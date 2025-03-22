@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/button';
 
-export default function Home() {
+const Home = () => {
   return (
     <div className=''>
       <Button>Click Me</Button>
     </div>
   );
-}
+};
+
+export default Home;
