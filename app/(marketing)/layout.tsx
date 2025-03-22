@@ -6,7 +6,7 @@ type Props = {
 };
 
 const MarketingLayout = ({ children }: Readonly<Props>) => (
-  <div className='min-h-screen flex flex-col'>
+  <div className='min-h-dvh flex flex-col'>
     <Header />
     <main className='flex-2 flex flex-col items-center justify-center'>{children}</main>
     <Footer />
