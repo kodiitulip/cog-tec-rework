@@ -1,16 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { SignInButton } from '@/components/auth/SignInButton';
+import { SignedIn } from '@/components/auth/SignedIn';
+import { SignedOut } from '@/components/auth/SignedOut';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { AuthLoaded } from '@/components/auth/AuthLoaded';
+import { AuthLoading } from '@/components/auth/AuthLoading';
+import { Loader } from 'lucide-react';
 
 export const Header = () => {
   return (
@@ -28,32 +25,27 @@ export const Header = () => {
           />
           <h1 className='text-2xl font-extrabold text-green-600 tracking-wide'>Lingo</h1>
         </Link>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              size='lg'
-              variant='ghost'
-            >
-              log in
-            </Button>
-          </DialogTrigger>
-          <DialogContent className='sm:max-w-107'>
-            <DialogHeader>
-              <DialogTitle>Log in</DialogTitle>
-              <DialogDescription>Login with your Credentials or Social Login</DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button
-                  type='submit'
-                  variant='ghost'
-                >
-                  Log In
-                </Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <AuthLoading>
+          <Loader className='size-5 text-muted-foreground animate-spin' />
+        </AuthLoading>
+        <AuthLoaded>
+          <SignedOut>
+            <SignInButton>
+              <Button
+                size='lg'
+                variant='ghost'
+              >
+                log in
+              </Button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <Avatar>
+              <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' />
+              <AvatarFallback>MK</AvatarFallback>
+            </Avatar>
+          </SignedIn>
+        </AuthLoaded>
       </div>
     </header>
   );
