@@ -1,12 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { SignInButton } from '@/components/auth/SignInButton';
-import { SignedIn } from '@/components/auth/SignedIn';
-import { SignedOut } from '@/components/auth/SignedOut';
+import { SignInButton } from '@/components/auth/buttons';
+import { SignedIn, SignedOut, AuthLoaded, AuthLoading } from '@/components/auth/status';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { AuthLoaded } from '@/components/auth/AuthLoaded';
-import { AuthLoading } from '@/components/auth/AuthLoading';
 import { Loader } from 'lucide-react';
 
 export const Header = () => {

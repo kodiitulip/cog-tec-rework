@@ -1,9 +1,5 @@
-import { AuthLoaded } from '@/components/auth/AuthLoaded';
-import { AuthLoading } from '@/components/auth/AuthLoading';
-import { SignedIn } from '@/components/auth/SignedIn';
-import { SignedOut } from '@/components/auth/SignedOut';
-import { SignInButton } from '@/components/auth/SignInButton';
-import { SignUpButton } from '@/components/auth/SignUpButton';
+import { SignedIn, SignedOut, AuthLoaded, AuthLoading } from '@/components/auth/status';
+import { SignUpButton, SignInButton } from '@/components/auth/buttons';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
 import Image from 'next/image';
