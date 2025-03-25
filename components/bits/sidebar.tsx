@@ -1,11 +1,10 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
-import { SidebarItem } from './sidebar-item';
+import { SidebarItem } from '@/components/bits/sidebar-item';
 import { Loader } from 'lucide-react';
-import { AuthLoading, AuthLoaded } from '../auth/status';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Button } from '../ui/button';
+import { AuthLoading, AuthLoaded } from '@/components/auth/status';
+import { UserButton } from '@/components/auth/buttons';
 
 type SidebarProps = {
   className?: string;
@@ -52,16 +51,21 @@ export const Sidebar = ({ className }: SidebarProps) => {
         <Loader className='size-5 text-muted-foreground animate-spin' />
       </AuthLoading>
       <AuthLoaded>
-        <Button
-          variant='sidebarGhost'
+        {/* <Button */}
+        {/*   variant='sidebarGhost' */}
+        {/*   className='justify-start h-13' */}
+        {/* > */}
+        {/*   <Avatar> */}
+        {/*     <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' /> */}
+        {/*     <AvatarFallback>MK</AvatarFallback> */}
+        {/*   </Avatar> */}
+        {/*   Hi, Mock! */}
+        {/* </Button> */}
+        <UserButton
           className='justify-start h-13'
-        >
-          <Avatar>
-            <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' />
-            <AvatarFallback>MK</AvatarFallback>
-          </Avatar>
-          Hi, Mock!
-        </Button>
+          variant='sidebarGhost'
+          label
+        />
       </AuthLoaded>
     </div>
   );

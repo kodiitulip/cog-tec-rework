@@ -7,8 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../ui/dialog';
-import { Button } from '../ui/button';
+} from '@/components/ui/dialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { type VariantProps } from 'class-variance-authority';
 
 // TODO: auth signup
 
@@ -61,5 +63,26 @@ export const SignInButton = ({ children }: HTMLAttributes<HTMLElement>) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+};
+
+type UserButtonProps = {
+  label?: boolean;
+  customLabel?: string;
+} & HTMLAttributes<HTMLElement> &
+  VariantProps<typeof buttonVariants>;
+
+export const UserButton = ({ variant = 'ghost', label, customLabel, ...props }: UserButtonProps) => {
+  return (
+    <Button
+      variant={variant}
+      {...props}
+    >
+      <Avatar>
+        <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' />
+        <AvatarFallback>MK</AvatarFallback>
+      </Avatar>
+      {label && (customLabel ?? 'Hi, Mock!')}
+    </Button>
   );
 };

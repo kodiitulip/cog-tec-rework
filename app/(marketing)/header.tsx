@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { SignInButton } from '@/components/auth/buttons';
+import { SignInButton, UserButton } from '@/components/auth/buttons';
 import { SignedIn, SignedOut, AuthLoaded, AuthLoading } from '@/components/auth/status';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader } from 'lucide-react';
 
 export const Header = () => {
@@ -37,10 +36,11 @@ export const Header = () => {
             </SignInButton>
           </SignedOut>
           <SignedIn>
-            <Avatar>
-              <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' />
-              <AvatarFallback>MK</AvatarFallback>
-            </Avatar>
+            {/* <Avatar> */}
+            {/*   <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' /> */}
+            {/*   <AvatarFallback>MK</AvatarFallback> */}
+            {/* </Avatar> */}
+            <UserButton />
           </SignedIn>
         </AuthLoaded>
       </div>
