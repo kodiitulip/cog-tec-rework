@@ -51,16 +51,6 @@ export const Sidebar = ({ className }: SidebarProps) => {
         <Loader className='size-5 text-muted-foreground animate-spin' />
       </AuthLoading>
       <AuthLoaded>
-        {/* <Button */}
-        {/*   variant='sidebarGhost' */}
-        {/*   className='justify-start h-13' */}
-        {/* > */}
-        {/*   <Avatar> */}
-        {/*     <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' /> */}
-        {/*     <AvatarFallback>MK</AvatarFallback> */}
-        {/*   </Avatar> */}
-        {/*   Hi, Mock! */}
-        {/* </Button> */}
         <UserButton
           className='justify-start h-13'
           variant='sidebarGhost'

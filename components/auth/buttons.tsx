@@ -11,6 +11,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
+import { GithubButton } from '@/components/auth/oauth/github-button';
+import { createClient } from '@/lib/supabase/client';
+import { getCurrentUserName, getCurrentUserAvatarUrl } from '@/lib/supabase/auth/user';
 
 // TODO: auth signup
 
@@ -25,7 +28,11 @@ export const SignUpButton = ({ children }: HTMLAttributes<HTMLElement>) => {
           <DialogTitle>Sign Up</DialogTitle>
           <DialogDescription>Sign up with your Credentials or Social Login</DialogDescription>
         </DialogHeader>
-        {/* TODO: Insert Sign Up modal Body here */}
+        <GithubButton
+          variant='ghost'
+          size='lg'
+          className='justify-start'
+        />
         <DialogFooter>
           <Button
             type='submit'
@@ -52,7 +59,11 @@ export const SignInButton = ({ children }: HTMLAttributes<HTMLElement>) => {
           <DialogTitle>Sign In</DialogTitle>
           <DialogDescription>Sign In with your Credentials or Social Login</DialogDescription>
         </DialogHeader>
-        {/* TODO: Insert Sign In modal Body here */}
+        <GithubButton
+          variant='ghost'
+          size='lg'
+          className='justify-start'
+        />
         <DialogFooter>
           <Button
             type='submit'
@@ -72,17 +83,40 @@ type UserButtonProps = {
 } & HTMLAttributes<HTMLElement> &
   VariantProps<typeof buttonVariants>;
 
-export const UserButton = ({ variant = 'ghost', label, customLabel, ...props }: UserButtonProps) => {
+export const UserButton = async ({ label, customLabel, ...props }: UserButtonProps) => {
+  const userName = await getCurrentUserName();
+  const userAvatarUrl = await getCurrentUserAvatarUrl();
+  return (
+    <Button {...props}>
+      <Avatar>
+        <AvatarImage src={userAvatarUrl} />
+        <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
+      </Avatar>
+      {label &&
+        (customLabel ?? (
+          <span>
+            hi, <strong className='text-sky-400'>{userName}</strong>
+          </span>
+        ))}
+    </Button>
+  );
+};
+
+type SignOutButtonProps = {} & VariantProps<typeof buttonVariants> & HTMLAttributes<HTMLElement>;
+
+export const SignOutButton = ({ children, ...props }: SignOutButtonProps) => {
+  const signOut = async () => {
+    const { auth } = createClient();
+    const { error } = await auth.signOut();
+    if (error) console.error(error);
+  };
+
   return (
     <Button
-      variant={variant}
       {...props}
+      onClick={signOut}
     >
-      <Avatar>
-        <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' />
-        <AvatarFallback>MK</AvatarFallback>
-      </Avatar>
-      {label && (customLabel ?? 'Hi, Mock!')}
+      {children ?? 'Sign Out'}
     </Button>
   );
 };

@@ -36,11 +36,10 @@ export const Header = () => {
             </SignInButton>
           </SignedOut>
           <SignedIn>
-            {/* <Avatar> */}
-            {/*   <AvatarImage src='/kenney/shape-characters/PNG/Default/blue_body_circle.png' /> */}
-            {/*   <AvatarFallback>MK</AvatarFallback> */}
-            {/* </Avatar> */}
-            <UserButton />
+            <UserButton
+              variant='ghost'
+              size='lg'
+            />
           </SignedIn>
         </AuthLoaded>
       </div>
