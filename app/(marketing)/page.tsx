@@ -1,4 +1,5 @@
-import { SignedIn, SignedOut, AuthLoaded, AuthLoading } from '@/components/auth/status';
+import { AuthLoaded, AuthLoading } from '@/components/auth/load';
+import { SignedOut, SignedIn } from '@/components/auth/sign';
 import { SignUpButton, SignInButton } from '@/components/auth/buttons';
 import { Button } from '@/components/ui/button';
 import { Loader } from 'lucide-react';
@@ -25,23 +26,19 @@ const Home = () => {
           </AuthLoading>
           <AuthLoaded>
             <SignedOut>
-              <SignUpButton>
-                <Button
-                  size='lg'
-                  variant='secondary'
-                  className='w-full'
-                >
-                  Get Started
-                </Button>
+              <SignUpButton
+                size='lg'
+                variant='secondary'
+                className='w-full'
+              >
+                Get Started
               </SignUpButton>
-              <SignInButton>
-                <Button
-                  size='lg'
-                  variant='primaryGhost'
-                  className='w-full'
-                >
-                  I already have an account
-                </Button>
+              <SignInButton
+                size='lg'
+                variant='primaryGhost'
+                className='w-full'
+              >
+                I already have an account
               </SignInButton>
             </SignedOut>
             <SignedIn>

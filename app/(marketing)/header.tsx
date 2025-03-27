@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
-import { SignInButton, UserButton } from '@/components/auth/buttons';
-import { SignedIn, SignedOut, AuthLoaded, AuthLoading } from '@/components/auth/status';
+import { SignInButton } from '@/components/auth/buttons';
+import { AuthLoaded, AuthLoading } from '@/components/auth/load';
 import { Loader } from 'lucide-react';
+import { UserButton } from '@/components/auth/user-button';
+import { SignedIn, SignedOut } from '@/components/auth/sign';
 
 export const Header = () => {
   return (
@@ -26,13 +27,11 @@ export const Header = () => {
         </AuthLoading>
         <AuthLoaded>
           <SignedOut>
-            <SignInButton>
-              <Button
-                size='lg'
-                variant='ghost'
-              >
-                log in
-              </Button>
+            <SignInButton
+              size='lg'
+              variant='ghost'
+            >
+              log in
             </SignInButton>
           </SignedOut>
           <SignedIn>

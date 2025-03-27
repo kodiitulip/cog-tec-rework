@@ -3,8 +3,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { SidebarItem } from '@/components/bits/sidebar-item';
 import { Loader } from 'lucide-react';
-import { AuthLoading, AuthLoaded } from '@/components/auth/status';
-import { UserButton } from '@/components/auth/buttons';
+import { AuthLoading, AuthLoaded } from '@/components/auth/load';
+import { UserButton } from '@/components/auth/user-button';
 
 type SidebarProps = {
   className?: string;

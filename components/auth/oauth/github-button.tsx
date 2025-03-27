@@ -8,17 +8,16 @@ import { GithubIcon } from 'lucide-react';
 type Props = {} & React.HTMLAttributes<HTMLElement> & VariantProps<typeof buttonVariants>;
 
 export const GithubButton = (props: Props) => {
-  const getUrlOrigin = () => {
-    if (typeof window !== undefined) return window.location.origin;
-    return 'http://localhost:3000';
-  };
+  const urlOrigin = window.location.origin ?? 'http://localhost:3000';
 
   const signIn = async () => {
     const { auth } = createClient();
+    const redirectUrl = new URL(urlOrigin + '/auth/callback');
+    redirectUrl.searchParams.set('next', '/learn');
     const { error } = await auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: getUrlOrigin() + '/auth/callback?next=/learn',
+        redirectTo: redirectUrl.toString(),
       },
     });
     if (error) console.error(error);

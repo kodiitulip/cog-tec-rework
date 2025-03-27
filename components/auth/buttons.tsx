@@ -1,4 +1,6 @@
-import { Children, HTMLAttributes, isValidElement } from 'react';
+'use client';
+
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,21 +10,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
 import { GithubButton } from '@/components/auth/oauth/github-button';
 import { createClient } from '@/lib/supabase/client';
-import { getCurrentUserName, getCurrentUserAvatarUrl } from '@/lib/supabase/auth/user';
+import { Slot } from '@radix-ui/react-slot';
+import { redirect } from 'next/navigation';
 
-// TODO: auth signup
+// TODO: auth signin/up forms
+type SignButtonProps = React.ComponentProps<'button'> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
 
-export const SignUpButton = ({ children }: HTMLAttributes<HTMLElement>) => {
-  const child = isValidElement(children) && Children.only(children);
+export const SignUpButton = ({ asChild, ...props }: SignButtonProps) => {
+  const Comp = asChild ? Slot : Button;
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{isValidElement(child) ? child : <button>{children ?? 'Sign Up'}</button>}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Comp {...props} />
+      </DialogTrigger>
       <DialogContent className='sm:max-w-107'>
         <DialogHeader>
           <DialogTitle>Sign Up</DialogTitle>
@@ -46,14 +54,14 @@ export const SignUpButton = ({ children }: HTMLAttributes<HTMLElement>) => {
   );
 };
 
-// TODO: auth signin
-
-export const SignInButton = ({ children }: HTMLAttributes<HTMLElement>) => {
-  const child = isValidElement(children) && Children.only(children);
+export const SignInButton = ({ asChild, ...props }: SignButtonProps) => {
+  const Comp = asChild ? Slot : Button;
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{isValidElement(child) ? child : <button>{children ?? 'Sign In'}</button>}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Comp {...props} />
+      </DialogTrigger>
       <DialogContent className='sm:max-w-107'>
         <DialogHeader>
           <DialogTitle>Sign In</DialogTitle>
@@ -77,46 +85,25 @@ export const SignInButton = ({ children }: HTMLAttributes<HTMLElement>) => {
   );
 };
 
-type UserButtonProps = {
-  label?: boolean;
-  customLabel?: string;
-} & HTMLAttributes<HTMLElement> &
-  VariantProps<typeof buttonVariants>;
+export const SignOutButton = ({ disabled, asChild, ...props }: SignButtonProps) => {
+  const Comp = asChild ? Slot : Button;
+  const [stateDisabled, setStateDisabled] = useState<boolean>(false);
 
-export const UserButton = async ({ label, customLabel, ...props }: UserButtonProps) => {
-  const userName = await getCurrentUserName();
-  const userAvatarUrl = await getCurrentUserAvatarUrl();
-  return (
-    <Button {...props}>
-      <Avatar>
-        <AvatarImage src={userAvatarUrl} />
-        <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
-      </Avatar>
-      {label &&
-        (customLabel ?? (
-          <span>
-            hi, <strong className='text-sky-400'>{userName}</strong>
-          </span>
-        ))}
-    </Button>
-  );
-};
-
-type SignOutButtonProps = {} & VariantProps<typeof buttonVariants> & HTMLAttributes<HTMLElement>;
-
-export const SignOutButton = ({ children, ...props }: SignOutButtonProps) => {
   const signOut = async () => {
+    setStateDisabled(true);
     const { auth } = createClient();
-    const { error } = await auth.signOut();
-    if (error) console.error(error);
+    const { error } = await auth.signOut({
+      scope: 'local',
+    });
+    if (error) return console.error(error);
+    redirect('/');
   };
 
   return (
-    <Button
+    <Comp
       {...props}
       onClick={signOut}
-    >
-      {children ?? 'Sign Out'}
-    </Button>
+      disabled={disabled ?? (stateDisabled && stateDisabled)}
+    />
   );
 };
