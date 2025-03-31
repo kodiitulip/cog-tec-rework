@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:studio": "pnpm drizzle-kit studio --config=drizzle.config.ts",
-    "db:push": "pnpm drizzle-kit push --config=drizzle.config.ts"
+    "studio": "pnpm drizzle-kit studio --config=drizzle.config.ts --verbose",
+    "push": "pnpm drizzle-kit push --config=drizzle.config.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.3",

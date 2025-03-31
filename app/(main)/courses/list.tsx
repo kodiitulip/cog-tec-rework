@@ -1,11 +1,11 @@
 'use client';
 
-import { SelectCourse } from '@/db/schema';
+import { SelectCourse, SelectUserProgress } from '@/db/schema';
 import { Card } from './card';
 
 type Props = {
   courses: SelectCourse[];
-  activeCourseId: number;
+  activeCourseId?: SelectUserProgress['activeCourseId'];
 };
 
 export const List = ({ courses, activeCourseId }: Props) => {

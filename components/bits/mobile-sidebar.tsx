@@ -18,7 +18,7 @@ export const MobileSidebar = () => {
         </span>
       </SheetTrigger>
       <SheetContent
-        className='p-0 z-100'
+        className='p-0'
         side='left'
       >
         <SheetHeader className='sr-only'>
