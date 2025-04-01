@@ -1,9 +1,9 @@
-import { Loader } from 'lucide-react';
+import { LoadingIcon } from '@/components/misc/loading';
 
 const Loading = () => {
   return (
     <div className='h-full w-full flex items-center justify-center'>
-      <Loader className='size-6 text-muted-foreground animate-spin' />
+      <LoadingIcon className='size-6' />
     </div>
   );
 };

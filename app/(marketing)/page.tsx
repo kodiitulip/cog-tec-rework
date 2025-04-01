@@ -2,7 +2,7 @@ import { AuthLoaded, AuthLoading } from '@/components/auth/load';
 import { SignedOut, SignedIn } from '@/components/auth/sign';
 import { SignUpButton, SignInButton } from '@/components/auth/buttons';
 import { Button } from '@/components/ui/button';
-import { Loader } from 'lucide-react';
+import { LoadingIcon } from '@/components/misc/loading';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -22,7 +22,7 @@ const Home = () => {
         </h1>
         <div className='flex flex-col items-center gap-y-3 max-w-82 w-full'>
           <AuthLoading>
-            <Loader className='size-5 text-muted-foreground animate-spin' />
+            <LoadingIcon />
           </AuthLoading>
           <AuthLoaded>
             <SignedOut>
