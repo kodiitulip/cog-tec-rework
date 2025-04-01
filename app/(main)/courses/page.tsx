@@ -3,8 +3,6 @@ import React from 'react';
 import { List } from './list';
 
 const CoursesPage = async () => {
-  // const coursesData = getCourses();
-  // const userProgressData = getUserProgress();
   const [courses, userProgress] = await Promise.all([getCourses(), getUserProgress()]);
 
   return (
@@ -14,6 +12,13 @@ const CoursesPage = async () => {
         courses={courses}
         activeCourseId={userProgress?.activeCourseId}
       />
+      <hr className='my-4' />
+      <h1 className='text-2xl font-bold text-neutral-700'>Language Courses</h1>
+      <List
+        courses={courses}
+        activeCourseId={userProgress?.activeCourseId}
+      />
+      <hr />
     </div>
   );
 };
