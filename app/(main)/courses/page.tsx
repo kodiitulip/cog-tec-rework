@@ -18,7 +18,7 @@ const CoursesPage = async () => {
         courses={courses}
         activeCourseId={userProgress?.activeCourseId}
       />
-      <hr />
+      <hr className='my-4' />
     </div>
   );
 };
