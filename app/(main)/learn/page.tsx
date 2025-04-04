@@ -2,11 +2,11 @@ import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { Header } from './header';
 import { UserProgress } from '@/components/bits/pages/user-progress';
-import { getUserProgress } from '@/db/queries';
+import { getUserProgress, getUnits } from '@/db/queries';
 import { redirect } from 'next/navigation';
 
 const LearnPage = async () => {
-  const [userProgress] = await Promise.all([getUserProgress()]);
+  const [userProgress, units] = await Promise.all([getUserProgress(), getUnits()]);
 
   if (!userProgress || !userProgress.activeCourse) {
     redirect('/courses');
@@ -23,6 +23,14 @@ const LearnPage = async () => {
       </StickyWrapper>
       <FeedWrapper>
         <Header title={userProgress.activeCourse.title} />
+        {units.map(({ id, ...unit }) => (
+          <div
+            key={id}
+            className='mb-10'
+          >
+            {JSON.stringify(unit)}
+          </div>
+        ))}
       </FeedWrapper>
     </div>
   );
