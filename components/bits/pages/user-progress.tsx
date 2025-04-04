@@ -1,11 +1,12 @@
 import { Button } from '@/components/ui/button';
+import { SelectCourses } from '@/db/schema';
 import { InfinityIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
 type Props = {
-  activeCourse: { title: string; imageSrc: string }; // TODO: replace with DB types
+  activeCourse: SelectCourses;
   hearts: number;
   points: number;
   hasActiveSubscription?: boolean;
@@ -21,7 +22,7 @@ export const UserProgress = ({ activeCourse, points, hearts, hasActiveSubscripti
         <Link href='/courses'>
           <Image
             src={activeCourse.imageSrc ?? '/flags/unknown.svg'}
-            alt={activeCourse.title}
+            alt={activeCourse.title ?? 'unknown flag'}
             className='rounded-md border'
             width={32}
             height={32}

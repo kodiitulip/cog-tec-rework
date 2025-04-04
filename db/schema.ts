@@ -19,7 +19,7 @@ export const courses = pgTable(
   ]
 );
 
-export type SelectCourse = typeof courses.$inferSelect;
+export type SelectCourses = typeof courses.$inferSelect;
 
 export const coursesRelations = relations(courses, ({ many }) => ({
   userProgress: many(userProgress),

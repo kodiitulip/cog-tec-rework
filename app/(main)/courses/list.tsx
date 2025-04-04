@@ -1,6 +1,6 @@
 'use client';
 
-import { SelectCourse, SelectUserProgress } from '@/db/schema';
+import { SelectCourses, SelectUserProgress } from '@/db/schema';
 import { Card } from './card';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,7 @@ import { upsertUserProgress } from '@/actions/user-progress';
 import { toast } from 'sonner';
 
 type Props = {
-  courses: SelectCourse[];
+  courses: SelectCourses[];
   activeCourseId?: SelectUserProgress['activeCourseId'];
 };
 

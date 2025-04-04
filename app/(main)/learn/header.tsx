@@ -13,16 +13,10 @@ export const Header = ({ title }: Props) => {
         variant='ghost'
         size='sm'
         asChild
-        aria-labelledby='label-button-header-back'
       >
         <Link href='/courses'>
           <ArrowLeft className='size-5 stroke-2 text-neutral-40' />
-          <span
-            className='sr-only'
-            id='label-button-header-back'
-          >
-            Select courses
-          </span>
+          <span className='sr-only'>Select courses</span>
         </Link>
       </Button>
       <h1 className='font-bold text-lg'>{title}</h1>
