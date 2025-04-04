@@ -6,19 +6,12 @@ const CoursesPage = async () => {
   const [courses, userProgress] = await Promise.all([getCourses(), getUserProgress()]);
 
   return (
-    <div className='h-full max-w-228 px-3 mx-auto'>
+    <div className='h-full max-w-228 px-3 mx-auto space-y-6'>
       <h1 className='text-2xl font-bold text-neutral-700'>Language Courses</h1>
       <List
         courses={courses}
         activeCourseId={userProgress?.activeCourseId}
       />
-      <hr className='my-4' />
-      <h1 className='text-2xl font-bold text-neutral-700'>Language Courses</h1>
-      <List
-        courses={courses}
-        activeCourseId={userProgress?.activeCourseId}
-      />
-      <hr className='my-4' />
     </div>
   );
 };
