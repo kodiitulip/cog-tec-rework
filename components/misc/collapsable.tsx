@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { cn } from "@/lib/utils";
-import { ChevronDownIcon } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { cn } from '@/lib/utils';
+import { ChevronDownIcon } from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 export const Collapsable = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -28,4 +28,3 @@ export const Collapsable = ({ children }: Readonly<{ children: React.ReactNode }
     </div>
   );
 };
-
