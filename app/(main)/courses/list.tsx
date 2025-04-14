@@ -1,16 +1,18 @@
 'use client';
 
-import { SelectCourses, SelectUserProgress } from '@/db/schema';
+import { SelectCourse, SelectUserProgress } from '@/db/schema';
 import { Card } from './card';
-import { useTransition } from 'react';
+import { cn } from '@/lib/utils';
+import { useState, useTransition } from 'react';
+import { Button } from '@/components/ui/button';
+import { ChevronDownIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { upsertUserProgress } from '@/actions/user-progress';
-import { toast } from 'sonner';
 
 type Props = {
-  courses: SelectCourses[];
+  courses: SelectCourse[];
   activeCourseId?: SelectUserProgress['activeCourseId'];
-};
+} & React.ComponentProps<'div'>;
 
 export const List = ({ courses, activeCourseId }: Props) => {
   const router = useRouter();
@@ -22,7 +24,7 @@ export const List = ({ courses, activeCourseId }: Props) => {
     if (id === activeCourseId) return router.push('/learn');
 
     startTransition(() => {
-      upsertUserProgress(id).catch(() => toast.error('Something went wrong!'));
+      upsertUserProgress(id);
     });
   };
 

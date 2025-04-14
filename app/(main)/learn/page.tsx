@@ -4,6 +4,7 @@ import { Header } from './header';
 import { UserProgress } from '@/components/bits/pages/user-progress';
 import { getUserProgress, getUnits } from '@/db/queries';
 import { redirect } from 'next/navigation';
+import { Unit } from './unit';
 
 const LearnPage = async () => {
   const [userProgress, units] = await Promise.all([getUserProgress(), getUnits()]);
@@ -23,12 +24,16 @@ const LearnPage = async () => {
       </StickyWrapper>
       <FeedWrapper>
         <Header title={userProgress.activeCourse.title} />
-        {units.map(({ id, ...unit }) => (
+        {units.map((unit) => (
           <div
-            key={id}
+            key={unit.id}
             className='mb-10'
           >
-            {JSON.stringify(unit)}
+            <Unit
+              {...unit}
+              activeLesson={undefined}
+              activeLessonPercentage={0}
+            />
           </div>
         ))}
       </FeedWrapper>
