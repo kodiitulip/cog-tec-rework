@@ -6,24 +6,39 @@ import { userProgress } from '@/db/schema';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { Result, err, ok } from 'neverthrow';
 
-export const upsertUserProgress = async (courseId: number) => {
+type UpsertUserProgressError = { type: 'UNAUTHORIZED' | 'MISSING_ID' | 'COURSE_NOT_FOUND' | 'COURSE_EMPTY' };
+
+export const upsertUserProgress = async (courseId: number): Promise<Result<null, UpsertUserProgressError>> => {
   const { auth } = await createClient();
 
-  const {
-    data: { user },
-  } = await auth.getUser();
-  if (!user) throw new Error('Unauthorized');
+  const { data, error } = await auth.getUser();
+  if (error)
+    return err({
+      type: 'UNAUTHORIZED',
+      error,
+    });
 
-  const { id: userId } = user;
-  if (!userId) throw new Error('Unauthorized');
+  const { user } = data;
+
+  const { id } = user;
+  if (!id)
+    return err({
+      type: 'MISSING_ID',
+    });
 
   const course = await getCourseById(courseId);
-  if (!course) throw new Error('Course not found');
+  if (!course)
+    return err({
+      type: 'COURSE_NOT_FOUND',
+    });
 
   // TODO: enable once units and lessos are implemented
   // if (!course.units.length || !course.units[0].lessons.length) {
-  //   throw new Error("Course is empty");
+  //   return err({
+  //     type: 'COURSE_EMPTY',
+  //   });
   // }
 
   const existingUserProgress = await getUserProgress();
@@ -37,11 +52,11 @@ export const upsertUserProgress = async (courseId: number) => {
     });
     revalidatePath('/courses');
     revalidatePath('/learn');
-    redirect('/learn');
+    return ok(redirect('/learn'));
   }
 
   await db.insert(userProgress).values({
-    userId,
+    userId: id,
     activeCourseId: courseId,
     userName: (user.user_metadata['user_name'] as string) || 'User',
     userImageSrc:
@@ -50,5 +65,5 @@ export const upsertUserProgress = async (courseId: number) => {
 
   revalidatePath('/courses');
   revalidatePath('/learn');
-  redirect('/learn');
+  return ok(redirect('/learn'));
 };

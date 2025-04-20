@@ -28,15 +28,27 @@ export const coursesRelations = relations(courses, ({ many }) => ({
 }));
 
 // units table
-export const units = pgTable('units', {
-  id: serial('id').primaryKey(),
-  title: text('title').notNull(),
-  description: text('description').notNull(),
-  courseId: integer('course_id')
-    .references(() => courses.id, { onDelete: 'cascade' })
-    .notNull(),
-  order: integer('order').notNull(),
-});
+export const units = pgTable(
+  'units',
+  {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    description: text('description').notNull(),
+    courseId: integer('course_id')
+      .references(() => courses.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: integer('order').notNull(),
+    imageSrc: text('image_src').notNull(),
+  },
+  () => [
+    pgPolicy('Authenticated read access to courses', {
+      as: 'permissive',
+      for: 'select',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+  ]
+);
 
 export type SelectUnits = typeof units.$inferSelect;
 
@@ -49,14 +61,25 @@ export const unitsRelations = relations(units, ({ many, one }) => ({
 }));
 
 // lessons table
-export const lessons = pgTable('lessons', {
-  id: serial('id').primaryKey(),
-  title: text('title').notNull(),
-  unitId: integer('unit_id')
-    .references(() => units.id, { onDelete: 'cascade' })
-    .notNull(),
-  order: integer('order').notNull(),
-});
+export const lessons = pgTable(
+  'lessons',
+  {
+    id: serial('id').primaryKey(),
+    title: text('title').notNull(),
+    unitId: integer('unit_id')
+      .references(() => units.id, { onDelete: 'cascade' })
+      .notNull(),
+    order: integer('order').notNull(),
+  },
+  () => [
+    pgPolicy('Authenticated read access to courses', {
+      as: 'permissive',
+      for: 'select',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+  ]
+);
 
 export type SelectLessons = typeof lessons.$inferSelect;
 
@@ -71,15 +94,26 @@ export const lessonsRelations = relations(lessons, ({ one, many }) => ({
 // challanges table
 export const challengesEnum = pgEnum('type', ['SELECT', 'ASSIST']);
 
-export const challenges = pgTable('challenges', {
-  id: serial('id').primaryKey(),
-  lessonId: integer('lesson_id')
-    .references(() => lessons.id, { onDelete: 'cascade' })
-    .notNull(),
-  type: challengesEnum('type').notNull(),
-  question: text('question').notNull(),
-  order: integer('order').notNull(),
-});
+export const challenges = pgTable(
+  'challenges',
+  {
+    id: serial('id').primaryKey(),
+    lessonId: integer('lesson_id')
+      .references(() => lessons.id, { onDelete: 'cascade' })
+      .notNull(),
+    type: challengesEnum('type').notNull(),
+    question: text('question').notNull(),
+    order: integer('order').notNull(),
+  },
+  () => [
+    pgPolicy('Authenticated read access to courses', {
+      as: 'permissive',
+      for: 'select',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+  ]
+);
 
 export type SelectChallenges = typeof challenges.$inferSelect;
 
@@ -93,16 +127,26 @@ export const challengesRelations = relations(challenges, ({ one, many }) => ({
 }));
 
 // challangeOptions table
-export const challengeOptions = pgTable('challenge_options', {
-  id: serial('id').primaryKey(),
-  challengeId: integer('challenge_id')
-    .references(() => challenges.id, { onDelete: 'cascade' })
-    .notNull(),
-  text: text('text').notNull(),
-  correct: boolean('correct').notNull(),
-  imageSrc: text('image_src'),
-  audioSrc: text('audio_src'),
-});
+export const challengeOptions = pgTable(
+  'challenge_options',
+  {
+    id: serial('id').primaryKey(),
+    challengeId: integer('challenge_id')
+      .references(() => challenges.id, { onDelete: 'cascade' })
+      .notNull(),
+    text: text('text').notNull(),
+    correct: boolean('correct').notNull(),
+    imageSrc: text('image_src'),
+  },
+  () => [
+    pgPolicy('Authenticated read access to courses', {
+      as: 'permissive',
+      for: 'select',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+  ]
+);
 
 export type SelectChallengeOptions = typeof challengeOptions.$inferSelect;
 
@@ -114,14 +158,25 @@ export const challengeOptionsRelations = relations(challengeOptions, ({ one }) =
 }));
 
 // challangeProgress table
-export const challengeProgress = pgTable('challenge_progress', {
-  id: serial('id').primaryKey(),
-  userId: text('user_id').notNull(), // TODO: confirm this doesnt fuck everything on the app
-  challengeId: integer('challenge_id')
-    .references(() => challenges.id, { onDelete: 'cascade' })
-    .notNull(),
-  completed: boolean('completed').notNull(),
-});
+export const challengeProgress = pgTable(
+  'challenge_progress',
+  {
+    id: serial('id').primaryKey(),
+    userId: text('user_id').notNull(),
+    challengeId: integer('challenge_id')
+      .references(() => challenges.id, { onDelete: 'cascade' })
+      .notNull(),
+    completed: boolean('completed').notNull(),
+  },
+  () => [
+    pgPolicy('Authenticated read access to courses', {
+      as: 'permissive',
+      for: 'select',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+  ]
+);
 
 export type SelectChallengeProgress = typeof challengeProgress.$inferSelect;
 
@@ -147,6 +202,24 @@ export const userProgress = pgTable(
     pgPolicy('Authenticated read access to userProgress', {
       as: 'permissive',
       for: 'select',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+    pgPolicy('Authenticated insert access to userProgress', {
+      as: 'permissive',
+      for: 'insert',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+    pgPolicy('Authenticated update access to userProgress', {
+      as: 'permissive',
+      for: 'update',
+      to: authenticatedRole,
+      using: sql`true`,
+    }),
+    pgPolicy('Authenticated delete access to userProgress', {
+      as: 'permissive',
+      for: 'delete',
       to: authenticatedRole,
       using: sql`true`,
     }),

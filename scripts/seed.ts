@@ -26,36 +26,17 @@ const main = async () => {
     await db.insert(schema.courses).values([
       {
         id: 1,
-        title: 'Spanish',
-        imageSrc: '/flags/es.svg',
-      },
-      {
-        id: 2,
-        title: 'French',
-        imageSrc: '/flags/fr.svg',
-      },
-      {
-        id: 3,
-        title: 'Croatian',
-        imageSrc: '/flags/hr.svg',
-      },
-      {
-        id: 4,
-        title: 'Italian',
-        imageSrc: '/flags/it.svg',
-      },
-      {
-        id: 5,
-        title: 'Japanese',
-        imageSrc: '/flags/jp.svg',
+        title: 'Behaviorismo',
+        imageSrc: '/icon/behaviorism/icon.svg',
       },
     ]);
     await db.insert(schema.units).values([
       {
         id: 1,
         courseId: 1,
-        title: 'Unit 1',
-        description: 'Learn the basics',
+        title: 'Fundamentos',
+        description: 'Aprenda os fundamentos',
+        imageSrc: '/icon/behaviorism/fundaments.svg',
         order: 1,
       },
     ]);
@@ -64,7 +45,7 @@ const main = async () => {
         id: 1,
         unitId: 1,
         order: 1,
-        title: 'Nouns',
+        title: 'Pensadores',
       },
     ]);
     await db.insert(schema.challenges).values([
@@ -73,7 +54,8 @@ const main = async () => {
         lessonId: 1,
         type: 'SELECT',
         order: 1,
-        question: 'Wich one of these is the "the man"?',
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
       },
     ]);
     await db.insert(schema.challengeOptions).values([
@@ -82,24 +64,21 @@ const main = async () => {
         challengeId: 1,
         imageSrc: '/challenges/es/images/man.svg',
         correct: true,
-        text: 'el hombre',
-        audioSrc: '/challenges/es/audio/man.mp3',
+        text: 'Pavlov',
       },
       {
         id: 2,
         challengeId: 1,
         imageSrc: '/challenges/es/images/woman.svg',
         correct: false,
-        text: 'la mujer',
-        audioSrc: '/challenges/es/audio/woman.mp3',
+        text: 'Watson',
       },
       {
         id: 3,
         challengeId: 1,
         imageSrc: '/challenges/es/images/robot.svg',
         correct: false,
-        text: 'el robot',
-        audioSrc: '/challenges/es/audio/robot.mp3',
+        text: 'Skinner',
       },
     ]);
 

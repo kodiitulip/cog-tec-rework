@@ -5,6 +5,7 @@ import { Card } from './card';
 import { useTransition } from 'react';
 import { redirect } from 'next/navigation';
 import { upsertUserProgress } from '@/actions/user-progress';
+import { toast } from 'sonner';
 
 type Props = {
   courses: SelectCourses[];
@@ -19,8 +20,23 @@ export const List = ({ courses, activeCourseId }: Props) => {
 
     if (id === activeCourseId) return redirect('/learn');
 
-    startTransition(() => {
-      upsertUserProgress(id);
+    startTransition(async () => {
+      const result = await upsertUserProgress(id);
+      if (result.isErr()) {
+        let message = 'Unexpected error';
+        switch (result.error.type) {
+          case 'UNAUTHORIZED':
+            message = 'Unauthorized User';
+          case 'MISSING_ID':
+            message = 'Missing User ID';
+          case 'COURSE_NOT_FOUND':
+            message = 'Course could not be found';
+          case 'COURSE_EMPTY':
+            message = 'Course is empty of units';
+        }
+
+        toast.error(message);
+      } else if (result.isOk()) toast.success('Changed course Successfuly');
     });
   };
 
