@@ -3,6 +3,92 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@theme {
+  --color-ecstasy-50: oklch(98.32% 0.0183 86.11deg);
+  --color-ecstasy-100: oklch(96.35% 0.0428 87.95deg);
+  --color-ecstasy-200: oklch(92.09% 0.0821 83.93deg);
+  --color-ecstasy-300: oklch(86.96% 0.1264 80.62deg);
+  --color-ecstasy-400: oklch(79.96% 0.159 68.66deg);
+  --color-ecstasy-500: oklch(75.24% 0.1775 58.27deg);
+  --color-ecstasy-600: oklch(71.16% 0.1919 48.56deg);
+  --color-ecstasy-700: oklch(59.2% 0.1682 45deg);
+  --color-ecstasy-800: oklch(50.02% 0.1394 44.19deg);
+  --color-ecstasy-900: oklch(43.15% 0.1141 45.2deg);
+  --color-ecstasy-950: oklch(28.11% 0.075 44.32deg);
+
+  --color-behaviorism-50: oklch(97.05% 0.013 17.51deg);
+  --color-behaviorism-100: oklch(93.7% 0.0287 17.73deg);
+  --color-behaviorism-200: oklch(88.69% 0.0545 18.26deg);
+  --color-behaviorism-300: oklch(77.26% 0.1196 20.18deg);
+  --color-behaviorism-400: oklch(71.14% 0.1566 21.83deg);
+  --color-behaviorism-500: oklch(63.42% 0.1979 24.79deg);
+  --color-behaviorism-600: oklch(57.08% 0.2054 26.73deg);
+  --color-behaviorism-700: oklch(49.97% 0.1824 26.96deg);
+  --color-behaviorism-800: oklch(43.97% 0.154 26.31deg);
+  --color-behaviorism-900: oklch(39.37% 0.1266 25.14deg);
+  --color-behaviorism-950: oklch(25.58% 0.0839 25.4deg);
+
+  --color-gestalt-50: oklch(97.14% 0.0107 256.7deg);
+  --color-gestalt-100: oklch(93.55% 0.024 253.95deg);
+  --color-gestalt-200: oklch(88.47% 0.0448 255.63deg);
+  --color-gestalt-300: oklch(78.29% 0.0883 253.03deg);
+  --color-gestalt-400: oklch(71.33% 0.1162 255.45deg);
+  --color-gestalt-500: oklch(62.43% 0.1521 260.54deg);
+  --color-gestalt-600: oklch(54.87% 0.1756 263.95deg);
+  --color-gestalt-700: oklch(49.09% 0.1784 266.21deg);
+  --color-gestalt-800: oklch(42.96% 0.1489 267.85deg);
+  --color-gestalt-900: oklch(38.44% 0.1128 267.43deg);
+  --color-gestalt-950: oklch(28.62% 0.0725 270.46deg);
+
+  --color-sociocultural-50: oklch(97.72% 0.0137 67.67deg);
+  --color-sociocultural-100: oklch(94.86% 0.0313 70.52deg);
+  --color-sociocultural-200: oklch(89.08% 0.0607 66.91deg);
+  --color-sociocultural-300: oklch(83.17% 0.091 62.25deg);
+  --color-sociocultural-400: oklch(73.18% 0.141 53.3deg);
+  --color-sociocultural-500: oklch(67.26% 0.1694 46.39deg);
+  --color-sociocultural-600: oklch(61.6% 0.1758 40.61deg);
+  --color-sociocultural-700: oklch(52.79% 0.1572 37.22deg);
+  --color-sociocultural-800: oklch(45.32% 0.1277 35.74deg);
+  --color-sociocultural-900: oklch(39.39% 0.1035 35.49deg);
+  --color-sociocultural-950: oklch(25.87% 0.0669 33.91deg);
+
+  --color-goldenrod-50: oklch(98.3% 0.0195 87.48deg);
+  --color-goldenrod-100: oklch(95.47% 0.0559 89.23deg);
+  --color-goldenrod-200: oklch(89.4% 0.1234 87.21deg);
+  --color-goldenrod-300: oklch(85.27% 0.1496 82.06deg);
+  --color-goldenrod-400: oklch(80.59% 0.1651 72.86deg);
+  --color-goldenrod-500: oklch(73.64% 0.1755 57.69deg);
+  --color-goldenrod-600: oklch(63.91% 0.1749 47.45deg);
+  --color-goldenrod-700: oklch(53.61% 0.1626 40.82deg);
+  --color-goldenrod-800: oklch(45.65% 0.1394 38.53deg);
+  --color-goldenrod-900: oklch(40.03% 0.1182 38.42deg);
+  --color-goldenrod-950: oklch(27.11% 0.0818 39.69deg);
+
+  --color-silvermist-50: oklch(97.34% 0.0013 287.31deg);
+  --color-silvermist-100: oklch(95.39% 0.0025 228.44deg);
+  --color-silvermist-200: oklch(91.26% 0.0029 264.68deg);
+  --color-silvermist-300: oklch(85.64% 0.0064 255.49deg);
+  --color-silvermist-400: oklch(79.36% 0.0083 253.87deg);
+  --color-silvermist-500: oklch(73.13% 0.0106 267.37deg);
+  --color-silvermist-600: oklch(66.99% 0.0122 269.53deg);
+  --color-silvermist-700: oklch(59.4% 0.0123 274.81deg);
+  --color-silvermist-800: oklch(51.44% 0.0112 273.25deg);
+  --color-silvermist-900: oklch(45.6% 0.0055 258.36deg);
+  --color-silvermist-950: oklch(31.47% 0.007 286.04deg);
+
+  --color-bronzedamask-50: oklch(97.42% 0.0101 58.27deg);
+  --color-bronzedamask-100: oklch(93.66% 0.0239 51.18deg);
+  --color-bronzedamask-200: oklch(86.81% 0.0477 48.16deg);
+  --color-bronzedamask-300: oklch(78.03% 0.0827 44.52deg);
+  --color-bronzedamask-400: oklch(65.42% 0.138 38.41deg);
+  --color-bronzedamask-500: oklch(61.5% 0.1561 35.03deg);
+  --color-bronzedamask-600: oklch(56.41% 0.1637 31.25deg);
+  --color-bronzedamask-700: oklch(48.87% 0.1447 28.74deg);
+  --color-bronzedamask-800: oklch(42.33% 0.1169 26.05deg);
+  --color-bronzedamask-900: oklch(37.08% 0.0942 25.37deg);
+  --color-bronzedamask-950: oklch(24.35% 0.0609 22.71deg);
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -37,10 +123,6 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
 }
 
 :root {
