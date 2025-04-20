@@ -1,27 +1,23 @@
 'use client';
 
-import { SelectCourse, SelectUserProgress } from '@/db/schema';
+import { SelectCourses, SelectUserProgress } from '@/db/schema';
 import { Card } from './card';
-import { cn } from '@/lib/utils';
-import { useState, useTransition } from 'react';
-import { Button } from '@/components/ui/button';
-import { ChevronDownIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useTransition } from 'react';
+import { redirect } from 'next/navigation';
 import { upsertUserProgress } from '@/actions/user-progress';
 
 type Props = {
-  courses: SelectCourse[];
+  courses: SelectCourses[];
   activeCourseId?: SelectUserProgress['activeCourseId'];
 } & React.ComponentProps<'div'>;
 
 export const List = ({ courses, activeCourseId }: Props) => {
-  const router = useRouter();
   const [pending, startTransition] = useTransition();
 
   const onClick = (id: number) => {
     if (pending) return;
 
-    if (id === activeCourseId) return router.push('/learn');
+    if (id === activeCourseId) return redirect('/learn');
 
     startTransition(() => {
       upsertUserProgress(id);

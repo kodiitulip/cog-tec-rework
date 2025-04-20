@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { SignInButton } from '@/components/auth/buttons';
-import { AuthLoaded, AuthLoading } from '@/components/auth/load';
 import { LoadingIcon } from '@/components/misc/loading';
 import { UserButton } from '@/components/auth/user-button';
 import { SignedIn, SignedOut } from '@/components/auth/sign';
+import { Suspense } from 'react';
 
 export const Header = () => {
   return (
@@ -22,10 +22,7 @@ export const Header = () => {
           />
           <h1 className='text-2xl font-extrabold text-green-600 tracking-wide'>Lingo</h1>
         </Link>
-        <AuthLoading>
-          <LoadingIcon />
-        </AuthLoading>
-        <AuthLoaded>
+        <Suspense fallback={<LoadingIcon />}>
           <SignedOut>
             <SignInButton
               size='lg'
@@ -40,7 +37,7 @@ export const Header = () => {
               size='lg'
             />
           </SignedIn>
-        </AuthLoaded>
+        </Suspense>
       </div>
     </header>
   );

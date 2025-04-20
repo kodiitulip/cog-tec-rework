@@ -1,34 +1,25 @@
 'use client';
 
 import { Button, buttonVariants } from '@/components/ui/button';
-import { createClient } from '@/lib/supabase/client';
 import { type VariantProps } from 'class-variance-authority';
-import { GithubIcon } from 'lucide-react';
+import { SiGithub } from '@icons-pack/react-simple-icons';
+import { signInWithGithub } from '@/actions/auth';
+import { useTransition } from 'react';
 
-type Props = {} & React.HTMLAttributes<HTMLElement> & VariantProps<typeof buttonVariants>;
+type Props = {} & React.ComponentProps<'button'> & VariantProps<typeof buttonVariants>;
 
-export const GithubButton = (props: Props) => {
-  const urlOrigin = window.location.origin ?? 'http://localhost:3000';
-
-  const signIn = async () => {
-    const { auth } = createClient();
-    const redirectUrl = new URL(urlOrigin + '/auth/callback');
-    redirectUrl.searchParams.set('next', '/learn');
-    const { error } = await auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: redirectUrl.toString(),
-      },
-    });
-    if (error) console.error(error);
-  };
-
+export const GithubButton = ({ disabled, ...props }: Props) => {
+  const [pending, startTransition] = useTransition();
   return (
     <Button
       {...props}
-      onClick={signIn}
+      onClick={() => startTransition(signInWithGithub)}
+      disabled={disabled ?? pending}
     >
-      <GithubIcon className='size-5' />
+      <SiGithub
+        color='default'
+        className='size-5'
+      />
       Sign In with Github
     </Button>
   );

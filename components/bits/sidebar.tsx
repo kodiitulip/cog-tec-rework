@@ -2,9 +2,9 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SidebarItem } from '@/components/bits/sidebar-item';
-import { Loader } from 'lucide-react';
-import { AuthLoading, AuthLoaded } from '@/components/auth/load';
 import { UserButton } from '@/components/auth/user-button';
+import { LoadingIcon } from '../misc/loading';
+import { Suspense } from 'react';
 
 type SidebarProps = {
   className?: string;
@@ -47,16 +47,13 @@ export const Sidebar = ({ className }: SidebarProps) => {
           iconSrc='/icons/shop.svg'
         />
       </div>
-      <AuthLoading>
-        <Loader className='size-5 text-muted-foreground animate-spin' />
-      </AuthLoading>
-      <AuthLoaded>
+      <Suspense fallback={<LoadingIcon />}>
         <UserButton
           className='justify-start h-13'
           variant='sidebarGhost'
           label
         />
-      </AuthLoaded>
+      </Suspense>
     </div>
   );
 };

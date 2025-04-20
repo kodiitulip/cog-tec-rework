@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useTransition } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -13,12 +13,11 @@ import {
 import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
 import { GithubButton } from '@/components/auth/oauth/github-button';
-import { createClient } from '@/lib/supabase/client';
 import { Slot } from '@radix-ui/react-slot';
-import { redirect } from 'next/navigation';
+import { signOut } from '@/actions/auth';
 
 // TODO: auth signin/up forms
-type SignButtonProps = React.ComponentProps<'button'> &
+type SignButtonProps = React.ComponentPropsWithoutRef<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
   };
@@ -85,25 +84,14 @@ export const SignInButton = ({ asChild, ...props }: SignButtonProps) => {
   );
 };
 
-export const SignOutButton = ({ disabled, asChild, ...props }: SignButtonProps) => {
-  const Comp = asChild ? Slot : Button;
-  const [stateDisabled, setStateDisabled] = useState<boolean>(false);
-
-  const signOut = async () => {
-    setStateDisabled(true);
-    const { auth } = createClient();
-    const { error } = await auth.signOut({
-      scope: 'local',
-    });
-    if (error) return console.error(error);
-    redirect('/');
-  };
+export const SignOutButton = ({ disabled, ...props }: SignButtonProps) => {
+  const [pending, startTransition] = useTransition();
 
   return (
-    <Comp
+    <Button
       {...props}
-      onClick={signOut}
-      disabled={disabled ?? (stateDisabled && stateDisabled)}
+      onClick={() => startTransition(signOut)}
+      disabled={disabled ?? pending}
     />
   );
 };

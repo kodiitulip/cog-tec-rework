@@ -1,10 +1,10 @@
-import { AuthLoaded, AuthLoading } from '@/components/auth/load';
 import { SignedOut, SignedIn } from '@/components/auth/sign';
 import { SignUpButton, SignInButton } from '@/components/auth/buttons';
 import { Button } from '@/components/ui/button';
 import { LoadingIcon } from '@/components/misc/loading';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 const Home = () => {
   return (
@@ -21,10 +21,7 @@ const Home = () => {
           Learn Practice, and master new languages with Lingo.
         </h1>
         <div className='flex flex-col items-center gap-y-3 max-w-82 w-full'>
-          <AuthLoading>
-            <LoadingIcon />
-          </AuthLoading>
-          <AuthLoaded>
+          <Suspense fallback={<LoadingIcon />}>
             <SignedOut>
               <SignUpButton
                 size='lg'
@@ -51,7 +48,7 @@ const Home = () => {
                 <Link href='/learn'>Continue Learning</Link>
               </Button>
             </SignedIn>
-          </AuthLoaded>
+          </Suspense>
         </div>
       </div>
     </div>
