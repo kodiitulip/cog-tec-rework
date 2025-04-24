@@ -5,30 +5,29 @@ import { LogOut } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
 import { SignOutButton } from './buttons';
+import { cn } from '@/lib/utils';
 
 type UserButtonProps = {
   label?: boolean;
-  customLabel?: string;
 } & React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants>;
 
-export const UserButton = async ({ label, customLabel, ...props }: UserButtonProps) => {
+export const UserButton = async ({ label, className, ...props }: UserButtonProps) => {
   const userName = await getCurrentUserName();
   const userAvatarUrl = await getCurrentUserAvatarUrl();
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button {...props}>
+        <Button {...props} className={cn('group/user-button', className)}>
           <Avatar>
             <AvatarImage src={userAvatarUrl} />
             <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
-          {label &&
-            (customLabel ?? (
-              <span>
-                hi, <strong className='text-sky-400'>{userName}</strong>
-              </span>
-            ))}
+          {label && (
+            <span>
+              hi, <strong className='text-ecstasy-400 group-hover/user-button:text-current'>{userName}</strong>
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56'>

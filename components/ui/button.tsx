@@ -5,30 +5,30 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-slate-200 focus-visible:ring-2 aria-invalid:ring-rose/20 dark:aria-invalid:ring-rose/40 uppercase tracking-wide cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-bold transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-neutral-700 focus-visible:ring-2 aria-invalid:ring-rose/20 dark:aria-invalid:ring-rose/40 uppercase tracking-wide cursor-pointer",
   {
     variants: {
       variant: {
         default:
-          'bg-ecstasy-400 text-white border-ecstasy-600 border-b-4 active:border-b-2 hover:bg-ecstasy-400/80 hover:text-slate-300 focus-visible:bg-ecstasy-400/80',
+          'bg-ecstasy-400 text-white border-ecstasy-500 border-b-4 active:border-b-2 hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80',
         ghost:
-          'bg-transparent text-slate-500 border-transparent border-0 hover:bg-slate-100 focus-visible:bg-slate-100',
+          'bg-transparent text-neutral-700 border-transparent border-0 hover:bg-ecstasy-400/40 focus-visible:bg-ecstasy-400/40',
         behaviorism:
-          'bg-behaviorism-400 text-primary-foreground hover:bg-behaviorism-400/80 focus-visible:bg-behaviorism-400/90 border-behaviorism-600 border-b-4 active:border-b-0',
+          'bg-behaviorism-400 text-white hover:bg-behaviorism-400/80 focus-visible:bg-behaviorism-400/90 border-behaviorism-600 border-b-4 active:border-b-2',
         behaviorismGhost: 'bg-transparent text-behaviorism-500 hover:bg-slate-100 focus-visible:bg-slate-100',
         gestalt:
-          'bg-gestalt-400 text-primary-foreground hover:bg-gestalt-400/80 focus-visible:bg-gestalt-400/90 border-gestalt-600 border-b-4 active:border-b-0',
+          'bg-gestalt-400 text-white hover:bg-gestalt-400/80 focus-visible:bg-gestalt-400/90 border-gestalt-600 border-b-4 active:border-b-2',
         gestaltGhost: 'bg-transparent text-gestalt-500 hover:bg-slate-100 focus-visible:bg-slate-100',
         danger:
-          'bg-rose-400 text-primary-foreground hover:bg-rose-400/90 focus-visible:bg-rose-400/90 border-rose-500 border-b-4 active:border-b-0',
+          'bg-rose-400 text-white hover:bg-rose-400/90 focus-visible:bg-rose-400/90 border-rose-500 border-b-4 active:border-b-2',
         dangerGhost: 'bg-transparent text-rose-500 hover:bg-slate-100 focus-visible:bg-slate-100',
         socio:
-          'bg-sociocultural-400 text-primary-foreground hover:bg-sociocultural-400/80 focus-visible:bg-sociocultural-400/90 border-sociocultural-600 border-b-4 active:border-b-0',
+          'bg-sociocultural-400 text-white hover:bg-sociocultural-400/80 focus-visible:bg-sociocultural-400/90 border-sociocultural-600 border-b-4 active:border-b-2',
         socioGhost: 'bg-transparent text-sociocultural-500 hover:bg-slate-100 focus-visible:bg-slate-100',
         sidebar:
           'bg-ecstasy-400 text-white rounded-l-none hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80 transition-none',
         sidebarGhost:
-          'bg-transparent text-slate-500 rounded-l-none hover:bg-ecstasy-400 focus-visible:bg-ecstasy-400 transition-none',
+          'bg-transparent text-neutral-700 rounded-l-none hover:text-white hover:bg-ecstasy-400 focus-visible:bg-ecstasy-400 transition-none',
       },
       size: {
         default: 'h-11 px-4 py-2 has-[>svg]:px-3',

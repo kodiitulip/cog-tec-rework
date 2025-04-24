@@ -3,15 +3,13 @@
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import Image from 'next/image';
 
 type Props = {
-  label?: string;
-  iconSrc?: string;
+  children?: React.ReactNode;
   href?: string;
 };
 
-export const SidebarItem = ({ label, iconSrc, href }: Props) => {
+export const SidebarItem = ({ children, href }: Props) => {
   const pathname = usePathname();
   const active = pathname === href;
 
@@ -21,21 +19,7 @@ export const SidebarItem = ({ label, iconSrc, href }: Props) => {
       className='justify-start h-13'
       asChild
     >
-      <Link href={href ?? '/learn'}>
-        {iconSrc && (
-          <Image
-            src={iconSrc}
-            alt={label ?? ''}
-            width={32}
-            height={32}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.hidden = true;
-            }}
-          />
-        )}
-        {label ?? 'item'}
-      </Link>
+      <Link href={href ?? '/learn'}>{children}</Link>
     </Button>
   );
 };
