@@ -27,7 +27,17 @@ const main = async () => {
       {
         id: 1,
         title: 'Behaviorismo',
-        imageSrc: '/icon/behaviorism/icon.svg',
+        imageSrc: '/icon/behaviorism/icon-color.svg',
+      },
+      {
+        id: 2,
+        title: 'Gestalt',
+        imageSrc: '/icon/gestalt/icon-color.svg',
+      },
+      {
+        id: 3,
+        title: 'Teoria Sociocultural',
+        imageSrc: '/icon/socioculture/icon-color.svg',
       },
     ]);
     await db.insert(schema.units).values([
