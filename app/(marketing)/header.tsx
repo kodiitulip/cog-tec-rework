@@ -1,32 +1,29 @@
 import Link from 'next/link';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { SignInButton } from '@/components/auth/buttons';
 import { LoadingIcon } from '@/components/misc/loading';
 import { UserButton } from '@/components/auth/user-button';
 import { SignedIn, SignedOut } from '@/components/auth/sign';
 import { Suspense } from 'react';
+import { CogTecIcon } from '@/components/svgs';
 
 export const Header = () => {
   return (
-    <header className='h-20 w-full border-b-2 border-slate-200 px-4'>
+    <header className='h-20 w-full bg-ecstasy-500 text-white rounded-b-lg px-4'>
       <div className='lg:max-w-(--breakpoint-lg) mx-auto flex items-center justify-between h-full'>
         <Link
           href='/'
           className='pt-8 pl-4 pb-7 flex items-center gap-x-3'
         >
-          <Image
-            alt='Mascot'
-            src='/kenney/shape-characters/PNG/Default/green_body_square.png'
-            width={40}
-            height={40}
-          />
-          <h1 className='text-2xl font-extrabold text-green-600 tracking-wide'>Lingo</h1>
+          <CogTecIcon className='fill-current size-10' />
+          <h1 className='text-2xl font-extrabold tracking-[calc(var(--spacing)*2)]'>CogTec</h1>
         </Link>
         <Suspense fallback={<LoadingIcon />}>
           <SignedOut>
             <SignInButton
               size='lg'
               variant='ghost'
+              className='text-current'
             >
               log in
             </SignInButton>
@@ -35,6 +32,7 @@ export const Header = () => {
             <UserButton
               variant='ghost'
               size='lg'
+              className='text-current'
             />
           </SignedIn>
         </Suspense>

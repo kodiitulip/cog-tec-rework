@@ -18,34 +18,32 @@ const Home = () => {
       </div>
       <div className='flex flex-col items-center gap-y-8'>
         <h1 className='text-xl lg:text-3xl font-bold text-neutral-600 max-w-120 text-center'>
-          Learn Practice, and master new languages with Lingo.
+          Aprenda e pratique as teorias da Cognição!
         </h1>
         <div className='flex flex-col items-center gap-y-3 max-w-82 w-full'>
           <Suspense fallback={<LoadingIcon />}>
             <SignedOut>
               <SignUpButton
                 size='lg'
-                variant='secondary'
                 className='w-full'
               >
-                Get Started
+                Crie uma conta
               </SignUpButton>
               <SignInButton
                 size='lg'
-                variant='primaryGhost'
+                variant='ghost'
                 className='w-full'
               >
-                I already have an account
+                Eu já tenho uma conta
               </SignInButton>
             </SignedOut>
             <SignedIn>
               <Button
                 asChild
                 size='lg'
-                variant='secondary'
                 className='w-full'
               >
-                <Link href='/learn'>Continue Learning</Link>
+                <Link href='/learn'>Continue Aprendendo</Link>
               </Button>
             </SignedIn>
           </Suspense>
