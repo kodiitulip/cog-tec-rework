@@ -13,15 +13,18 @@ type UserButtonProps = {
   VariantProps<typeof buttonVariants>;
 
 export const UserButton = async ({ label, className, ...props }: UserButtonProps) => {
-  const userName = await getCurrentUserName();
-  const userAvatarUrl = await getCurrentUserAvatarUrl();
+  const userName = (await getCurrentUserName()) ?? 'user';
+  const userAvatarUrl = (await getCurrentUserAvatarUrl()) ?? '/empty.svg';
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button {...props} className={cn('group/user-button', className)}>
+        <Button
+          {...props}
+          className={cn('group/user-button', className)}
+        >
           <Avatar>
             <AvatarImage src={userAvatarUrl} />
-            <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarFallback className='text-ecstasy-400'>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           {label && (
             <span>

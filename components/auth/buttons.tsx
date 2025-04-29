@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -14,6 +13,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
 import { GithubButton } from '@/components/auth/oauth/github-button';
 import { signOut } from '@/actions/auth';
+import { SignInForm } from './sign-forms';
 
 // TODO: auth signin/up forms
 type SignButtonProps = React.ComponentPropsWithoutRef<'button'> &
@@ -36,14 +36,6 @@ export const SignUpButton = (props: SignButtonProps) => (
         size='lg'
         className='justify-start'
       />
-      <DialogFooter>
-        <Button
-          type='submit'
-          variant='ghost'
-        >
-          Sign Up
-        </Button>
-      </DialogFooter>
     </DialogContent>
   </Dialog>
 );
@@ -63,14 +55,8 @@ export const SignInButton = (props: SignButtonProps) => (
         size='lg'
         className='justify-start'
       />
-      <DialogFooter>
-        <Button
-          type='submit'
-          variant='ghost'
-        >
-          Sign In
-        </Button>
-      </DialogFooter>
+      <hr className='border-neutral-700 border-t-1' />
+      <SignInForm />
     </DialogContent>
   </Dialog>
 );
