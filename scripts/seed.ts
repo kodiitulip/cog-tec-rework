@@ -8,8 +8,8 @@ import * as schema from '@/db/schema';
 
 config({ path: '.env.local' });
 
-const client = postgres(process.env.DATABASE_URL!, { prepare: false });
-const db = drizzle({ client, schema });
+const admin = postgres(process.env.ADMIN_DATABASE_URL!, { prepare: false });
+const db = drizzle({ client: admin, schema });
 
 const main = async () => {
   try {

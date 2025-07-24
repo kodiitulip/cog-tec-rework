@@ -6,5 +6,5 @@ import * as schema from './schema';
 
 config({ path: '.env.local' });
 
-const client = postgres(process.env.DATABASE_URL!, { prepare: false });
+const client = postgres(process.env.ADMIN_DATABASE_URL!, { prepare: false });
 export const db = drizzle({ client, schema });

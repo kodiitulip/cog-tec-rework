@@ -8,7 +8,7 @@ const drizzleConfig: Config = {
   out: './supabase/migrations',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    url: process.env.ADMIN_DATABASE_URL!,
   },
 };
 

@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { db } from '@/db/drizzle';
 import { createClient } from '@/lib/supabase/server';
 import { eq } from 'drizzle-orm';
-import { units, userProgress, courses,        challengeProgress } from '@/db/schema';
+import { units, userProgress, courses, challengeProgress } from '@/db/schema';
 
 export const getCourses = cache(async () => {
   const data = await db.query.courses.findMany({
@@ -39,7 +39,7 @@ export const getUnits = cache(async () => {
     where: eq(units.courseId, userProgress.activeCourseId),
     with: {
       lessons: {
-    orderBy: ({ order }, { asc }) => [asc(order)],
+        orderBy: ({ order }, { asc }) => [asc(order)],
         with: {
           challenges: {
             with: {
@@ -55,12 +55,12 @@ export const getUnits = cache(async () => {
 
   const normalizedData = data.map((unit) => {
     const completedLessons = unit.lessons.map((lesson) => {
-      const completed = lesson.challenges.every(({challengeProgress}) => {
-        return challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({completed}) => completed)
+      const completed = lesson.challenges.every(({ challengeProgress }) => {
+        return challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed)
       })
-      return {...lesson, completed }
+      return { ...lesson, completed }
     })
-    return {...unit, lessons: completedLessons}
+    return { ...unit, lessons: completedLessons }
   })
 
   return normalizedData

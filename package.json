@@ -9,7 +9,9 @@
     "lint": "next lint",
     "studio": "bunx drizzle-kit studio --config=drizzle.config.ts --verbose",
     "push": "bunx drizzle-kit push --config=drizzle.config.ts",
-    "seed": "bun ./scripts/seed.ts"
+    "seed": "bun ./scripts/seed.ts",
+    "supa:start": "supabase start",
+    "supa:stop": "supabase stop"
   },
   "dependencies": {
     "@icons-pack/react-simple-icons": "^12.7.0",
@@ -43,6 +45,7 @@
     "drizzle-kit": "^0.30.6",
     "eslint": "^9",
     "eslint-config-next": "15.2.3",
+    "supabase": "^2.23.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   },
