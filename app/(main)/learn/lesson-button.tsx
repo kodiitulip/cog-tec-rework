@@ -15,18 +15,6 @@ type Props = {
 };
 
 export const LessonButton = ({ index, totalCount, current, locked, id, activeCourse }: Props) => {
-  const cycleLength = 8;
-  const cycleIndex = index % cycleLength;
-
-  let indentation;
-
-  if (cycleIndex <= 2) indentation = cycleIndex;
-  else if (cycleIndex <= 4) indentation = 4 - cycleIndex;
-  else if (cycleIndex <= 6) indentation = 4 - cycleIndex;
-  else indentation = cycleIndex - 8;
-
-  const rightPosition = indentation * 40;
-
   const isFirst = index === 0;
   const isLast = index === totalCount;
   const isCompleted = !current && !locked;
@@ -49,13 +37,14 @@ export const LessonButton = ({ index, totalCount, current, locked, id, activeCou
       href={href}
       aria-disabled={locked}
       style={{
-        pointerEvents: locked ? 'none' : 'auto',
-        right: `${rightPosition}px`,
-        marginTop: isFirst && !isCompleted ? 60 : 24,
+        pointerEvents: locked && !isFirst ? 'none' : 'auto',
+        // right: `${rightPosition}px`,
+        // marginTop: isFirst && !isCompleted ? 60 : 24,
       }}
       className={cn(
         'relative size-20 flex items-center justify-center rounded-full border-2 border-b-8 hover:border-b-4',
-        colors
+        colors,
+        index % 3 !== 0 ? 'col-span-1' : 'col-span-2 mx-auto'
       )}
     >
       <Icon />
