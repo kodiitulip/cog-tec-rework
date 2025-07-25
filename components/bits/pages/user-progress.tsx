@@ -21,9 +21,9 @@ export const UserProgress = ({ activeCourse, points, hearts, hasActiveSubscripti
       >
         <Link href='/courses'>
           <Image
-            src={activeCourse.imageSrc ?? '/flags/unknown.svg'}
+            src={activeCourse.imageSrc ?? '/icon/cog-tec/icon.svg'}
             alt={activeCourse.title ?? 'unknown flag'}
-            className='rounded-md border'
+            className='rounded-md'
             width={32}
             height={32}
           />

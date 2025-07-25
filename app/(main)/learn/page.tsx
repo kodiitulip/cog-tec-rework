@@ -33,6 +33,7 @@ const LearnPage = async () => {
               {...unit}
               activeLesson={undefined}
               activeLessonPercentage={0}
+              activeCourse={userProgress.activeCourse!.title}
             />
           </div>
         ))}

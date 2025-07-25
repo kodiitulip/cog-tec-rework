@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default:
           'bg-ecstasy-400 text-white border-ecstasy-500 border-b-4 active:border-b-2 hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80',
         ghost:
-          'bg-transparent text-neutral-700 border-transparent border-0 hover:bg-ecstasy-400/40 focus-visible:bg-ecstasy-400/40',
+          'bg-transparent border-transparent border-0 hover:bg-ecstasy-400/40 focus-visible:bg-ecstasy-400/40',
         behaviorism:
           'bg-behaviorism-400 text-white hover:bg-behaviorism-400/80 focus-visible:bg-behaviorism-400/90 border-behaviorism-600 border-b-4 active:border-b-2',
         behaviorismGhost: 'bg-transparent text-behaviorism-500 hover:bg-slate-100 focus-visible:bg-slate-100',

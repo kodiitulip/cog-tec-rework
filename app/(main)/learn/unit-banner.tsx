@@ -1,14 +1,18 @@
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { NotebookText } from 'lucide-react';
 import Link from 'next/link';
 
 type Props = {
   title: string;
   description: string;
+  activeCourse: string;
 };
 
-export const UnitBanner = ({ title, description }: Props) => (
-  <div className='@container w-full rounded-xl bg-green-400 p-5 text-white flex items-center justify-between'>
+export const UnitBanner = ({ title, description, activeCourse }: Props) => (
+  <div className={cn('@container w-full rounded-xl bg-neutral-400 p-5 text-white flex items-center justify-between',
+    activeCourse == 'Behaviorismo' ? 'bg-behaviorism-500' : activeCourse == 'Gestalt' ? 'bg-gestalt-500' : activeCourse == 'Teoria Sociocultural' ? 'bg-sociocultural-500' : ''
+  )}>
     <div className='space-y-2.5'>
       <h3 className='text-2xl font-bold'>{title}</h3>
       <p className='text-lg'>{description}</p>
@@ -16,8 +20,8 @@ export const UnitBanner = ({ title, description }: Props) => (
     <Button
       asChild
       size='lg'
-      variant='secondary'
-      className='hidden @md:flex border-2 border-b-4 active:border-b-2'
+      variant='ghost'
+      className='hidden @md:flex hover:bg-white/20 focus-visible:bg-white/20'
     >
       <Link href='/lesson'>
         <NotebookText className='mr-2' />

@@ -10,13 +10,15 @@ type Props = {
   lessons: (SelectLessons & { completed: boolean })[];
   activeLesson?: SelectLessons & { unit: SelectUnits };
   activeLessonPercentage: number;
+  activeCourse: string;
 };
 
-export const Unit = ({ id, order, title, description, lessons, activeLesson, activeLessonPercentage }: Props) => (
+export const Unit = ({ title, description, lessons, activeLesson, activeLessonPercentage, activeCourse }: Props) => (
   <>
     <UnitBanner
       title={title}
       description={description}
+      activeCourse={activeCourse}
     />
     <div className='flex items-center flex-col relative'>
       {lessons.map((lesson, index) => {

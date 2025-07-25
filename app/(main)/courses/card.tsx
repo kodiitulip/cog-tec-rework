@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import Image from 'next/image';
 
@@ -14,7 +15,9 @@ export const Card = ({ id, title, imageSrc, onClick, disabled, active }: Props) 
   return (
     <button
       onClick={() => onClick(id)}
-      className='border-2 rounded-xl border-b-4 hover:bg-black/5 cursor-pointer active:border-b-2 flex flex-col items-center justify-between p-3 pb-6 min-h-55 min-w-50 disabled:pointer-events-none disabled:opacity-50'
+      className={cn('border-2 rounded-xl border-b-4 hover:bg-black/5 cursor-pointer active:border-b-2 flex flex-col items-center justify-between p-3 pb-6 min-h-55 min-w-50 disabled:pointer-events-none disabled:opacity-50',
+        title == 'Behaviorismo' ? 'border-behaviorism-500' : title == 'Gestalt' ? 'border-gestalt-500' : title == 'Teoria Sociocultural' ? 'border-sociocultural-500' : ''
+      )}
       disabled={disabled}
     >
       <div className='min-h-6 w-full flex items-center justify-end'>
@@ -30,7 +33,7 @@ export const Card = ({ id, title, imageSrc, onClick, disabled, active }: Props) 
         alt={title}
         height={70}
         width={93.33}
-        className='rounded-lg drop-shadow-md border object-cover'
+        className='rounded-lg drop-shadow-md object-cover'
       />
       <p className='text-neutral-700 text-center font-bold mt-3'>{title}</p>
     </button>
