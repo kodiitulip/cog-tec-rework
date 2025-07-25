@@ -57,6 +57,18 @@ const main = async () => {
         order: 1,
         title: 'Pensadores',
       },
+      {
+        id: 2,
+        unitId: 1,
+        order: 2,
+        title: 'Test',
+      },
+      {
+        id: 3,
+        unitId: 1,
+        order: 3,
+        title: 'Yipe',
+      },
     ]);
     await db.insert(schema.challenges).values([
       {

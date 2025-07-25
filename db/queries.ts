@@ -46,30 +46,32 @@ export const getUnits = cache(async () => {
               challengeProgress: {
                 where: eq(challengeProgress.userId, userProgress.userId),
               },
-            }
-          }
-        }
-      }
-    }
-  })
+            },
+          },
+        },
+      },
+    },
+  });
 
   const normalizedData = data.map((unit) => {
     const completedLessons = unit.lessons.map((lesson) => {
       const completed = lesson.challenges.every(({ challengeProgress }) => {
-        return challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed)
-      })
-      return { ...lesson, completed }
-    })
-    return { ...unit, lessons: completedLessons }
-  })
+        return (
+          challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed)
+        );
+      });
+      return { ...lesson, completed };
+    });
+    return { ...unit, lessons: completedLessons };
+  });
 
-  return normalizedData
-})
+  return normalizedData;
+});
 
 export const getCourseById = cache(async (courseId: number) => {
   const data = await db.query.courses.findFirst({
     where: eq(courses.id, courseId),
     // TODO: Populate units and lessons
-  })
+  });
   return data;
-})
+});
