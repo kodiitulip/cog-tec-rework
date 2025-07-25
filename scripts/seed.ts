@@ -49,6 +49,14 @@ const main = async () => {
         imageSrc: '/icon/behaviorism/fundaments.svg',
         order: 1,
       },
+      {
+        id: 2,
+        courseId: 1,
+        title: 'Estudos',
+        description: '????',
+        imageSrc: '/icon/behaviorism/fundaments.svg',
+        order: 2,
+      },
     ]);
     await db.insert(schema.lessons).values([
       {
@@ -67,6 +75,30 @@ const main = async () => {
         id: 3,
         unitId: 1,
         order: 3,
+        title: 'Yipe',
+      },
+      {
+        id: 4,
+        unitId: 1,
+        order: 4,
+        title: 'Pensadores',
+      },
+      {
+        id: 5,
+        unitId: 1,
+        order: 5,
+        title: 'Test',
+      },
+      {
+        id: 6,
+        unitId: 2,
+        order: 2,
+        title: 'Yipe',
+      },
+      {
+        id: 7,
+        unitId: 2,
+        order: 2,
         title: 'Yipe',
       },
     ]);

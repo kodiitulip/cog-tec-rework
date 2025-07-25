@@ -38,15 +38,19 @@ export const LessonButton = ({ index, totalCount, current, locked, id, activeCou
       aria-disabled={locked}
       style={{
         pointerEvents: locked && !isFirst ? 'none' : 'auto',
-        // right: `${rightPosition}px`,
-        // marginTop: isFirst && !isCompleted ? 60 : 24,
       }}
       className={cn(
-        'relative size-20 flex items-center justify-center rounded-full border-2 border-b-8 hover:border-b-4',
+        'relative size-20 flex items-center justify-center rounded-full border-2 border-b-6 hover:border-b-4',
         colors,
         index % 3 !== 0 ? 'col-span-1' : 'col-span-2 mx-auto'
       )}
     >
+      {current && (
+        <div className='absolute -top-6 uppercase rounded-xl bg-white animate-bounce tracking-wide z-10 border-2 font-bold px-3 py-2.5 border-current'>
+          start
+          <div className='absolute left-1/2 -bottom-2 w-0 h-0 border-x-8 border-x-transparent border-t-8 transform -translate-x-1/2 border-t-current'></div>
+        </div>
+      )}
       <Icon />
     </Link>
   );

@@ -2,14 +2,19 @@ import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { Header } from './header';
 import { UserProgress } from '@/components/bits/pages/user-progress';
-import { getUserProgress, getUnits } from '@/db/queries';
+import { getUserProgress, getUnits, getCourseProgress, getLessonPercentage } from '@/db/queries';
 import { redirect } from 'next/navigation';
 import { Unit } from './unit';
 
 const LearnPage = async () => {
-  const [userProgress, units] = await Promise.all([getUserProgress(), getUnits()]);
+  const [userProgress, units, courseProgress, lessonPercentage] = await Promise.all([
+    getUserProgress(),
+    getUnits(),
+    getCourseProgress(),
+    getLessonPercentage(),
+  ]);
 
-  if (!userProgress || !userProgress.activeCourse) {
+  if (!userProgress || !userProgress.activeCourse || !courseProgress) {
     redirect('/courses');
   }
 
@@ -31,8 +36,8 @@ const LearnPage = async () => {
           >
             <Unit
               {...unit}
-              activeLessonId={userProgress.activeLesson?.id}
-              activeLessonPercentage={0}
+              activeLesson={courseProgress.activeLesson}
+              activeLessonPercentage={lessonPercentage}
               activeCourse={userProgress.activeCourse!.title}
             />
           </div>

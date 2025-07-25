@@ -8,12 +8,12 @@ type Props = {
   title: string;
   description: string;
   lessons: (SelectLessons & { completed: boolean })[];
-  activeLessonId?: number;
+  activeLesson?: SelectLessons;
   activeLessonPercentage: number;
   activeCourse: string;
 };
 
-export const Unit = ({ title, description, lessons, activeLessonId, activeLessonPercentage, activeCourse }: Props) => (
+export const Unit = ({ title, description, lessons, activeLesson, activeLessonPercentage, activeCourse }: Props) => (
   <>
     <UnitBanner
       title={title}
@@ -22,7 +22,7 @@ export const Unit = ({ title, description, lessons, activeLessonId, activeLesson
     />
     <div className='grid grid-cols2 justify-center gap-y-3 gap-x-20 py-10'>
       {lessons.map((lesson, index) => {
-        const isCurrent = lesson.id === activeLessonId;
+        const isCurrent = lesson.id === activeLesson?.id;
         const isLocked = !lesson.completed && !isCurrent;
 
         return (
