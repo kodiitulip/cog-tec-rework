@@ -79,6 +79,22 @@ const main = async () => {
         question:
           'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
       },
+      {
+        id: 2,
+        lessonId: 2,
+        type: 'SELECT',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 3,
+        lessonId: 3,
+        type: 'SELECT',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
     ]);
     await db.insert(schema.challengeOptions).values([
       {

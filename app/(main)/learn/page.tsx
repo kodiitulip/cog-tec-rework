@@ -31,7 +31,7 @@ const LearnPage = async () => {
           >
             <Unit
               {...unit}
-              activeLesson={undefined}
+              activeLessonId={userProgress.activeLesson?.id}
               activeLessonPercentage={0}
               activeCourse={userProgress.activeCourse!.title}
             />
