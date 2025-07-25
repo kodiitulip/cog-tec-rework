@@ -1,43 +1,62 @@
 import { useActionState } from 'react';
 import { Button } from '../ui/button';
 import { SignInFieldErrors, SignInSuccess, signInWithEmail } from '@/actions/auth';
-import { Result, ResultAsync, ok } from 'neverthrow';
 
 type SignInFormProps = React.ComponentPropsWithRef<'form'> & {};
-interface SignInInitialState extends ResultAsync<SignInSuccess, SignInFieldErrors> {}
+type SignInInitialState = SignInSuccess | SignInFieldErrors | null;
 
 export const SignInForm = ({ ...props }: SignInFormProps) => {
-  const [state, action, isPending] = useActionState<SignInInitialState, FormData>(
-    signInWithEmail,
-    ok({
-      success: true,
-      formError: null,
-      authError: null,
-    })
-  );
+  const [state, action, isPending] = useActionState<SignInInitialState, FormData>(signInWithEmail, null);
+
   return (
     <form
       action={action}
+      className='space-y-1.5'
       {...props}
     >
-      <label htmlFor='email'>
+      <label
+        htmlFor='email'
+        className='block'
+      >
         Email:
         <input
           type='email'
           id='email'
           name='email'
           placeholder='email@addrs.io'
+          className='ml-1'
         />
+        {state?.formError?.email?.map((msg, idx) => (
+          <div
+            key={idx}
+            className='text-sm text-rose-400 ml-1'
+          >
+            {msg}
+          </div>
+        ))}
       </label>
-      <label htmlFor='password'>
+      <label
+        htmlFor='password'
+        className='block'
+      >
         Password:
         <input
           type='password'
           id='password'
           name='password'
           placeholder='password'
+          className='ml-1'
         />
+        {state?.formError?.password?.map((msg, idx) => (
+          <div
+            key={idx}
+            className='text-sm text-rose-400 ml-1'
+          >
+            {msg}
+          </div>
+        ))}
       </label>
+      {state?.authError && <div className='text-sm text-rose-400'>{state?.authError?.message}</div>}
       <Button
         type='submit'
         variant='ghost'

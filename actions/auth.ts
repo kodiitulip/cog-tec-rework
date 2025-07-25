@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { UserLoginFormSchema } from '@/zod/schemas';
-import { Result, ResultAsync, err, ok } from 'neverthrow';
 import { AuthError } from '@supabase/supabase-js';
 
 export const signInWithGithub = async () => {
@@ -37,20 +36,20 @@ export type SignInSuccess = {
 };
 
 export const signInWithEmail = async (
-  state: Result<SignInSuccess, SignInFieldErrors>,
+  _state: SignInSuccess | SignInFieldErrors | null,
   formData: FormData
-): Promise<ResultAsync<SignInSuccess, SignInFieldErrors>> => {
+): Promise<SignInSuccess | SignInFieldErrors | null> => {
   const validatedFields = UserLoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
   });
 
-  if (!validatedFields.success) {
-    return err({
+  console.log(validatedFields.error?.flatten().fieldErrors);
+  if (!validatedFields.success)
+    return {
       success: false,
       formError: validatedFields.error.flatten().fieldErrors,
-    });
-  }
+    };
 
   const { email, password } = validatedFields.data;
 
@@ -60,13 +59,13 @@ export const signInWithEmail = async (
     password,
   });
 
-  if (error) {
-    return err({
+  if (error)
+    return {
       success: false,
       authError: error,
-    });
-  }
-  return ok({ success: true, authError: null, formError: null });
+    };
+
+  return { success: true, authError: null, formError: null };
 };
 
 export const signOut = async () => {
