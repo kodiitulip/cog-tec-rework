@@ -46,9 +46,9 @@ export const upsertUserProgress = async (courseId: number): Promise<Result<null,
   if (existingUserProgress) {
     await db.update(userProgress).set({
       activeCourseId: courseId,
+      activeLessonId: existingUserProgress.activeLessonId || 1,
       userName: (user.user_metadata['user_name'] as string) || 'User',
-      userImageSrc:
-        (user.user_metadata['avatar_url'] as string) || '/kenney/shape-characters/PNG/Default/blue_body_circle.png',
+      userImageSrc: user.user_metadata['avatar_url'] as string,
     });
     revalidatePath('/courses');
     revalidatePath('/learn');
@@ -58,9 +58,9 @@ export const upsertUserProgress = async (courseId: number): Promise<Result<null,
   await db.insert(userProgress).values({
     userId: id,
     activeCourseId: courseId,
+    activeLessonId: 1,
     userName: (user.user_metadata['user_name'] as string) || 'User',
-    userImageSrc:
-      (user.user_metadata['avatar_url'] as string) || '/kenney/shape-characters/PNG/Default/blue_body_circle.png',
+    userImageSrc: user.user_metadata['avatar_url'] as string,
   });
 
   revalidatePath('/courses');
