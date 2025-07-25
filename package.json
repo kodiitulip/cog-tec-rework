@@ -11,6 +11,7 @@
     "push": "bunx drizzle-kit push --config=drizzle.config.ts",
     "seed": "bun ./scripts/seed.ts",
     "supa:start": "supabase start",
+    "supa:restart": "supabase stop && supabase start",
     "supa:stop": "supabase stop"
   },
   "dependencies": {
