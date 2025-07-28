@@ -4,6 +4,7 @@ import { SelectChallengeOptions, SelectChallenges } from '@/db/schema';
 import { useState } from 'react';
 import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
+import { Challenge } from './challenge';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -33,9 +34,10 @@ export const Quiz = ({
     return uncompletedIndex === -1 ? 0 : uncompletedIndex;
   });
 
-  const challenge = challenges[activeIndex];
+  const currentChallenge = challenges[activeIndex];
+  const options = currentChallenge?.challengeOptions || [];
 
-  const title = challenge.type === 'ASSIST' ? 'Selecione o significado correto' : challenge.question;
+  const title = currentChallenge.type === 'ASSIST' ? 'Selecione o significado correto' : currentChallenge.question;
 
   return (
     <>
@@ -46,13 +48,19 @@ export const Quiz = ({
       <div className='h-full flex items-center justify-center'>
         <div className='max-w-230 px-6 lg:px-0 flex flex-col gap-y-12'>
           <h1 className='text-lg text-center lg:text-start font-bold text-neutral-700'>{title}</h1>
-          <div className=''>
-            {challenge.type === 'SELECT' && ( // TODO: change from SELECT to ASSIST *prone for changes
+          <div>
+            {currentChallenge.type === 'ASSIST' && ( // TODO: change from SELECT to ASSIST *prone for changes
               <QuestionBubble
-                question={challenge.question}
+                question={currentChallenge.question}
                 courseName={activeCourseName}
               />
             )}
+            <Challenge
+              options={options}
+              onSelect={() => {}}
+              status='correct' // TODO: remove hardcoded status
+              type={currentChallenge.type}
+            />
           </div>
         </div>
       </div>
