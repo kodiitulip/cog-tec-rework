@@ -11,20 +11,19 @@ const buttonVariants = cva(
       variant: {
         default:
           'bg-ecstasy-400 text-white border-ecstasy-500 border-b-4 active:border-b-2 hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80',
-        ghost:
-          'bg-transparent border-transparent border-0 hover:bg-ecstasy-400/40 focus-visible:bg-ecstasy-400/40',
+        ghost: 'bg-transparent border-transparent border-0 hover:bg-ecstasy-400/40 focus-visible:bg-ecstasy-400/40',
         behaviorism:
           'bg-behaviorism-400 text-white hover:bg-behaviorism-400/80 focus-visible:bg-behaviorism-400/90 border-behaviorism-600 border-b-4 active:border-b-2',
-        behaviorismGhost: 'bg-transparent text-behaviorism-500 hover:bg-slate-100 focus-visible:bg-slate-100',
+        behaviorismGhost: 'bg-transparent text-behaviorism-500 hover:bg-slate-500/40 focus-visible:bg-slate-500/40',
         gestalt:
           'bg-gestalt-400 text-white hover:bg-gestalt-400/80 focus-visible:bg-gestalt-400/90 border-gestalt-600 border-b-4 active:border-b-2',
-        gestaltGhost: 'bg-transparent text-gestalt-500 hover:bg-slate-100 focus-visible:bg-slate-100',
+        gestaltGhost: 'bg-transparent text-gestalt-500 hover:bg-slate-500/40 focus-visible:bg-slate-500/40',
         danger:
           'bg-rose-400 text-white hover:bg-rose-400/90 focus-visible:bg-rose-400/90 border-rose-500 border-b-4 active:border-b-2',
-        dangerGhost: 'bg-transparent text-rose-500 hover:bg-slate-100 focus-visible:bg-slate-100',
+        dangerGhost: 'bg-transparent text-rose-500 hover:bg-slate-500/40 focus-visible:bg-slate-500/40',
         socio:
           'bg-sociocultural-400 text-white hover:bg-sociocultural-400/80 focus-visible:bg-sociocultural-400/90 border-sociocultural-600 border-b-4 active:border-b-2',
-        socioGhost: 'bg-transparent text-sociocultural-500 hover:bg-slate-100 focus-visible:bg-slate-100',
+        socioGhost: 'bg-transparent text-sociocultural-500 hover:bg-slate-500/40 focus-visible:bg-slate-500/40',
         sidebar:
           'bg-ecstasy-400 text-white rounded-l-none hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80 transition-none',
         sidebarGhost:
