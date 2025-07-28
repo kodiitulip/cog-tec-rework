@@ -113,15 +113,15 @@ const main = async () => {
       },
       {
         id: 2,
-        lessonId: 2,
-        type: 'SELECT',
+        lessonId: 1,
+        type: 'ASSIST',
         order: 1,
         question:
           'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
       },
       {
         id: 3,
-        lessonId: 3,
+        lessonId: 1,
         type: 'SELECT',
         order: 1,
         question:
