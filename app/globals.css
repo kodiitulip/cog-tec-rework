@@ -162,7 +162,7 @@
 
 @layer base {
   * {
-    @apply border-neutral-700 outline-neutral-400/50;
+    @apply border-neutral-400 outline-neutral-400/50;
   }
   body {
     @apply bg-ecstasy-50 text-neutral-700;
