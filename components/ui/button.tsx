@@ -28,6 +28,7 @@ const buttonVariants = cva(
           'bg-ecstasy-400 text-white rounded-l-none hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80 transition-none',
         sidebarGhost:
           'bg-transparent text-neutral-700 rounded-l-none hover:text-white hover:bg-ecstasy-400 focus-visible:bg-ecstasy-400 transition-none',
+        empty: '',
       },
       size: {
         default: 'h-11 px-4 py-2 has-[>svg]:px-3',
@@ -44,24 +45,21 @@ const buttonVariants = cva(
   }
 );
 
-export interface ButtonProps extends React.ComponentPropsWithoutRef<'button'>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-}
+export type ButtonProps = React.ComponentProps<'button'> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+  };
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild, ...props }, ref) => {
-    const Comp = asChild ? Slot : 'button';
+const Button = ({ className, variant, size, asChild = false, ...props }: ButtonProps) => {
+  const Comp = asChild ? Slot : 'button';
 
-    return (
-      <Comp
-        data-slot='button'
-        ref={ref}
-        className={cn(buttonVariants({ variant, size, className }))}
-        {...props}
-      />
-    );
-  }
-);
-Button.displayName = 'Button';
+  return (
+    <Comp
+      data-slot='button'
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  );
+};
 
 export { Button, buttonVariants };

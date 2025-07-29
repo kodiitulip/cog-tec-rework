@@ -11,12 +11,12 @@ export const QuestionBubble = ({ question, courseName }: Props) => {
     courseName === 'Behaviorismo'
       ? BehaviorismIcon
       : courseName === 'Gestalt'
-        ? GestaltIcon
-        : courseName === 'Teoria Sociocultural'
-          ? SociocultureIcon
-          : CogTecIcon;
+      ? GestaltIcon
+      : courseName === 'Teoria Sociocultural'
+      ? SociocultureIcon
+      : CogTecIcon;
 
-  const color = tailwindCourseColors(courseName || '', 'fill', '500', 'ecstasy');
+  const color = tailwindCourseColors(courseName || '', 'fill', '500');
 
   return (
     <div className='flex items-center gap-x-4 mb-6'>

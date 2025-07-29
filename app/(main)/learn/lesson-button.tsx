@@ -23,11 +23,11 @@ export const LessonButton = ({ index, totalCount, current, locked, id, activeCou
   const href = isCompleted ? `/lesson/${id}` : '/lesson';
 
   const colors = [
-    tailwindCourseColors(locked ? '' : activeCourse, 'bg', '500', 'gray'),
-    tailwindCourseColors(locked ? '' : activeCourse, 'text', '700', 'gray'),
-    tailwindCourseColors(locked ? '' : activeCourse, 'border', '700', 'gray'),
-    'hover:' + tailwindCourseColors(locked ? '' : activeCourse, 'bg', '400', 'gray'),
-    'focus-visible:' + tailwindCourseColors(locked ? '' : activeCourse, 'bg', '400', 'gray'),
+    tailwindCourseColors(locked ? '' : activeCourse, 'bg', '500'),
+    tailwindCourseColors(locked ? '' : activeCourse, 'text', '700'),
+    tailwindCourseColors(locked ? '' : activeCourse, 'border', '700'),
+    'hover:' + tailwindCourseColors(locked ? '' : activeCourse, 'bg', '400'),
+    'focus-visible:' + tailwindCourseColors(locked ? '' : activeCourse, 'bg', '400'),
   ];
 
   return (

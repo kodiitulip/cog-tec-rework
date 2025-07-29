@@ -22,7 +22,7 @@ type Props = {
 export const Quiz = ({
   initialPercentage,
   initialHearts,
-  initialLessonId,
+  // initialLessonId,
   initialLessonChallenges,
   activeCourseName,
 }: Props) => {
@@ -33,6 +33,13 @@ export const Quiz = ({
     const uncompletedIndex = challenges.findIndex(({ completed }) => !completed);
     return uncompletedIndex === -1 ? 0 : uncompletedIndex;
   });
+  const [selectedOption, setSelectedOption] = useState<number>(-1);
+  const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
+
+  const onSelect = (id: number) => {
+    if (status !== 'none') return;
+    setSelectedOption(id);
+  };
 
   const currentChallenge = challenges[activeIndex];
   const options = currentChallenge?.challengeOptions || [];
@@ -57,8 +64,10 @@ export const Quiz = ({
             )}
             <Challenge
               options={options}
-              onSelect={() => {}}
-              status='correct' // TODO: remove hardcoded status
+              onSelect={onSelect}
+              status={status}
+              selectedOption={selectedOption}
+              disabled={false}
               type={currentChallenge.type}
             />
           </div>
