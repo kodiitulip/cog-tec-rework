@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn, tailwindCourseColors } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import Image from 'next/image';
 
@@ -12,14 +12,8 @@ type Props = {
 };
 
 export const Card = ({ id, title, imageSrc, onClick, disabled, active }: Props) => {
-  const color =
-    title == 'Behaviorismo'
-      ? 'border-behaviorism-500'
-      : title == 'Gestalt'
-      ? 'border-gestalt-500'
-      : title == 'Teoria Sociocultural'
-      ? 'border-sociocultural-500'
-      : '';
+  const color = tailwindCourseColors(title, 'border', '500');
+
   return (
     <button
       onClick={() => onClick(id)}

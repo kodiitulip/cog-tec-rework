@@ -1,5 +1,5 @@
 import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
-import { cn } from '@/lib/utils';
+import { cn, tailwindCourseColors } from '@/lib/utils';
 
 type Props = {
   question: string;
@@ -11,18 +11,13 @@ export const QuestionBubble = ({ question, courseName }: Props) => {
     courseName === 'Behaviorismo'
       ? BehaviorismIcon
       : courseName === 'Gestalt'
-      ? GestaltIcon
-      : courseName === 'Teoria Sociocultural'
-      ? SociocultureIcon
-      : CogTecIcon;
-  const color =
-    courseName === 'Behaviorismo'
-      ? 'fill-behaviorism-500'
-      : courseName === 'Gestalt'
-      ? 'fill-gestalt-500'
-      : courseName === 'Teoria Sociocultural'
-      ? 'fill-sociocultural-500'
-      : 'fill-ecstasy-500';
+        ? GestaltIcon
+        : courseName === 'Teoria Sociocultural'
+          ? SociocultureIcon
+          : CogTecIcon;
+
+  const color = tailwindCourseColors(courseName || '', 'fill', '500', 'ecstasy');
+
   return (
     <div className='flex items-center gap-x-4 mb-6'>
       <Icon
