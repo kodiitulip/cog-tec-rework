@@ -1,6 +1,6 @@
 'use client';
 
-import { SelectChallengeOptions, SelectChallenges } from '@/db/schema';
+import { SelectChallengeOptions, SelectChallenges, SelectLessons } from '@/db/schema';
 import { useState, useTransition } from 'react';
 import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
@@ -20,7 +20,7 @@ type NormalizedChallenges = SelectChallenges & {
 type Props = {
   initialPercentage: number;
   initialHearts: number;
-  initialLessonId: number;
+  initialLessonId: SelectLessons['id'];
   initialLessonChallenges: NormalizedChallenges[];
   activeCourseName?: CourseTitles;
 };
@@ -42,6 +42,7 @@ export const Quiz = ({
 
   const [hearts, setHearts] = useState<number>(initialHearts);
   const [percentage, setPercentage] = useState<number>(initialPercentage);
+  const [lessonId] = useState<SelectLessons['id']>(initialLessonId);
   const [challenges] = useState<NormalizedChallenges[]>(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState<number>(() => {
     const uncompletedIndex = challenges.findIndex(({ completed }) => !completed);
@@ -170,11 +171,16 @@ export const Quiz = ({
   // TODO: remove harcoded true
   if (true || !currentChallenge) {
     return (
-      <FinishScreen
-        courseName={activeCourseName}
-        points={challenges.length * 10}
-        hearts={hearts}
-      />
+      <>
+        <FinishScreen
+          courseName={activeCourseName}
+          points={challenges.length * 10}
+          hearts={hearts}
+          lessonId={lessonId}
+        />
+        {correctAudio}
+        {incorrectAudio}
+      </>
     );
   }
 

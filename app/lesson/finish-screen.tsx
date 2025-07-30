@@ -1,14 +1,18 @@
 import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
 import { cn, CourseTitles } from '@/lib/utils';
 import { ResultCard } from './result-card';
+import { Footer } from './footer';
+import { SelectLessons } from '@/db/schema';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   courseName?: CourseTitles;
   points: number;
   hearts: number;
+  lessonId: SelectLessons['id'];
 };
 
-export const FinishScreen = ({ courseName, hearts, points }: Props) => {
+export const FinishScreen = ({ courseName, hearts, points, lessonId }: Props) => {
   const Icon =
     courseName === 'Behaviorismo'
       ? BehaviorismIcon
@@ -17,6 +21,8 @@ export const FinishScreen = ({ courseName, hearts, points }: Props) => {
       : courseName === 'Teoria Sociocultural'
       ? SociocultureIcon
       : CogTecIcon;
+
+  const router = useRouter();
 
   return (
     <>
@@ -52,6 +58,11 @@ export const FinishScreen = ({ courseName, hearts, points }: Props) => {
           />
         </div>
       </div>
+      <Footer
+        lessonId={lessonId}
+        status='completed'
+        onCheck={() => router.push('/learn')}
+      />
     </>
   );
 };
