@@ -1,6 +1,7 @@
 import { SelectLessons } from '@/db/schema';
 import { UnitBanner } from './unit-banner';
 import { LessonButton } from './lesson-button';
+import { CourseTitles } from '@/lib/utils';
 
 type Props = {
   id: number;
@@ -10,7 +11,7 @@ type Props = {
   lessons: (SelectLessons & { completed: boolean })[];
   activeLesson?: SelectLessons;
   activeLessonPercentage: number;
-  activeCourse: string;
+  activeCourse: CourseTitles;
 };
 
 export const Unit = ({ title, description, lessons, activeLesson, activeLessonPercentage, activeCourse }: Props) => (

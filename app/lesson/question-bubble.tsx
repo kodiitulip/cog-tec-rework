@@ -1,33 +1,42 @@
 import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
-import { tailwindCourseColors } from '@/lib/utils';
+import { cn, CourseTitles } from '@/lib/utils';
 
 type Props = {
   question: string;
-  courseName?: string;
+  courseName?: CourseTitles;
 };
 
 export const QuestionBubble = ({ question, courseName }: Props) => {
   const Icon =
-    courseName === 'Behaviorismo' ? BehaviorismIcon
-    : courseName === 'Gestalt' ? GestaltIcon
-    : courseName === 'Teoria Sociocultural' ? SociocultureIcon
-    : CogTecIcon;
-
-  const color = tailwindCourseColors(courseName || '', '500');
+    courseName === 'Behaviorismo'
+      ? BehaviorismIcon
+      : courseName === 'Gestalt'
+      ? GestaltIcon
+      : courseName === 'Teoria Sociocultural'
+      ? SociocultureIcon
+      : CogTecIcon;
 
   return (
     <div className='flex items-center gap-x-4 mb-6'>
       <Icon
         height={60}
         width={60}
-        className='hidden lg:block'
-        style={{ fill: `var(${color})` }}
+        className={cn(
+          'hidden lg:block',
+          courseName === 'Behaviorismo' && 'fill-behaviorism-500',
+          courseName === 'Gestalt' && 'fill-gestalt-500',
+          courseName === 'Teoria Sociocultural' && 'fill-sociocultural-500'
+        )}
       />
       <Icon
         height={40}
         width={40}
-        className='lg:hidden'
-        style={{ fill: `var(${color})` }}
+        className={cn(
+          'lg:hidden',
+          courseName === 'Behaviorismo' && 'fill-behaviorism-500',
+          courseName === 'Gestalt' && 'fill-gestalt-500',
+          courseName === 'Teoria Sociocultural' && 'fill-sociocultural-500'
+        )}
       />
       <div className='relative py-2 px-4 border-2 rounded-xl text-sm lg:text-base border-neutral-400'>
         {question}

@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, tailwindCourseColors } from '@/lib/utils';
+import { cn, CourseTitles } from '@/lib/utils';
 import { Check, Crown, Star } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,7 +11,7 @@ type Props = {
   locked?: boolean;
   current?: boolean;
   percentage: number;
-  activeCourse: string;
+  activeCourse: CourseTitles;
 };
 
 export const LessonButton = ({ index, totalCount, current, locked, id, activeCourse }: Props) => {
@@ -19,19 +19,8 @@ export const LessonButton = ({ index, totalCount, current, locked, id, activeCou
   const isLast = index === totalCount;
   const isCompleted = !current && !locked;
 
-  const Icon =
-    isCompleted ? Check
-    : isLast ? Crown
-    : Star;
+  const Icon = isCompleted ? Check : isLast ? Crown : Star;
   const href = isCompleted ? `/lesson/${id}` : '/lesson';
-
-  const colors = [
-    tailwindCourseColors(locked ? '' : activeCourse, '500', 'bg'),
-    tailwindCourseColors(locked ? '' : activeCourse, '700', 'text'),
-    tailwindCourseColors(locked ? '' : activeCourse, '700', 'border'),
-    'hover:' + tailwindCourseColors(locked ? '' : activeCourse, '400', 'bg'),
-    'focus-visible:' + tailwindCourseColors(locked ? '' : activeCourse, '400', 'bg'),
-  ];
 
   return (
     <Link
@@ -42,8 +31,13 @@ export const LessonButton = ({ index, totalCount, current, locked, id, activeCou
       }}
       className={cn(
         'relative size-20 flex items-center justify-center rounded-full border-2 border-b-6 hover:border-b-4',
-        ...colors,
-        index % 3 !== 0 ? 'col-span-1' : 'col-span-2 mx-auto'
+        index % 3 !== 0 ? 'col-span-1' : 'col-span-2 mx-auto',
+        locked && 'bg-neutral-500 text-neutral-700 border-neutral-700',
+        !locked && activeCourse === 'Behaviorismo' && 'bg-behaviorism-500 text-behaviorism-700 border-behaviorism-700',
+        !locked && activeCourse === 'Gestalt' && 'bg-gestalt-500 text-gestalt-700 border-gestalt-700',
+        !locked &&
+          activeCourse === 'Teoria Sociocultural' &&
+          'bg-sociocultural-500 text-sociocultural-700 border-sociocultural-700'
       )}
     >
       {current && (

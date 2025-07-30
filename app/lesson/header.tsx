@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { tailwindCourseColors } from '@/lib/utils';
+import { cn, CourseTitles } from '@/lib/utils';
 import { useExitModal } from '@/store/use-exit-modal';
 import { X } from 'lucide-react';
 import Image from 'next/image';
@@ -11,12 +11,11 @@ import { useKey } from 'react-use';
 type Props = {
   hearts: number;
   percentage: number;
-  courseName?: string;
+  courseName?: CourseTitles;
 };
 
 export const Header = ({ hearts, percentage, courseName }: Props) => {
   const { open } = useExitModal();
-  const indicatorColor = tailwindCourseColors(courseName || '', '500', 'bg');
 
   useKey((e) => e.key === 'Escape', open, { event: 'keypress' }, [open]);
 
@@ -32,7 +31,11 @@ export const Header = ({ hearts, percentage, courseName }: Props) => {
       </Button>
       <Progress
         value={percentage}
-        classNameIndicator={indicatorColor}
+        classNameIndicator={cn(
+          courseName === 'Behaviorismo' && 'bg-behaviorism-500',
+          courseName === 'Gestalt' && 'bg-gestalt-500',
+          courseName === 'Teoria Sociocultural' && 'bg-sociocultural-500'
+        )}
       />
       <div className='text-rose-500 flex items-center font-bold'>
         <Image

@@ -16,10 +16,13 @@ export const Footer = ({ onCheck, status, activeCourseName, lessonId, disabled =
   const isMobile = useMedia('(max-width: 1024px)');
   activeCourseName = activeCourseName?.toLowerCase().replaceAll(' ', '-') || '';
   const courseButton =
-    activeCourseName === 'behaviorismo' ? 'behaviorism'
-    : activeCourseName === 'gestalt' ? 'gestalt'
-    : activeCourseName === 'teoria-sociocultural' ? 'socio'
-    : 'default';
+    activeCourseName === 'behaviorismo'
+      ? 'behaviorism'
+      : activeCourseName === 'gestalt'
+      ? 'gestalt'
+      : activeCourseName === 'teoria-sociocultural'
+      ? 'socio'
+      : 'default';
 
   useKey('Enter', onCheck, {}, [onCheck]);
 

@@ -1,10 +1,10 @@
-import { cn, tailwindCourseColors } from '@/lib/utils';
+import { cn, CourseTitles } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import Image from 'next/image';
 
 type Props = {
   id: number;
-  title: string;
+  title: CourseTitles;
   imageSrc: string;
   onClick: (id: number) => void;
   disabled?: boolean;
@@ -12,14 +12,14 @@ type Props = {
 };
 
 export const Card = ({ id, title, imageSrc, onClick, disabled, active }: Props) => {
-  const color = tailwindCourseColors(title, 'border', '500');
-
   return (
     <button
       onClick={() => onClick(id)}
       className={cn(
         'border-2 rounded-xl border-b-4 hover:bg-black/5 cursor-pointer active:border-b-2 flex flex-col items-center justify-between p-3 pb-6 min-h-55 min-w-50 disabled:pointer-events-none disabled:opacity-50',
-        color
+        title === 'Behaviorismo' && 'border-behaviorism-500',
+        title === 'Gestalt' && 'border-gestalt-500',
+        title === 'Teoria Sociocultural' && 'border-sociocultural-500'
       )}
       disabled={disabled}
     >
