@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
 import { Challenge } from './challenge';
+import { Footer } from './footer';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -22,7 +23,7 @@ type Props = {
 export const Quiz = ({
   initialPercentage,
   initialHearts,
-  // initialLessonId,
+  initialLessonId,
   initialLessonChallenges,
   activeCourseName,
 }: Props) => {
@@ -36,9 +37,33 @@ export const Quiz = ({
   const [selectedOption, setSelectedOption] = useState<number>(-1);
   const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
 
+  const onNext = () => setActiveIndex((curr) => curr + 1);
+
   const onSelect = (id: number) => {
     if (status !== 'none') return;
     setSelectedOption(id);
+  };
+
+  const onContinue = () => {
+    if (!selectedOption) return;
+    if (status === 'wrong') {
+      setStatus('none');
+      setSelectedOption(-1);
+      return;
+    }
+    if (status === 'correct') {
+      onNext();
+      setStatus('none');
+      setSelectedOption(-1);
+      return;
+    }
+    const correctOption = options.find(({ correct }) => correct);
+    if (!correctOption) return;
+    if (correctOption.id == selectedOption) {
+      console.log('aaa');
+    } else {
+      console.log('aaab');
+    }
   };
 
   const currentChallenge = challenges[activeIndex];
@@ -56,7 +81,7 @@ export const Quiz = ({
         <div className='max-w-230 px-6 lg:px-0 flex flex-col gap-y-12'>
           <h1 className='text-lg text-center lg:text-start font-bold text-neutral-700'>{title}</h1>
           <div>
-            {currentChallenge.type === 'ASSIST' && ( // TODO: change from SELECT to ASSIST *prone for changes
+            {currentChallenge.type === 'ASSIST' && (
               <QuestionBubble
                 question={currentChallenge.question}
                 courseName={activeCourseName}
@@ -73,6 +98,13 @@ export const Quiz = ({
           </div>
         </div>
       </div>
+      <Footer
+        onCheck={() => {}}
+        status={status}
+        disabled={!selectedOption}
+        activeCourseName={activeCourseName}
+        lessonId={initialLessonId} // TODO: change this, probably becomes outdated when pressing continue
+      />
     </>
   );
 };

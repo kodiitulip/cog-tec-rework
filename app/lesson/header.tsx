@@ -16,7 +16,7 @@ type Props = {
 
 export const Header = ({ hearts, percentage, courseName }: Props) => {
   const { open } = useExitModal();
-  const indicatorColor = tailwindCourseColors(courseName || '', 'bg', '500');
+  const indicatorColor = tailwindCourseColors(courseName || '', '500', 'bg');
 
   useKey((e) => e.key === 'Escape', open, { event: 'keypress' }, [open]);
 
