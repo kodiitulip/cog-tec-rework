@@ -29,7 +29,7 @@ const buttonVariants = cva(
         sidebarGhost:
           'bg-transparent text-neutral-700 rounded-l-none hover:text-white hover:bg-ecstasy-400 focus-visible:bg-ecstasy-400 transition-none',
         empty:
-          'bg-transparent border-neutral-600 border-b-4 active:border-b-2 hover:bg-neutral-400/80 focus-visible:bg-neutral-400/80',
+          'bg-transparent border-neutral-500 border-2 border-b-4 active:border-b-2 hover:bg-neutral-400/80 focus-visible:bg-neutral-400/80',
         emptyGhost:
           'bg-transparent border-transparent border-0 hover:bg-neutral-400/40 focus-visible:bg-neutral-400/40',
       },
