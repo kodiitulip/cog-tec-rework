@@ -1,11 +1,14 @@
 'use client';
 
 import { SelectChallengeOptions, SelectChallenges } from '@/db/schema';
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
 import { Challenge } from './challenge';
 import { Footer } from './footer';
+import { CourseTitles } from '@/lib/utils';
+import { reduceHearts, upsertChallengeProgress } from '@/actions/challenge-progress';
+import { toast } from 'sonner';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -17,7 +20,7 @@ type Props = {
   initialHearts: number;
   initialLessonId: number;
   initialLessonChallenges: NormalizedChallenges[];
-  activeCourseName?: string;
+  activeCourseName?: CourseTitles;
 };
 
 export const Quiz = ({
@@ -27,6 +30,8 @@ export const Quiz = ({
   initialLessonChallenges,
   activeCourseName,
 }: Props) => {
+  const [pending, startTransition] = useTransition();
+
   const [hearts, setHearts] = useState<number>(initialHearts);
   const [percentage, setPercentage] = useState<number>(initialPercentage);
   const [challenges] = useState<NormalizedChallenges[]>(initialLessonChallenges);
@@ -41,6 +46,10 @@ export const Quiz = ({
 
   const onSelect = (id: number) => {
     if (status !== 'none') return;
+    if (selectedOption == id) {
+      setSelectedOption(-1);
+      return;
+    }
     setSelectedOption(id);
   };
 
@@ -60,9 +69,86 @@ export const Quiz = ({
     const correctOption = options.find(({ correct }) => correct);
     if (!correctOption) return;
     if (correctOption.id == selectedOption) {
-      console.log('aaa');
+      startTransition(() => {
+        upsertChallengeProgress(currentChallenge.id)
+          .then((res) => {
+            if (!res.error) {
+              setStatus('correct');
+              setPercentage((prev) => prev + 100 / challenges.length);
+
+              // this is practice
+              if (initialPercentage === 100) {
+                setHearts((prev) => Math.min(prev + 1, 5));
+              }
+              return;
+            }
+            switch (res.error.type) {
+              case 'UNAUTHORIZED':
+                toast.error('Usuário não autorizado');
+                console.log(res.error.error?.message);
+                break;
+
+              case 'MISSING_USER_ID':
+                toast.error('Id do usuário não encontrado');
+                break;
+
+              case 'MISSING_USER_PROGRESS':
+                toast.error('Progresso do usuário não encontrado');
+                break;
+
+              case 'ZERO_HEARTS':
+                toast.error('Usuário não tem corações restantes');
+                break;
+
+              case 'CHALLENGE_NOT_FOUND':
+                toast.error('Houve um erro ao encontrar a atividade');
+                break;
+
+              default:
+                toast.error('Houve um erro inesperado!');
+                break;
+            }
+          })
+          .catch(() => toast.error('Um erro inesperado aconteceu.'));
+      });
     } else {
-      console.log('aaab');
+      startTransition(() => {
+        reduceHearts(currentChallenge.id)
+          .then((res) => {
+            if (!res.error) {
+              setStatus('wrong');
+              setHearts((prev) => Math.max(prev - 1, 0));
+              return;
+            }
+            switch (res.error.type) {
+              case 'UNAUTHORIZED':
+                toast.error('Usuário não autorizado');
+                console.log(res.error.error?.message);
+                break;
+
+              case 'MISSING_USER_ID':
+                toast.error('Id do usuário não encontrado');
+                break;
+
+              case 'MISSING_USER_PROGRESS':
+                toast.error('Progresso do usuário não encontrado');
+                break;
+
+              case 'ZERO_HEARTS':
+                toast.error('Usuário não tem corações restantes');
+                break;
+
+              case 'CHALLENGE_NOT_FOUND':
+                toast.error('Houve um erro ao encontrar a atividade');
+                break;
+
+              default:
+                toast.error('Houve um erro inesperado!');
+                break;
+            }
+          })
+          .catch(() => toast.error('Um erro inesperado aconteceu.'));
+      });
     }
   };
 
@@ -76,6 +162,7 @@ export const Quiz = ({
       <Header
         hearts={hearts}
         percentage={percentage}
+        courseName={activeCourseName}
       />
       <div className='h-full flex items-center justify-center'>
         <div className='max-w-230 px-6 lg:px-0 flex flex-col gap-y-12'>
@@ -92,17 +179,16 @@ export const Quiz = ({
               onSelect={onSelect}
               status={status}
               selectedOption={selectedOption}
-              disabled={false}
+              disabled={pending}
               type={currentChallenge.type}
             />
           </div>
         </div>
       </div>
       <Footer
-        onCheck={() => {}}
+        onCheck={onContinue}
         status={status}
-        disabled={!selectedOption}
-        activeCourseName={activeCourseName}
+        disabled={pending || selectedOption === -1}
         lessonId={initialLessonId} // TODO: change this, probably becomes outdated when pressing continue
       />
     </>
