@@ -3,7 +3,6 @@ import { Nunito } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
-import { ExitModal } from '@/components/modals/exit-modal';
 
 const nunito = Nunito({
   variable: '--font-nunito',
@@ -24,7 +23,6 @@ export default function RootLayout({
     <html lang='pt-BR'>
       <body className={cn(nunito.variable, 'antialiased')}>
         <Toaster />
-        <ExitModal />
         {children}
       </body>
     </html>

@@ -1,3 +1,5 @@
+import { ExitModal } from '@/components/modals/exit-modal';
+
 type Props = Readonly<{
   children: React.ReactNode;
 }>;
@@ -5,6 +7,7 @@ type Props = Readonly<{
 const LessonLayout = ({ children }: Props) => {
   return (
     <div className='flex flex-col h-full'>
+      <ExitModal />
       <div className='flex flex-col size-full'>{children}</div>
     </div>
   );
