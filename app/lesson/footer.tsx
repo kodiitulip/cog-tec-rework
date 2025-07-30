@@ -7,24 +7,14 @@ import { Button } from '@/components/ui/button';
 type Props = {
   onCheck: () => void;
   status: 'correct' | 'wrong' | 'none' | 'completed';
-  activeCourseName?: string;
   lessonId: number;
   disabled?: boolean;
 };
 
-export const Footer = ({ onCheck, status, activeCourseName, lessonId, disabled = false }: Props) => {
+export const Footer = ({ onCheck, status, lessonId, disabled = false }: Props) => {
   const isMobile = useMedia('(max-width: 1024px)');
-  activeCourseName = activeCourseName?.toLowerCase().replaceAll(' ', '-') || '';
-  const courseButton =
-    activeCourseName === 'behaviorismo'
-      ? 'behaviorism'
-      : activeCourseName === 'gestalt'
-      ? 'gestalt'
-      : activeCourseName === 'teoria-sociocultural'
-      ? 'socio'
-      : 'default';
 
-  useKey('Enter', onCheck, {}, [onCheck]);
+  useKey((e) => e.key === 'Enter', onCheck, {}, [onCheck]);
 
   return (
     <footer
@@ -34,7 +24,7 @@ export const Footer = ({ onCheck, status, activeCourseName, lessonId, disabled =
         status === 'wrong' && 'border-transparent bg-rose-100'
       )}
     >
-      <div className='max-w-285 h-full mx-auto felx items-center justify-between px-6 lg:px-10'>
+      <div className='max-w-285 h-full mx-auto flex items-center justify-between px-6 lg:px-10'>
         {status === 'correct' && (
           <div className='text-green-500 font-bold text-base flex items-center'>
             <CheckCircle className='size-6 mr-4' />
@@ -61,7 +51,7 @@ export const Footer = ({ onCheck, status, activeCourseName, lessonId, disabled =
           className='ml-auto'
           onClick={onCheck}
           size={isMobile ? 'sm' : 'lg'}
-          variant={status === 'wrong' ? 'danger' : courseButton}
+          variant={status === 'wrong' ? 'danger' : 'default'}
         >
           {status === 'none' && 'Confirmar'}
           {status === 'correct' && 'Próximo'}
