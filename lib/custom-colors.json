@@ -1,0 +1,41 @@
+{
+  "behaviorism": {
+    "50": "--color-behaviorism-50",
+    "100": "--color-behaviorism-100",
+    "200": "--color-behaviorism-200",
+    "300": "--color-behaviorism-300",
+    "400": "--color-behaviorism-400",
+    "500": "--color-behaviorism-500",
+    "600": "--color-behaviorism-600",
+    "700": "--color-behaviorism-700",
+    "800": "--color-behaviorism-800",
+    "900": "--color-behaviorism-900",
+    "950": "--color-behaviorism-950"
+  },
+  "gestalt": {
+    "50": "--color-gestalt-50",
+    "100": "--color-gestalt-100",
+    "200": "--color-gestalt-200",
+    "300": "--color-gestalt-300",
+    "400": "--color-gestalt-400",
+    "500": "--color-gestalt-500",
+    "600": "--color-gestalt-600",
+    "700": "--color-gestalt-700",
+    "800": "--color-gestalt-800",
+    "900": "--color-gestalt-900",
+    "950": "--color-gestalt-950"
+  },
+  "socioculture": {
+    "50": "--color-socioculture-50",
+    "100": "--color-socioculture-100",
+    "200": "--color-socioculture-200",
+    "300": "--color-socioculture-300",
+    "400": "--color-socioculture-400",
+    "500": "--color-socioculture-500",
+    "600": "--color-socioculture-600",
+    "700": "--color-socioculture-700",
+    "800": "--color-socioculture-800",
+    "900": "--color-socioculture-900",
+    "950": "--color-socioculture-950"
+  }
+}
