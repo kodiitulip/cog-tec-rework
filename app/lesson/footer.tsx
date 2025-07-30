@@ -3,11 +3,12 @@ import { CheckCircle, XCircle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { SelectLessons } from '@/db/schema';
 
 type Props = {
   onCheck: () => void;
   status: 'correct' | 'wrong' | 'none' | 'completed';
-  lessonId: number;
+  lessonId: SelectLessons['id'];
   disabled?: boolean;
 };
 
