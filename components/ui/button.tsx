@@ -28,7 +28,10 @@ const buttonVariants = cva(
           'bg-ecstasy-400 text-white rounded-l-none hover:bg-ecstasy-400/80 focus-visible:bg-ecstasy-400/80 transition-none',
         sidebarGhost:
           'bg-transparent text-neutral-700 rounded-l-none hover:text-white hover:bg-ecstasy-400 focus-visible:bg-ecstasy-400 transition-none',
-        empty: '',
+        empty:
+          'bg-transparent border-neutral-600 border-b-4 active:border-b-2 hover:bg-neutral-400/80 focus-visible:bg-neutral-400/80',
+        emptyGhost:
+          'bg-transparent border-transparent border-0 hover:bg-neutral-400/40 focus-visible:bg-neutral-400/40',
       },
       size: {
         default: 'h-11 px-4 py-2 has-[>svg]:px-3',
