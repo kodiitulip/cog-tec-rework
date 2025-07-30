@@ -9,6 +9,8 @@ import { Footer } from './footer';
 import { CourseTitles } from '@/lib/utils';
 import { reduceHearts, upsertChallengeProgress } from '@/actions/challenge-progress';
 import { toast } from 'sonner';
+import { useAudio } from 'react-use';
+import { FinishScreen } from './finish-screen';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -30,6 +32,12 @@ export const Quiz = ({
   initialLessonChallenges,
   activeCourseName,
 }: Props) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [correctAudio, _c, correctControls] = useAudio({ src: '/sounds/correct.mp3' });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [incorrectAudio, _i, incorrectControls] = useAudio({ src: '/sounds/incorrect.wav' });
+  // const [finishAudio, _f, finishControls] = useAudio({ src: '/sounds/finish.mp3' });
+
   const [pending, startTransition] = useTransition();
 
   const [hearts, setHearts] = useState<number>(initialHearts);
@@ -73,6 +81,7 @@ export const Quiz = ({
         upsertChallengeProgress(currentChallenge.id)
           .then((res) => {
             if (!res.error) {
+              correctControls.play();
               setStatus('correct');
               setPercentage((prev) => prev + 100 / challenges.length);
 
@@ -116,6 +125,7 @@ export const Quiz = ({
         reduceHearts(currentChallenge.id)
           .then((res) => {
             if (!res.error) {
+              incorrectControls.play();
               setStatus('wrong');
               setHearts((prev) => Math.max(prev - 1, 0));
               return;
@@ -157,8 +167,21 @@ export const Quiz = ({
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione o significado correto' : currentChallenge.question;
 
+  // TODO: remove harcoded true
+  if (true || !currentChallenge) {
+    return (
+      <FinishScreen
+        courseName={activeCourseName}
+        points={challenges.length * 10}
+        hearts={hearts}
+      />
+    );
+  }
+
   return (
     <>
+      {correctAudio}
+      {incorrectAudio}
       <Header
         hearts={hearts}
         percentage={percentage}
