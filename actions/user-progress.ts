@@ -2,11 +2,13 @@
 
 import { db } from '@/db/drizzle';
 import { getCourseById, getUserProgress } from '@/db/queries';
-import { userProgress } from '@/db/schema';
+import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { Result, err, ok } from 'neverthrow';
+import { and, eq } from 'drizzle-orm';
+import { AuthError } from '@supabase/supabase-js';
 
 type UpsertUserProgressError = { type: 'UNAUTHORIZED' | 'MISSING_ID' | 'COURSE_NOT_FOUND' | 'COURSE_EMPTY' };
 
@@ -66,4 +68,92 @@ export const upsertUserProgress = async (courseId: number): Promise<Result<null,
   revalidatePath('/courses');
   revalidatePath('/learn');
   return ok(redirect('/learn'));
+};
+
+export type ReduceHeartsError = {
+  type:
+    | 'UNAUTHORIZED'
+    | 'MISSING_USER_ID'
+    | 'MISSING_USER_PROGRESS'
+    | 'CHALLENGE_NOT_FOUND'
+    | 'PRACTICE_MODE'
+    | 'ZERO_HEARTS';
+  error?: AuthError;
+};
+
+export const reduceHearts = async (
+  challengeId: SelectChallenges['id']
+): Promise<{ error: ReduceHeartsError | null }> => {
+  const { auth } = await createClient();
+
+  const { data, error } = await auth.getUser();
+  if (error)
+    return {
+      error: {
+        type: 'UNAUTHORIZED',
+        error,
+      },
+    };
+
+  const {
+    user: { id: userId },
+  } = data;
+  if (!userId)
+    return {
+      error: {
+        type: 'MISSING_USER_ID',
+      },
+    };
+
+  const currentUserProgress = await getUserProgress();
+
+  if (!currentUserProgress)
+    return {
+      error: {
+        type: 'MISSING_USER_PROGRESS',
+      },
+    };
+
+  const existingChallengeProgress = await db.query.challengeProgress.findFirst({
+    where: and(eq(challengeProgress.userId, userId), eq(challengeProgress.challengeId, challengeId)),
+  });
+
+  const isPractice = !!existingChallengeProgress;
+
+  if (isPractice) return { error: { type: 'PRACTICE_MODE' } };
+
+  if (currentUserProgress.hearts === 0)
+    return {
+      error: {
+        type: 'ZERO_HEARTS',
+      },
+    };
+
+  const challenge = await db.query.challenges.findFirst({
+    where: eq(challenges.id, challengeId),
+  });
+
+  if (!challenge)
+    return {
+      error: {
+        type: 'CHALLENGE_NOT_FOUND',
+      },
+    };
+
+  const lessonId = challenge.lessonId;
+
+  await db
+    .update(userProgress)
+    .set({
+      hearts: Math.max(currentUserProgress.hearts - 1, 0),
+    })
+    .where(eq(userProgress.userId, userId));
+
+  revalidatePath('/learn');
+  revalidatePath('/lesson');
+  revalidatePath('/leaderboard');
+  revalidatePath(`/lesson/${lessonId}`);
+  return {
+    error: null,
+  };
 };
