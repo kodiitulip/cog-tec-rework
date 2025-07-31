@@ -6,13 +6,14 @@ import { CourseTitles } from '@/lib/utils';
 import { SelectLessons } from '@/db/schema';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: SelectLessons['id'];
-  };
+  }>;
 };
 
 const LessonIdPage = async ({ params }: Props) => {
-  const [lesson, userProgress] = await Promise.all([getLesson(params.id), getUserProgress()]);
+  const { id: lessonId } = await params;
+  const [lesson, userProgress] = await Promise.all([getLesson(lessonId), getUserProgress()]);
 
   if (!lesson || !userProgress) redirect('/learn');
 
