@@ -1,9 +1,11 @@
 import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
+import Confetti from 'react-confetti';
 import { cn, CourseTitles } from '@/lib/utils';
 import { ResultCard } from './result-card';
 import { Footer } from './footer';
 import { SelectLessons } from '@/db/schema';
 import { useRouter } from 'next/navigation';
+import { useAudio, useWindowSize } from 'react-use';
 
 type Props = {
   courseName?: CourseTitles;
@@ -13,19 +15,26 @@ type Props = {
 };
 
 export const FinishScreen = ({ courseName, hearts, points, lessonId }: Props) => {
+  const { width, height } = useWindowSize();
+  const [finishAudio] = useAudio({ src: '/sounds/finish.mp3', autoPlay: true });
   const Icon =
-    courseName === 'Behaviorismo'
-      ? BehaviorismIcon
-      : courseName === 'Gestalt'
-      ? GestaltIcon
-      : courseName === 'Teoria Sociocultural'
-      ? SociocultureIcon
-      : CogTecIcon;
+    courseName === 'Behaviorismo' ? BehaviorismIcon
+    : courseName === 'Gestalt' ? GestaltIcon
+    : courseName === 'Teoria Sociocultural' ? SociocultureIcon
+    : CogTecIcon;
 
   const router = useRouter();
 
   return (
     <>
+      <Confetti
+        recycle={false}
+        width={width}
+        height={height}
+        numberOfPieces={500}
+        tweenDuration={10000}
+      />
+      {finishAudio}
       <div
         className={cn(
           'flex flex-col gap-t-4 lg:gap-y-8 max-w-(--breakpoint-lg) mx-auto text-center items-center justify-center h-full fill-ecstasy-500',
