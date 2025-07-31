@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { CourseList, CourseCreate, CourseEdit } from './resources/courses';
 import { UnitsCreate, UnitsEdit, UnitsList } from './resources/units';
 import { LessonsCreate, LessonsEdit, LessonsList } from './resources/lessons';
+import { ChallengeCreate, ChallengeEdit, ChallengeList } from './resources/challenge';
+import { ChallengeOptionsCreate, ChallengeOptionsEdit, ChallengeOptionsList } from './resources/challenge-options';
 
 const dataProvider = simpleRestProvider('/api');
 
@@ -32,6 +34,20 @@ const App = () => {
         list={LessonsList}
         create={LessonsCreate}
         edit={LessonsEdit}
+      />
+      <Resource
+        name='challenges'
+        recordRepresentation='title'
+        list={ChallengeList}
+        create={ChallengeCreate}
+        edit={ChallengeEdit}
+      />
+      <Resource
+        name='challenge-options'
+        recordRepresentation='title'
+        list={ChallengeOptionsList}
+        create={ChallengeOptionsCreate}
+        edit={ChallengeOptionsEdit}
       />
     </Admin>
   );
