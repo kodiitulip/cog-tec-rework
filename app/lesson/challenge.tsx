@@ -6,7 +6,7 @@ type Props = {
   options: SelectChallengeOptions[];
   onSelect: (id: number) => void;
   status: 'correct' | 'wrong' | 'none';
-  selectedOption?: number;
+  selectedOption?: SelectChallengeOptions['id'];
   disabled?: boolean;
   type: SelectChallenges['type'];
 };

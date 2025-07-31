@@ -2,6 +2,7 @@ import { getLesson, getUserProgress } from '@/db/queries';
 import { redirect } from 'next/navigation';
 import React from 'react';
 import { Quiz } from './quiz';
+import { CourseTitles } from '@/lib/utils';
 
 const LessonPage = async () => {
   const [lesson, userProgress] = await Promise.all([getLesson(), getUserProgress()]);
@@ -17,7 +18,7 @@ const LessonPage = async () => {
       initialLessonChallenges={lesson.challenges}
       initialHearts={userProgress.hearts}
       initialPercentage={initialPercentage}
-      activeCourseName={userProgress.activeCourse?.title}
+      activeCourseName={userProgress.activeCourse?.title as CourseTitles}
     />
   );
 };

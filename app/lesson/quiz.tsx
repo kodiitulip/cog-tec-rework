@@ -54,7 +54,7 @@ export const Quiz = ({
     const uncompletedIndex = challenges.findIndex(({ completed }) => !completed);
     return uncompletedIndex === -1 ? 0 : uncompletedIndex;
   });
-  const [selectedOption, setSelectedOption] = useState<number>(-1);
+  const [selectedOption, setSelectedOption] = useState<SelectChallengeOptions['id'] | undefined>();
   const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
 
   const onNext = () => setActiveIndex((curr) => curr + 1);
@@ -62,7 +62,7 @@ export const Quiz = ({
   const onSelect = (id: number) => {
     if (status !== 'none') return;
     if (selectedOption == id) {
-      setSelectedOption(-1);
+      setSelectedOption(undefined);
       return;
     }
     setSelectedOption(id);
@@ -72,13 +72,13 @@ export const Quiz = ({
     if (!selectedOption) return;
     if (status === 'wrong') {
       setStatus('none');
-      setSelectedOption(-1);
+      setSelectedOption(undefined);
       return;
     }
     if (status === 'correct') {
       onNext();
       setStatus('none');
-      setSelectedOption(-1);
+      setSelectedOption(undefined);
       return;
     }
     const correctOption = options.find(({ correct }) => correct);
@@ -198,7 +198,7 @@ export const Quiz = ({
       <Footer
         onCheck={onContinue}
         status={status}
-        disabled={pending || selectedOption === -1}
+        disabled={pending || !selectedOption}
         lessonId={lessonId}
       />
     </>
