@@ -5,25 +5,8 @@ import { Progress } from '@/components/ui/progress';
 import { getUserProgress } from '@/db/queries';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
-
-const tempquests = [
-  {
-    title: 'Ganhe 20 XP',
-    value: 20,
-  },
-  {
-    title: 'Ganhe 50 XP',
-    value: 50,
-  },
-  {
-    title: 'Ganhe 100 XP',
-    value: 100,
-  },
-  {
-    title: 'Ganhe 300 XP',
-    value: 300,
-  },
-];
+import { tempquests } from '@/constants';
+import { cn } from '@/lib/utils';
 
 const QuestsPage = async () => {
   const [userProgress] = await Promise.all([getUserProgress()]);
@@ -51,15 +34,34 @@ const QuestsPage = async () => {
           <p className='tex-neutral-500 text-center text-lg mb-6'>Complete missões ganhando pontos</p>
           <p className='text-rose-600/70 text-center font-bold tracking-wider uppercase'>🚧 Em construção 🚧</p>
           <ul>
-            {tempquests.map(({title, value}) => {
-              const progress = (userProgress.points / value) * 100
-              return <div key={title} className='flex items-center w-full p-4 gap-x-4 border-t-2'>
-                <Image src='/icons/points.svg' alt='points' width={60} height={60}/>
-                <div className='flex flex-col gap-y-2 w-full'>
-                  <p className='text-neutral-700 text-xl font-bold'>{title}</p>
-                  <Progress classNameIndicator='bg-ecstasy-500' value={progress} className='h-3' />
+            {tempquests.map(({ title, value }) => {
+              const progress = (userProgress.points / value) * 100;
+              return (
+                <div
+                  key={title}
+                  className='flex items-center w-full p-4 gap-x-4 border-t-2'
+                >
+                  <Image
+                    src='/icons/points.svg'
+                    alt='points'
+                    width={60}
+                    height={60}
+                  />
+                  <div className='flex flex-col gap-y-2 w-full'>
+                    <p className='text-neutral-700 text-xl font-bold'>{title}</p>
+                    <Progress
+                      classNameIndicator={cn(
+                        'bg-ecstasy-500',
+                        userProgress.activeCourse?.title === 'Behaviorismo' && 'bg-behaviorism-500',
+                        userProgress.activeCourse?.title === 'Gestalt' && 'bg-gestalt-500',
+                        userProgress.activeCourse?.title === 'Teoria Sociocultural' && 'bg-sociocultural-500'
+                      )}
+                      value={progress}
+                      className='h-3'
+                    />
+                  </div>
                 </div>
-              </div>
+              );
             })}
           </ul>
         </div>

@@ -24,9 +24,9 @@ export const Sidebar = ({ className }: SidebarProps) => {
       <div className='flex flex-col gap-y-2 flex-1'>
         <SidebarItem href='/learn'>estudos</SidebarItem>
         <SidebarItem href='/library'>biblioteca</SidebarItem>
-        <SidebarItem href='/shop'>loja</SidebarItem>
-        <SidebarItem href='/quests'>missões</SidebarItem>
         <SidebarItem href='/leaderboard'>ranking</SidebarItem>
+        <SidebarItem href='/quests'>missões</SidebarItem>
+        <SidebarItem href='/shop'>loja</SidebarItem>
       </div>
       <Suspense fallback={<LoadingIcon />}>
         <UserButton
