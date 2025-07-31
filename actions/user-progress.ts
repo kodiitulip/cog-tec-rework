@@ -20,8 +20,7 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
   const { data, error } = await auth.getUser();
   if (error)
     return {
-      type: 'UNAUTHORIZED',
-      error,
+      error: { type: 'UNAUTHORIZED', error },
     };
 
   const { user } = data;
@@ -29,18 +28,18 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
   const { id } = user;
   if (!id)
     return {
-      type: 'MISSING_ID',
+      error: { type: 'MISSING_ID' },
     };
 
   const course = await getCourseById(courseId);
   if (!course)
-    return err({
-      type: 'COURSE_NOT_FOUND',
-    });
+    return {
+      error: { type: 'COURSE_NOT_FOUND' },
+    };
 
   if (!course.units.length || !course.units[0].lessons.length)
     return {
-      type: 'COURSE_EMPTY',
+      error: { type: 'COURSE_EMPTY' },
     };
 
   const existingUserProgress = await getUserProgress();
@@ -52,18 +51,15 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
       userName: (user.user_metadata['user_name'] as string) || 'User',
       userImageSrc: user.user_metadata['avatar_url'] as string,
     });
-    revalidatePath('/courses');
-    revalidatePath('/learn');
-    return ok(redirect('/learn'));
+  } else {
+    await db.insert(userProgress).values({
+      userId: id,
+      activeCourseId: courseId,
+      activeLessonId: 1,
+      userName: (user.user_metadata['user_name'] as string) || 'User',
+      userImageSrc: user.user_metadata['avatar_url'] as string,
+    });
   }
-
-  await db.insert(userProgress).values({
-    userId: id,
-    activeCourseId: courseId,
-    activeLessonId: 1,
-    userName: (user.user_metadata['user_name'] as string) || 'User',
-    userImageSrc: user.user_metadata['avatar_url'] as string,
-  });
 
   revalidatePath('/courses');
   revalidatePath('/learn');
