@@ -6,29 +6,31 @@ import { challengeProgress, challenges, SelectChallenges, userProgress } from '@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { Result, err, ok } from 'neverthrow';
 import { and, eq } from 'drizzle-orm';
 import { AuthError } from '@supabase/supabase-js';
 
-type UpsertUserProgressError = { type: 'UNAUTHORIZED' | 'MISSING_ID' | 'COURSE_NOT_FOUND' | 'COURSE_EMPTY' };
+type UpsertUserProgressError = {
+  type: 'UNAUTHORIZED' | 'MISSING_ID' | 'COURSE_NOT_FOUND' | 'COURSE_EMPTY';
+  error?: AuthError;
+};
 
-export const upsertUserProgress = async (courseId: number): Promise<Result<null, UpsertUserProgressError>> => {
+export const upsertUserProgress = async (courseId: number): Promise<{ error: UpsertUserProgressError | null }> => {
   const { auth } = await createClient();
 
   const { data, error } = await auth.getUser();
   if (error)
-    return err({
+    return {
       type: 'UNAUTHORIZED',
       error,
-    });
+    };
 
   const { user } = data;
 
   const { id } = user;
   if (!id)
-    return err({
+    return {
       type: 'MISSING_ID',
-    });
+    };
 
   const course = await getCourseById(courseId);
   if (!course)
@@ -37,9 +39,9 @@ export const upsertUserProgress = async (courseId: number): Promise<Result<null,
     });
 
   if (!course.units.length || !course.units[0].lessons.length)
-    return err({
+    return {
       type: 'COURSE_EMPTY',
-    });
+    };
 
   const existingUserProgress = await getUserProgress();
 
@@ -65,7 +67,7 @@ export const upsertUserProgress = async (courseId: number): Promise<Result<null,
 
   revalidatePath('/courses');
   revalidatePath('/learn');
-  return ok(redirect('/learn'));
+  return { error: null };
 };
 
 export type ReduceHeartsError = {

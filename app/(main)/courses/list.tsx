@@ -6,6 +6,7 @@ import { useTransition } from 'react';
 import { redirect } from 'next/navigation';
 import { upsertUserProgress } from '@/actions/user-progress';
 import { toast } from 'sonner';
+import { CourseTitles } from '@/lib/utils';
 
 type Props = {
   courses: SelectCourses[];
@@ -21,22 +22,25 @@ export const List = ({ courses, activeCourseId }: Props) => {
     if (id === activeCourseId) return redirect('/learn');
 
     startTransition(async () => {
-      const result = await upsertUserProgress(id);
-      if (result.isErr()) {
-        let message = 'Unexpected error';
-        switch (result.error.type) {
-          case 'UNAUTHORIZED':
-            message = 'Unauthorized User';
-          case 'MISSING_ID':
-            message = 'Missing User ID';
-          case 'COURSE_NOT_FOUND':
-            message = 'Course could not be found';
-          case 'COURSE_EMPTY':
-            message = 'Course is empty of units';
-        }
-
-        toast.error(message);
-      } else if (result.isOk()) toast.success('Changed course Successfuly');
+      const { error } = await upsertUserProgress(id);
+      if (!error) {
+        toast.success('Changed course Successfuly');
+        redirect('/learn');
+      }
+      switch (error.type) {
+        case 'UNAUTHORIZED':
+          toast.error('Usuário não autorizado');
+          break;
+        case 'COURSE_NOT_FOUND':
+          toast.error('Curso não encontrado');
+          break;
+        case 'COURSE_EMPTY':
+          toast.error('Curso está vazio. Porfavor avisar aos administradores!');
+          break;
+        default:
+          toast.error('Um erro inesperado aconteceu');
+          break;
+      }
     });
   };
 
@@ -46,7 +50,7 @@ export const List = ({ courses, activeCourseId }: Props) => {
         <Card
           key={id}
           id={id}
-          title={title}
+          title={title as CourseTitles}
           imageSrc={imageSrc}
           onClick={onClick}
           disabled={pending}
