@@ -1,9 +1,11 @@
 import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { UserProgress } from '@/components/bits/pages/user-progress';
+import { QuestSidenote } from '@/components/misc/sidenote/quest';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { getTopNUsers, getUserProgress } from '@/db/queries';
+import { CourseTitles } from '@/lib/utils';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
@@ -19,6 +21,10 @@ const LeaderboardPage = async () => {
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
           points={userProgress.points}
+        />
+        <QuestSidenote
+          points={userProgress.points}
+          courseTitle={userProgress.activeCourse.title as CourseTitles}
         />
       </StickyWrapper>
       <FeedWrapper>

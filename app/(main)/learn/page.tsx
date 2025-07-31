@@ -6,6 +6,7 @@ import { getUserProgress, getUnits, getCourseProgress, getLessonPercentage } fro
 import { redirect } from 'next/navigation';
 import { Unit } from './unit';
 import { CourseTitles } from '@/lib/utils';
+import { QuestSidenote } from '@/components/misc/sidenote/quest';
 
 const LearnPage = async () => {
   const [userProgress, units, courseProgress, lessonPercentage] = await Promise.all([
@@ -26,6 +27,10 @@ const LearnPage = async () => {
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
           points={userProgress.points}
+        />
+        <QuestSidenote
+          points={userProgress.points}
+          courseTitle={userProgress.activeCourse.title as CourseTitles}
         />
       </StickyWrapper>
       <FeedWrapper>
