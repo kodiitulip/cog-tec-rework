@@ -58,6 +58,26 @@ export const Quiz = ({
   const [selectedOption, setSelectedOption] = useState<SelectChallengeOptions['id'] | undefined>();
   const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
 
+  const currentChallenge = challenges[activeIndex];
+
+  if (!currentChallenge) {
+    return (
+      <>
+        <FinishScreen
+          courseName={activeCourseName}
+          points={challenges.length * 10}
+          hearts={hearts}
+          lessonId={lessonId}
+        />
+        {correctAudio}
+        {incorrectAudio}
+      </>
+    );
+  }
+
+  const title = currentChallenge.type === 'ASSIST' ? 'Selecione o significado correto' : currentChallenge.question;
+  const options = currentChallenge?.challengeOptions || [];
+
   const onNext = () => setActiveIndex((curr) => curr + 1);
 
   const onSelect = (id: number) => {
@@ -84,7 +104,7 @@ export const Quiz = ({
     }
     const correctOption = options.find(({ correct }) => correct);
     if (!correctOption) return;
-    if (correctOption.id == selectedOption) {
+    if (correctOption.id === selectedOption) {
       startTransition(() => {
         upsertChallengeProgress(currentChallenge.id)
           .then((res) => {
@@ -119,21 +139,22 @@ export const Quiz = ({
     } else {
       startTransition(() => {
         reduceHearts(currentChallenge.id)
-          .then((res) => {
-            if (!res.error) {
+          .then(({ error }) => {
+            if (!error) {
               incorrectControls.play();
               setStatus('wrong');
               setHearts((prev) => Math.max(prev - 1, 0));
               return;
             }
-            switch (res.error.type) {
+            switch (error.type) {
               case 'UNAUTHORIZED':
                 toast.error('Usuário não autorizado');
-                console.log(res.error.error?.message);
+                console.log(error.error?.message);
                 break;
 
-              case 'ZERO_HEARTS':
-                openHeartsModal();
+              case 'PRACTICE_MODE':
+                incorrectControls.play();
+                setStatus('wrong');
                 break;
 
               default:
@@ -145,26 +166,6 @@ export const Quiz = ({
       });
     }
   };
-
-  const currentChallenge = challenges[activeIndex];
-  const options = currentChallenge?.challengeOptions || [];
-
-  const title = currentChallenge.type === 'ASSIST' ? 'Selecione o significado correto' : currentChallenge.question;
-
-  if (!currentChallenge) {
-    return (
-      <>
-        <FinishScreen
-          courseName={activeCourseName}
-          points={challenges.length * 10}
-          hearts={hearts}
-          lessonId={lessonId}
-        />
-        {correctAudio}
-        {incorrectAudio}
-      </>
-    );
-  }
 
   return (
     <>

@@ -37,19 +37,19 @@ const LeaderboardPage = async () => {
           />
           <h1 className='text-center font-bold text-neutral-800 text-2xl my-6'>Ranking</h1>
           <p className='tex-neutral-500 text-center text-lg mb-6'>Veja sua posição ao lado de outros estudantes!</p>
-          <Separator className='mb-4 h-0.5 rounded-full' />
+          <Separator className='mb-4 rounded-full' />
           {leaderboard.map(({ userId, userName, userImageSrc, points }, index) => (
             <div
               key={userId}
               className='flex items-center w-full p-2 px-4 rounded-xl hover:bg-gray-200/50'
             >
-              <p className='font-bold text-lime-700 mr-4'>{index + 1}</p>
+              <p className='font-bold text-neutral-500 mr-4'>{index + 1}</p>
               <Avatar className='border bg-green-500 size-12 ml-3 mr-6'>
                 <AvatarImage
                   src={userImageSrc}
                   className='object-cover'
                 />
-                <AvatarFallback>{userName.slice(0, 2)}</AvatarFallback>
+                <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
               </Avatar>
               <p className='font-bold text-neutral-800 flex-1'>{userName}</p>
               <p className='text-neutral-500'>{points} XP</p>

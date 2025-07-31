@@ -32,8 +32,7 @@ const QuestsPage = async () => {
           />
           <h1 className='text-center font-bold text-neutral-800 text-2xl my-6'>Missões</h1>
           <p className='tex-neutral-500 text-center text-lg mb-6'>Complete missões ganhando pontos</p>
-          <p className='text-rose-600/70 text-center font-bold tracking-wider uppercase'>🚧 Em construção 🚧</p>
-          <ul>
+          <ul className='w-full'>
             {tempquests.map(({ title, value }) => {
               const progress = (userProgress.points / value) * 100;
               return (
