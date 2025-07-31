@@ -11,6 +11,7 @@ import { reduceHearts, upsertChallengeProgress } from '@/actions/challenge-progr
 import { toast } from 'sonner';
 import { useAudio } from 'react-use';
 import { FinishScreen } from './finish-screen';
+import { useHeartsModal } from '@/store/use-hearts-modal';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -32,12 +33,10 @@ export const Quiz = ({
   initialLessonChallenges,
   activeCourseName,
 }: Props) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [correctAudio, _c, correctControls] = useAudio({ src: '/sounds/correct.mp3' });
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [incorrectAudio, _i, incorrectControls] = useAudio({ src: '/sounds/incorrect.wav' });
-  // const [finishAudio, _f, finishControls] = useAudio({ src: '/sounds/finish.mp3' });
+  const [correctAudio, , correctControls] = useAudio({ src: '/sounds/correct.mp3' });
+  const [incorrectAudio, , incorrectControls] = useAudio({ src: '/sounds/incorrect.wav' });
 
+  const { open: openHeartsModal } = useHeartsModal();
   const [pending, startTransition] = useTransition();
 
   const [hearts, setHearts] = useState<number>(initialHearts);
@@ -98,20 +97,8 @@ export const Quiz = ({
                 console.log(res.error.error?.message);
                 break;
 
-              case 'MISSING_USER_ID':
-                toast.error('Id do usuário não encontrado');
-                break;
-
-              case 'MISSING_USER_PROGRESS':
-                toast.error('Progresso do usuário não encontrado');
-                break;
-
               case 'ZERO_HEARTS':
-                toast.error('Usuário não tem corações restantes');
-                break;
-
-              case 'CHALLENGE_NOT_FOUND':
-                toast.error('Houve um erro ao encontrar a atividade');
+                openHeartsModal();
                 break;
 
               default:
@@ -137,20 +124,8 @@ export const Quiz = ({
                 console.log(res.error.error?.message);
                 break;
 
-              case 'MISSING_USER_ID':
-                toast.error('Id do usuário não encontrado');
-                break;
-
-              case 'MISSING_USER_PROGRESS':
-                toast.error('Progresso do usuário não encontrado');
-                break;
-
               case 'ZERO_HEARTS':
-                toast.error('Usuário não tem corações restantes');
-                break;
-
-              case 'CHALLENGE_NOT_FOUND':
-                toast.error('Houve um erro ao encontrar a atividade');
+                openHeartsModal();
                 break;
 
               default:
@@ -168,8 +143,7 @@ export const Quiz = ({
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione o significado correto' : currentChallenge.question;
 
-  // TODO: remove harcoded true
-  if (true || !currentChallenge) {
+  if (!currentChallenge) {
     return (
       <>
         <FinishScreen
@@ -218,7 +192,7 @@ export const Quiz = ({
         onCheck={onContinue}
         status={status}
         disabled={pending || selectedOption === -1}
-        lessonId={initialLessonId} // TODO: change this, probably becomes outdated when pressing continue
+        lessonId={lessonId}
       />
     </>
   );
