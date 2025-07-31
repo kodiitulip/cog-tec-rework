@@ -38,7 +38,7 @@ export const units = pgTable(
       .references(() => courses.id, { onDelete: 'cascade' })
       .notNull(),
     order: integer('order').notNull(),
-    imageSrc: text('image_src').notNull(),
+    imageSrc: text('image_src').notNull().default(''),
   },
   () => [
     pgPolicy('Authenticated read access to courses', {
