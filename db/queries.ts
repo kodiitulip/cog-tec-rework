@@ -4,12 +4,12 @@ import { createClient } from '@/lib/supabase/server';
 import { eq } from 'drizzle-orm';
 import { units, userProgress, courses, challengeProgress, lessons } from '@/db/schema';
 
-export const getCourses = cache(async () => {
-  const data = await db.query.courses.findMany({
-    orderBy: ({ id }, { asc }) => [asc(id)],
-  });
-  return data;
-});
+export const getCourses = cache(
+  async () =>
+    await db.query.courses.findMany({
+      orderBy: ({ id }, { asc }) => [asc(id)],
+    })
+);
 
 export const getUserProgress = cache(async () => {
   const { auth } = await createClient();
@@ -69,16 +69,22 @@ export const getUnits = cache(async () => {
   return normalizedData;
 });
 
-export const getCourseById = cache(async (courseId: number) => {
-  const data = await db.query.courses.findFirst({
-    where: eq(courses.id, courseId),
-    // TODO: Populate units and lessons
-    // with: {
-    //   units: true,
-    // },
-  });
-  return data;
-});
+export const getCourseById = cache(
+  async (courseId: number) =>
+    await db.query.courses.findFirst({
+      where: eq(courses.id, courseId),
+      with: {
+        units: {
+          orderBy: ({ order }, { asc }) => [asc(order)],
+          with: {
+            lessons: {
+              orderBy: ({ order }, { asc }) => [asc(order)],
+            },
+          },
+        },
+      },
+    })
+);
 
 export const getCourseProgress = cache(async () => {
   const userProgress = await getUserProgress();
