@@ -45,8 +45,8 @@ const LeaderboardPage = async () => {
                 />
                 <AvatarFallback>{userName.slice(0, 2)}</AvatarFallback>
               </Avatar>
-              <p>{userName}</p>
-              <p>{points} XP</p>
+              <p className='font-bold text-neutral-800 flex-1'>{userName}</p>
+              <p className='text-neutral-500'>{points} XP</p>
             </div>
           ))}
         </div>
