@@ -9,9 +9,10 @@ import { Footer } from './footer';
 import { CourseTitles } from '@/lib/utils';
 import { reduceHearts, upsertChallengeProgress } from '@/actions/challenge-progress';
 import { toast } from 'sonner';
-import { useAudio } from 'react-use';
+import { useAudio, useMount } from 'react-use';
 import { FinishScreen } from './finish-screen';
 import { useHeartsModal } from '@/store/use-hearts-modal';
+import { usePracticeModal } from '@/store/use-practice-modal';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -37,10 +38,16 @@ export const Quiz = ({
   const [incorrectAudio, , incorrectControls] = useAudio({ src: '/sounds/incorrect.wav' });
 
   const { open: openHeartsModal } = useHeartsModal();
+  const { open: openPracticeModal } = usePracticeModal();
+
+  useMount(() => {
+    if (initialPercentage === 100) openPracticeModal();
+  });
+
   const [pending, startTransition] = useTransition();
 
   const [hearts, setHearts] = useState<number>(initialHearts);
-  const [percentage, setPercentage] = useState<number>(initialPercentage);
+  const [percentage, setPercentage] = useState<number>(() => (initialPercentage === 100 ? 0 : initialPercentage));
   const [lessonId] = useState<SelectLessons['id']>(initialLessonId);
   const [challenges] = useState<NormalizedChallenges[]>(initialLessonChallenges);
   const [activeIndex, setActiveIndex] = useState<number>(() => {
