@@ -22,13 +22,14 @@ const ShopPage = async () => {
       <FeedWrapper>
         <div className='w-full flex flex-col items-center'>
           <Image
-            src='/icons/quests.svg'
+            src='/icons/shop.svg'
             alt='Quests'
             height={90}
             width={90}
           />
-          <h1 className='text-center font-bold text-neutral-800 text-2xl my-6'>Missões</h1>
-          <p className='tex-neutral-500 text-center text-lg mb-6'>Complete missões ganhando pontos</p>
+          <h1 className='text-center font-bold text-neutral-800 text-2xl my-6'>Loja</h1>
+          <p className='tex-neutral-500 text-center text-lg mb-6'>Gaste pontos para conseguir corações!</p>
+          <p className='text-rose-600/70 text-center font-bold tracking-wider uppercase'>🚧 Em construção 🚧</p>
         </div>
       </FeedWrapper>
     </div>

@@ -5,6 +5,7 @@ import { UserProgress } from '@/components/bits/pages/user-progress';
 import { getUserProgress, getUnits, getCourseProgress, getLessonPercentage } from '@/db/queries';
 import { redirect } from 'next/navigation';
 import { Unit } from './unit';
+import { CourseTitles } from '@/lib/utils';
 
 const LearnPage = async () => {
   const [userProgress, units, courseProgress, lessonPercentage] = await Promise.all([
@@ -38,7 +39,7 @@ const LearnPage = async () => {
               {...unit}
               activeLesson={courseProgress.activeLesson}
               activeLessonPercentage={lessonPercentage}
-              activeCourse={userProgress.activeCourse!.title}
+              activeCourse={userProgress.activeCourse!.title as CourseTitles}
             />
           </div>
         ))}
