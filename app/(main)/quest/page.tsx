@@ -1,13 +1,11 @@
 import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { UserProgress } from '@/components/bits/pages/user-progress';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { getTopNUsers, getUserProgress } from '@/db/queries';
+import { getUserProgress } from '@/db/queries';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 
-const LeaderboardPage = async () => {
+const QuestsPage = async () => {
   const [userProgress] = await Promise.all([getUserProgress()]);
 
   if (!userProgress || !userProgress.activeCourse) redirect('/courses');
@@ -37,4 +35,4 @@ const LeaderboardPage = async () => {
   );
 };
 
-export default LeaderboardPage;
+export default QuestsPage;
