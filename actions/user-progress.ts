@@ -36,12 +36,10 @@ export const upsertUserProgress = async (courseId: number): Promise<Result<null,
       type: 'COURSE_NOT_FOUND',
     });
 
-  // TODO: enable once units and lessos are implemented
-  // if (!course.units.length || !course.units[0].lessons.length) {
-  //   return err({
-  //     type: 'COURSE_EMPTY',
-  //   });
-  // }
+  if (!course.units.length || !course.units[0].lessons.length)
+    return err({
+      type: 'COURSE_EMPTY',
+    });
 
   const existingUserProgress = await getUserProgress();
 
