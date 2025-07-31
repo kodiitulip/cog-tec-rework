@@ -37,11 +37,13 @@ export const getUnits = cache(async () => {
 
   const data = await db.query.units.findMany({
     where: eq(units.courseId, userProgress.activeCourseId),
+    orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
       lessons: {
         orderBy: ({ order }, { asc }) => [asc(order)],
         with: {
           challenges: {
+            orderBy: ({ order }, { asc }) => [asc(order)],
             with: {
               challengeProgress: {
                 where: eq(challengeProgress.userId, userProgress.userId),
@@ -177,4 +179,22 @@ export const getLessonPercentage = cache(async () => {
   const percentage = Math.round(completedChallenges.length / lesson.challenges.length) * 100;
 
   return percentage;
+});
+
+export const getTopNUsers = cache(async (n: number = 10) => {
+  const userProgress = await getUserProgress();
+
+  if (!userProgress || !userProgress.userId) return [];
+
+  const data = await db.query.userProgress.findMany({
+    orderBy: ({ points }, { desc }) => [desc(points)],
+    limit: n,
+    columns: {
+      userId: true,
+      userName: true,
+      userImageSrc: true,
+      points: true,
+    },
+  });
+  return data;
 });

@@ -5,7 +5,6 @@ import { getCourseById, getUserProgress } from '@/db/queries';
 import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { and, eq } from 'drizzle-orm';
 import { AuthError } from '@supabase/supabase-js';
 
