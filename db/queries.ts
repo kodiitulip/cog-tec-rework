@@ -1,12 +1,12 @@
 import { cache } from 'react';
-import { db } from '@/db/drizzle';
+import { admin } from '@/db/drizzle';
 import { createClient } from '@/lib/supabase/server';
 import { eq } from 'drizzle-orm';
 import { units, userProgress, courses, challengeProgress, lessons } from '@/db/schema';
 
 export const getCourses = cache(
   async () =>
-    await db.query.courses.findMany({
+    await admin.query.courses.findMany({
       orderBy: ({ id }, { asc }) => [asc(id)],
     })
 );
@@ -18,7 +18,7 @@ export const getUserProgress = cache(async () => {
   } = await auth.getUser();
   if (!user) return undefined;
 
-  const data = await db.query.userProgress.findFirst({
+  const data = await admin.query.userProgress.findFirst({
     where: eq(userProgress.userId, user.id),
     with: {
       activeCourse: true,
@@ -35,7 +35,7 @@ export const getUnits = cache(async () => {
     return [];
   }
 
-  const data = await db.query.units.findMany({
+  const data = await admin.query.units.findMany({
     where: eq(units.courseId, userProgress.activeCourseId),
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
@@ -73,7 +73,7 @@ export const getUnits = cache(async () => {
 
 export const getCourseById = cache(
   async (courseId: number) =>
-    await db.query.courses.findFirst({
+    await admin.query.courses.findFirst({
       where: eq(courses.id, courseId),
       with: {
         units: {
@@ -93,7 +93,7 @@ export const getCourseProgress = cache(async () => {
 
   if (!userProgress || !userProgress?.userId || !userProgress.activeCourseId) return null;
 
-  const unitsInActiveCourse = await db.query.units.findMany({
+  const unitsInActiveCourse = await admin.query.units.findMany({
     orderBy: ({ order }, { asc }) => [asc(order)],
     where: eq(units.courseId, userProgress.activeCourseId),
     with: {
@@ -138,7 +138,7 @@ export const getLesson = cache(async (id?: number) => {
 
   if (!lessonId) return null;
 
-  const data = await db.query.lessons.findFirst({
+  const data = await admin.query.lessons.findFirst({
     where: eq(lessons.id, lessonId),
     with: {
       challenges: {
@@ -186,7 +186,7 @@ export const getTopNUsers = cache(async (n: number = 10) => {
 
   if (!userProgress || !userProgress.userId) return [];
 
-  const data = await db.query.userProgress.findMany({
+  const data = await admin.query.userProgress.findMany({
     orderBy: ({ points }, { desc }) => [desc(points)],
     limit: n,
     columns: {

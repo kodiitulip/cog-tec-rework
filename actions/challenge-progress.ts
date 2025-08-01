@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/db/drizzle';
+import { admin } from '@/db/drizzle';
 import { getUserProgress } from '@/db/queries';
 import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
 import { createClient } from '@/lib/supabase/server';
@@ -47,7 +47,7 @@ export const upsertChallengeProgress = async (
     };
   }
 
-  const challenge = await db.query.challenges.findFirst({
+  const challenge = await admin.query.challenges.findFirst({
     where: eq(challenges.id, challengeId),
   });
 
@@ -60,7 +60,7 @@ export const upsertChallengeProgress = async (
 
   const lessonId = challenge.lessonId;
 
-  const existingChallengeProgress = await db.query.challengeProgress.findFirst({
+  const existingChallengeProgress = await admin.query.challengeProgress.findFirst({
     where: and(eq(challengeProgress.userId, userId), eq(challengeProgress.challengeId, challengeId)),
   });
 
@@ -74,14 +74,14 @@ export const upsertChallengeProgress = async (
     };
 
   if (isPractice) {
-    await db
+    await admin
       .update(challengeProgress)
       .set({
         completed: true,
       })
       .where(eq(challengeProgress.id, existingChallengeProgress.id));
 
-    await db
+    await admin
       .update(userProgress)
       .set({
         hearts: Math.min(currentUserProgress.hearts + 1, 5),
@@ -89,13 +89,13 @@ export const upsertChallengeProgress = async (
       })
       .where(eq(userProgress.userId, userId));
   } else {
-    await db.insert(challengeProgress).values({
+    await admin.insert(challengeProgress).values({
       challengeId,
       userId,
       completed: true,
     });
 
-    await db
+    await admin
       .update(userProgress)
       .set({
         points: currentUserProgress.points + 10,

@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      const isLocalEnv = process.env.NODE_ENV === 'development' ?? false;
+      const isLocalEnv = process.env.NODE_ENV === 'development' || false;
       const forwardedHost = request.headers.get('x-forwarded-host');
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host

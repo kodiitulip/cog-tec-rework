@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { UserLoginFormSchema } from '@/zod/schemas';
+import { UserLoginFormSchema, SignUpFormSchema } from '@/zod/schemas';
 import { AuthError } from '@supabase/supabase-js';
 
 export const signInWithGithub = async () => {
@@ -44,7 +44,6 @@ export const signInWithEmail = async (
     password: formData.get('password'),
   });
 
-  console.log(validatedFields.error?.flatten().fieldErrors);
   if (!validatedFields.success)
     return {
       success: false,
@@ -66,6 +65,52 @@ export const signInWithEmail = async (
     };
 
   return { success: true, authError: null, formError: null };
+};
+
+export type SignUpReturn = {
+  success: boolean;
+  fieldErrors?: { email?: string[]; password?: string[]; repeatPassword?: string[], displayName?: string[] };
+  authError?: AuthError;
+};
+
+export const signUpWithEmail = async (
+  _state: SignUpReturn | null,
+  formData: FormData
+): Promise<SignUpReturn | null> => {
+  const validatedFields = SignUpFormSchema.safeParse({
+    userName: formData.get('userName'),
+    email: formData.get('email'),
+    password: formData.get('password'),
+    repeatPassword: formData.get('repeatPassword'),
+  });
+
+  if (!validatedFields.success)
+    return {
+      success: false,
+      fieldErrors: validatedFields.error.flatten().fieldErrors,
+    };
+
+  const { userName, email, password } = validatedFields.data;
+
+  const { auth } = await createClient();
+  const { error } = await auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        display_name: userName,
+        user_name: userName,
+      },
+    },
+  });
+
+  if (error)
+    return {
+      success: false,
+      authError: error,
+    };
+
+  return { success: true };
 };
 
 export const signOut = async () => {

@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*', // TODO: learn what this is and chang for better safety
+            value: '*',
           },
           {
             key: 'Access-Control-Allow-Methods',

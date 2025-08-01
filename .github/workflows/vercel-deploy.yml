@@ -1,0 +1,53 @@
+name: Deploy to vercel
+on:
+  workflow_dispatch:
+    inputs:
+      production:
+        type: boolean
+        default: false
+        description: Deploy to production?
+        required: true
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dkershner6/vercel-set-env-action@v3
+        with:
+          token: ${{ secrets.VERCEL_TOKEN }}
+          teamId: ${{ secrets.ORG_ID }}
+          projectName: cog-tec
+          envVariableKeys: NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,ADMIN_DATABASE_URL,DATABASE_URL
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          TARGET_NEXT_PUBLIC_SUPABASE_URL: preview,development,production
+          TYPE_NEXT_PUBLIC_SUPABASE_URL: encrypted
+
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          TARGET_NEXT_PUBLIC_SUPABASE_ANON_KEY: preview,development,production
+          TYPE_NEXT_PUBLIC_SUPABASE_ANON_KEY: encrypted
+
+          ADMIN_DATABASE_URL: ${{ secrets.ADMIN_DATABASE_URL }}
+          TARGET_ADMIN_DATABASE_URL: preview,development,production
+          TYPE_ADMIN_DATABASE_URL: encrypted
+
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TARGET_DATABASE_URL: preview,development,production
+          TYPE_DATABASE_URL: encrypted
+      - uses: amondnet/vercel-action@v25
+        id: vercel-deploy
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '${{ inputs.production ? "-prod" : "--target preview" }}'
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          scope: ${{ secrets.ORG_ID }}
+      - name: preview-url
+        run: |
+          echo ${{ steps.vercel-deploy.outputs.preview-url }}

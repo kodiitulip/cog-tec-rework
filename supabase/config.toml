@@ -33,7 +33,7 @@ sql_paths = ["./seed.sql"]
 enabled = false
 
 [studio]
-enabled = true
+enabled = false
 port = 54323
 api_url = "http://localhost"
 
@@ -54,10 +54,7 @@ file_size_limit = "50MiB"
 [auth]
 enabled = true
 site_url = "http://localhost:3000"
-additional_redirect_urls = [
-  "http://localhost:3000",
-  "http://localhost:54321"
-]
+additional_redirect_urls = ["http://localhost:3000", "http://localhost:54321"]
 jwt_expiry = 1800
 enable_refresh_token_rotation = true
 refresh_token_reuse_interval = 10

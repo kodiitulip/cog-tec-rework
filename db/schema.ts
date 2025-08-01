@@ -1,6 +1,6 @@
 import { relations, sql } from 'drizzle-orm';
 import { boolean, integer, pgEnum, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
-import { authenticatedRole } from 'drizzle-orm/supabase';
+import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
 
 // courses table
 export const courses = pgTable(
@@ -162,7 +162,9 @@ export const challengeProgress = pgTable(
   'challenge_progress',
   {
     id: serial('id').primaryKey(),
-    userId: text('user_id').notNull(),
+    userId: text('user_id')
+      .references(() => authUsers.id, { onDelete: 'cascade' })
+      .notNull(),
     challengeId: integer('challenge_id')
       .references(() => challenges.id, { onDelete: 'cascade' })
       .notNull(),
@@ -191,7 +193,9 @@ export const challengeProgressRelations = relations(challengeProgress, ({ one })
 export const userProgress = pgTable(
   'user_progress',
   {
-    userId: text('user_id').primaryKey(),
+    userId: text('user_id')
+      .primaryKey()
+      .references(() => authUsers.id, { onDelete: 'cascade' }),
     userName: text('user_name').notNull().default('User'),
     userImageSrc: text('user_image_src').notNull().default('/kenney/shape-characters/PNG/Default/blue_body_circle.png'),
     activeCourseId: integer('acive_course_id').references(() => courses.id, { onDelete: 'cascade' }),
@@ -238,4 +242,54 @@ export const userProgressRelations = relations(userProgress, ({ one }) => ({
     fields: [userProgress.activeLessonId],
     references: [lessons.id],
   }),
+  userId: one(authUsers, {
+    fields: [userProgress.userId],
+    references: [authUsers.id],
+  }),
 }));
+
+export const roles = pgTable(
+  'roles',
+  {
+    id: serial('id').primaryKey(),
+    roleName: text('role_name').notNull(),
+  },
+  () => [
+    pgPolicy('Admin access to roles', {
+      as: 'permissive',
+      for: 'all',
+      to: authenticatedRole,
+      using: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin'`,
+    }),
+  ]
+);
+
+export const userRoles = pgTable(
+  'user_roles',
+  {
+    id: serial('id').primaryKey(),
+    userId: text('user_id')
+      .references(() => authUsers.id, { onDelete: 'cascade' })
+      .notNull(),
+    roleId: integer('role_id').references(() => roles.id, { onDelete: 'cascade' }),
+  },
+  () => [
+    pgPolicy('Admin access to user_roles', {
+      as: 'permissive',
+      for: 'all',
+      to: authenticatedRole,
+      using: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin'`,
+    }),
+  ]
+);
+
+export const userRolesRelations = relations(roles, ({one}) => ({
+  userId: one(authUsers, {
+    fields: [userRoles.userId],
+    references: [authUsers.id],
+  })
+  roleId: one(roles, {
+    fields: [userRoles.roleId],
+    references: [roles.id],
+  })
+}))

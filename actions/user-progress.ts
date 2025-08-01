@@ -1,6 +1,6 @@
 'use server';
 
-import { db } from '@/db/drizzle';
+import { admin } from '@/db/drizzle';
 import { getCourseById, getUserProgress } from '@/db/queries';
 import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
 import { createClient } from '@/lib/supabase/server';
@@ -44,14 +44,14 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
   const existingUserProgress = await getUserProgress();
 
   if (existingUserProgress) {
-    await db.update(userProgress).set({
+    await admin.update(userProgress).set({
       activeCourseId: courseId,
       activeLessonId: existingUserProgress.activeLessonId || 1,
       userName: (user.user_metadata['user_name'] as string) || 'User',
       userImageSrc: user.user_metadata['avatar_url'] as string,
     });
   } else {
-    await db.insert(userProgress).values({
+    await admin.insert(userProgress).values({
       userId: id,
       activeCourseId: courseId,
       activeLessonId: 1,
@@ -109,7 +109,7 @@ export const reduceHearts = async (
       },
     };
 
-  const existingChallengeProgress = await db.query.challengeProgress.findFirst({
+  const existingChallengeProgress = await admin.query.challengeProgress.findFirst({
     where: and(eq(challengeProgress.userId, userId), eq(challengeProgress.challengeId, challengeId)),
   });
 
@@ -124,7 +124,7 @@ export const reduceHearts = async (
       },
     };
 
-  const challenge = await db.query.challenges.findFirst({
+  const challenge = await admin.query.challenges.findFirst({
     where: eq(challenges.id, challengeId),
   });
 
@@ -137,7 +137,7 @@ export const reduceHearts = async (
 
   const lessonId = challenge.lessonId;
 
-  await db
+  await admin
     .update(userProgress)
     .set({
       hearts: Math.max(currentUserProgress.hearts - 1, 0),
