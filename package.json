@@ -10,6 +10,7 @@
     "studio": "bunx drizzle-kit studio --config=drizzle.config.ts --verbose",
     "push": "bunx drizzle-kit push --config=drizzle.config.ts",
     "seed": "bun ./scripts/seed.ts",
+    "reset": "bun ./scripts/reset.ts",
     "supa:start": "supabase start",
     "supa:restart": "supabase stop && supabase start",
     "supa:stop": "supabase stop"
