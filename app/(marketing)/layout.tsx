@@ -1,3 +1,5 @@
+import { SignInModal } from '@/components/modals/sign-in-modal';
+import { SignUpModal } from '@/components/modals/sign-up-modal';
 import { Footer } from './footer';
 import { Header } from './header';
 
@@ -7,6 +9,8 @@ type Props = {
 
 const MarketingLayout = ({ children }: Readonly<Props>) => (
   <div className='min-h-dvh flex flex-col'>
+    <SignUpModal />
+    <SignInModal />
     <Header />
     <main className='flex-2 flex flex-col items-center justify-center'>{children}</main>
     <Footer />
