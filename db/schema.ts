@@ -1,6 +1,4 @@
-import { relations, sql } from 'drizzle-orm';
-import { boolean, integer, pgEnum, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
-import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
+import { relations } from 'drizzle-orm';
 import { challengeProgress, userProgress, SelectChallengeProgress, SelectUserProgress } from './schema/progress';
 import { challenges, challengeOptions, SelectChallenges, SelectChallengeOptions } from './schema/challenges';
 import { courses, units, lessons, SelectCourses, SelectUnits, SelectLessons } from './schema/courses';
@@ -8,13 +6,13 @@ import { appRolesEnum, challengesEnum } from './schema/enums';
 import { userRoles } from './schema/roles';
 
 export {
-  SelectCourses,
-  SelectUnits,
-  SelectLessons,
-  SelectChallenges,
-  SelectChallengeOptions,
-  SelectChallengeProgress,
-  SelectUserProgress,
+  type SelectCourses,
+  type SelectUnits,
+  type SelectLessons,
+  type SelectChallenges,
+  type SelectChallengeOptions,
+  type SelectChallengeProgress,
+  type SelectUserProgress,
   appRolesEnum,
   challengesEnum,
 };

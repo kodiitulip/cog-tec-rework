@@ -1,6 +1,6 @@
 import { pgPolicy, pgTable, serial, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
-import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
+import { authUsers, supabaseAuthAdminRole } from 'drizzle-orm/supabase';
 import { appRolesEnum } from '@/db/schema/enums';
 
 export const userRoles = pgTable(
@@ -14,10 +14,10 @@ export const userRoles = pgTable(
     role: appRolesEnum().notNull(),
   },
   () => [
-    pgPolicy('Admin access to user_roles', {
+    pgPolicy('Allow auth admin to read user roles', {
       as: 'permissive',
       for: 'all',
-      to: authenticatedRole,
+      to: supabaseAuthAdminRole,
       using: sql`true`,
     }),
   ]

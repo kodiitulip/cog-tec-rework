@@ -1,6 +1,6 @@
-import { relations, sql } from 'drizzle-orm';
-import { boolean, integer, pgEnum, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
-import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
+import { sql } from 'drizzle-orm';
+import { integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { authenticatedRole } from 'drizzle-orm/supabase';
 
 export const courses = pgTable(
   'courses',

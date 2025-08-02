@@ -1,4 +1,4 @@
-import { boolean, integer, pgEnum, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
+import { pgEnum } from 'drizzle-orm/pg-core';
 
-export const appRolesEnum = pgEnum('app_roles', ['ADMIN', 'USER']);
+export const appRolesEnum = pgEnum('app_roles', ['ADMIN']);
 export const challengesEnum = pgEnum('type', ['SELECT', 'ASSIST']);

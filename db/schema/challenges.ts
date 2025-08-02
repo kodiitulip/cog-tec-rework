@@ -1,7 +1,8 @@
-import { relations, sql } from 'drizzle-orm';
-import { boolean, integer, pgEnum, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
-import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
-import { lessons } from './schema/courses';
+import { sql } from 'drizzle-orm';
+import { boolean, integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { authenticatedRole } from 'drizzle-orm/supabase';
+import { lessons } from './courses';
+import { challengesEnum } from './enums';
 
 export const challenges = pgTable(
   'challenges',

@@ -1,7 +1,8 @@
-import { relations, sql } from 'drizzle-orm';
-import { boolean, integer, pgEnum, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { boolean, integer, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
 import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
 import { courses, lessons } from '@/db/schema/courses';
+import { challenges } from './challenges';
 
 export const challengeProgress = pgTable(
   'challenge_progress',
