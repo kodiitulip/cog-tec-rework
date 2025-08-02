@@ -2,7 +2,7 @@ import { relations } from 'drizzle-orm';
 import { challengeProgress, userProgress, SelectChallengeProgress, SelectUserProgress } from './schema/progress';
 import { challenges, challengeOptions, SelectChallenges, SelectChallengeOptions } from './schema/challenges';
 import { courses, units, lessons, SelectCourses, SelectUnits, SelectLessons } from './schema/courses';
-import { appRolesEnum, appPermissionEnum, challengesEnum } from './schema/enums';
+import { appRolesEnum, appPermissionsEnum, challengesEnum } from './schema/enums';
 import { userRoles, rolePermissions } from './schema/roles';
 
 export {
@@ -14,7 +14,7 @@ export {
   type SelectChallengeProgress,
   type SelectUserProgress,
   appRolesEnum,
-  appPermissionEnum,
+  appPermissionsEnum,
   challengesEnum,
 };
 export { courses, units, lessons, challenges, challengeOptions, challengeProgress, userProgress, userRoles, rolePermissions };
