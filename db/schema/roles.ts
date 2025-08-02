@@ -1,6 +1,6 @@
 import { pgPolicy, pgTable, serial, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
-import { authUsers, supabaseAuthAdminRole } from 'drizzle-orm/supabase';
+import { authUsers, supabaseAuthAdminRole, authenticatedRole } from 'drizzle-orm/supabase';
 import { appRolesEnum, appPermissionsEnum } from '@/db/schema/enums';
 
 export const rolePermissions = pgTable(
@@ -31,11 +31,25 @@ export const userRoles = pgTable(
     role: appRolesEnum().notNull(),
   },
   () => [
-    pgPolicy('Allow auth admin to read user roles', {
-      as: 'permissive',
+    pgPolicy('Admin read access to user roles', {
       for: 'all',
-      to: supabaseAuthAdminRole,
+      to: authenticatedRole,
       using: sql`true`,
+    }),
+    pgPolicy('Admin delete access to user roles', {
+      for: 'delete',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.DELETE')`,
+    }),
+    pgPolicy('Admin insert access to user roles', {
+      for: 'insert',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
+    }),
+    pgPolicy('Admin update access to user roles', {
+      for: 'update',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
     }),
   ]
 );

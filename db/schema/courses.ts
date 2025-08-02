@@ -16,6 +16,21 @@ export const courses = pgTable(
       to: authenticatedRole,
       using: sql`true`,
     }),
+    pgPolicy('Admin delete access to courses', {
+      for: 'delete',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.DELETE')`,
+    }),
+    pgPolicy('Admin insert access to courses', {
+      for: 'insert',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
+    }),
+    pgPolicy('Admin update access to courses', {
+      for: 'update',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
+    }),
   ]
 );
 
@@ -38,6 +53,21 @@ export const units = pgTable(
       to: authenticatedRole,
       using: sql`true`,
     }),
+    pgPolicy('Admin delete access to courses', {
+      for: 'delete',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.DELETE')`,
+    }),
+    pgPolicy('Admin insert access to courses', {
+      for: 'insert',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
+    }),
+    pgPolicy('Admin update access to courses', {
+      for: 'update',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
+    }),
   ]
 );
 
@@ -57,6 +87,21 @@ export const lessons = pgTable(
       for: 'select',
       to: authenticatedRole,
       using: sql`true`,
+    }),
+    pgPolicy('Admin delete access to courses', {
+      for: 'delete',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.DELETE')`,
+    }),
+    pgPolicy('Admin insert access to courses', {
+      for: 'insert',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
+    }),
+    pgPolicy('Admin update access to courses', {
+      for: 'update',
+      to: authenticatedRole,
+      using: sql`select authorize('COURSES.INSERT')`,
     }),
   ]
 );

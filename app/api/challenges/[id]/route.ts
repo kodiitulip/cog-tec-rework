@@ -1,4 +1,4 @@
-import { admin } from '@/db/drizzle';
+import { client } from '@/db/drizzle';
 import { challenges } from '@/db/schema';
 import { getIsAdmin } from '@/lib/admin';
 import { eq } from 'drizzle-orm';
@@ -11,7 +11,7 @@ export const GET = async (req: Request, { params }: { params: Promise<{ id: numb
 
   const { id } = await params;
 
-  const data = await admin.query.challenges.findFirst({
+  const data = await client.query.challenges.findFirst({
     where: eq(challenges.id, id),
   });
 
@@ -27,7 +27,7 @@ export const PUT = async (req: Request, { params }: { params: Promise<{ id: numb
 
   const body = await req.json();
 
-  const data = await admin
+  const data = await client
     .update(challenges)
     .set({
       ...body,
@@ -45,7 +45,7 @@ export const DELETE = async (req: Request, { params }: { params: Promise<{ id: n
 
   const { id } = await params;
 
-  const data = await admin.delete(challenges).where(eq(challenges.id, id)).returning();
+  const data = await client.delete(challenges).where(eq(challenges.id, id)).returning();
 
   return NextResponse.json(data[0]);
 };

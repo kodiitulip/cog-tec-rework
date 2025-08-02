@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { admin } from '@/db/drizzle';
+import { client } from '@/db/drizzle';
 import { getIsAdmin } from '@/lib/admin';
 import { courses } from '@/db/schema';
 
@@ -8,7 +8,7 @@ export const GET = async () => {
 
   if (!isAdmin) return new NextResponse('Unauthorized', { status: 401 });
 
-  const data = await admin.query.courses.findMany();
+  const data = await client.query.courses.findMany();
 
   return NextResponse.json(data);
 };
@@ -20,7 +20,7 @@ export const POST = async (req: Request) => {
 
   const body = await req.json();
 
-  const data = await admin
+  const data = await client
     .insert(courses)
     .values({
       ...body,

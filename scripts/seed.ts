@@ -21,10 +21,10 @@ const main = async () => {
     await db.delete(schema.lessons);
     await db.delete(schema.challenges);
     await db.delete(schema.challengeOptions);
-    await db.delete(schema.rolePermisions);
+    await db.delete(schema.rolePermissions);
     await db.delete(schema.userRoles);
 
-    db.insert(rolePermissions).values([
+    db.insert(schema.rolePermissions).values([
       {
         role: 'ADMIN',
         permission: 'COURSES.INSERT'
