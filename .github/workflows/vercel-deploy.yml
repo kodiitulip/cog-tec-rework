@@ -3,10 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       production:
-        type: boolean
-        default: false
-        description: Deploy to production?
+        type: choice
+        default: preview
+        description: Deploy to production or preview?
         required: true
+        options:
+          - production
+          - preview
 
 jobs:
   build-and-deploy:
@@ -44,7 +47,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: ${{ inputs.production && '-prod' }}
+          vercel-args: '--target=${{inputs.production}}'
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           scope: ${{ secrets.ORG_ID }}
