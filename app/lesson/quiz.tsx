@@ -177,24 +177,22 @@ export const Quiz = ({
         courseName={activeCourseName}
       />
       <div className='h-full flex items-center justify-center'>
-        <div className='max-w-230 px-6 lg:px-0 flex flex-col gap-y-12'>
+        <div className='max-w-230 px-6 lg:px-0 flex flex-col gap-y-12 w-full'>
           <h1 className='text-lg text-center lg:text-start font-bold text-neutral-700'>{title}</h1>
-          <div>
-            {currentChallenge.type === 'ASSIST' && (
-              <QuestionBubble
-                question={currentChallenge.question}
-                courseName={activeCourseName}
-              />
-            )}
-            <Challenge
-              options={options}
-              onSelect={onSelect}
-              status={status}
-              selectedOption={selectedOption}
-              disabled={pending}
-              type={currentChallenge.type}
+          {currentChallenge.type === 'ASSIST' && (
+            <QuestionBubble
+              question={currentChallenge.question}
+              courseName={activeCourseName}
             />
-          </div>
+          )}
+          <Challenge
+            options={options}
+            onSelect={onSelect}
+            status={status}
+            selectedOption={selectedOption}
+            disabled={pending}
+            type={currentChallenge.type}
+          />
         </div>
       </div>
       <Footer

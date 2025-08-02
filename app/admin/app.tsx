@@ -37,7 +37,7 @@ const App = () => {
       />
       <Resource
         name='challenges'
-        recordRepresentation='title'
+        recordRepresentation='question'
         list={ChallengeList}
         create={ChallengeCreate}
         edit={ChallengeEdit}
