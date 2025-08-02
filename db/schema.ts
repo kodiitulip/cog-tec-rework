@@ -255,7 +255,8 @@ export const roles = pgTable(
       as: 'permissive',
       for: 'all',
       to: authenticatedRole,
-      using: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin'`,
+      using: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin')`,
+      withCheck: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin')`,
     }),
   ]
 );
@@ -274,7 +275,8 @@ export const userRoles = pgTable(
       as: 'permissive',
       for: 'all',
       to: authenticatedRole,
-      using: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin'`,
+      using: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin')`,
+      withCheck: sql`EXISTS (SELECT 1 FROM user_roles JOIN roles ON user_roles.role_id = roles.id WHERE user_roles.user_id = auth.uid() AND roles.name = 'admin')`,
     }),
   ]
 );

@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react';
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { usePracticeModal } from '@/store/use-practice-modal';
+import { useSignUpModal } from '@/store/use-sign-up-modal';
 import { GithubButton } from '@/components/auth/oauth/github-button';
 import { SignUpForm } from '@/components/auth/sign-up-form';
 import { Separator } from '../ui/separator';
 
 export const SignUpModal = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
-  const { isOpen, close } = usePracticeModal();
+  const { isOpen, close } = useSignUpModal();
 
   useEffect(() => setIsClient(true), []);
 

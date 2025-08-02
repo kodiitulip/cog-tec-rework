@@ -42,15 +42,22 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           TARGET_DATABASE_URL: preview,development,production
           TYPE_DATABASE_URL: encrypted
+
       - uses: amondnet/vercel-action@v25
-        id: vercel-deploy
+        if: inputs.production == 'production'
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--target=${{inputs.production}}'
+          vercel-args: '-prod'
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           scope: ${{ secrets.ORG_ID }}
-      - name: preview-url
-        run: |
-          echo ${{ steps.vercel-deploy.outputs.preview-url }}
+
+      - uses: amondnet/vercel-action@v25
+        if: inputs.production == 'preview'
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_ID }}
+          scope: ${{ secrets.ORG_ID }}
