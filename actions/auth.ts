@@ -69,7 +69,7 @@ export const signInWithEmail = async (
 
 export type SignUpReturn = {
   success: boolean;
-  fieldErrors?: { email?: string[]; password?: string[]; repeatPassword?: string[], displayName?: string[] };
+  fieldErrors?: { email?: string[]; password?: string[]; repeatPassword?: string[], userName?: string[] };
   authError?: AuthError;
 };
 
