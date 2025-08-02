@@ -21,7 +21,19 @@ const main = async () => {
     await db.delete(schema.lessons);
     await db.delete(schema.challenges);
     await db.delete(schema.challengeOptions);
-    await db.delete(schema.challengeProgress);
+    await db.delete(schema.rolePermisions);
+    await db.delete(schema.userRoles);
+
+    db.insert(rolePermissions).values([
+      {
+        role: 'ADMIN',
+        permission: 'COURSES.INSERT'
+      },
+      {
+        role: 'ADMIN',
+        permission: 'COURSES.DELETE'
+      },
+    ])
 
     await db.insert(schema.courses).values([
       {
@@ -51,11 +63,19 @@ const main = async () => {
       },
       {
         id: 2,
-        courseId: 1,
-        title: 'Estudos',
-        description: '????',
-        imageSrc: '/icon/behaviorism/fundaments.svg',
-        order: 2,
+        courseId: 2,
+        title: 'Fundamentos',
+        description: 'Aprenda os fundamentos',
+        imageSrc: '/icon/gestalt/design.svg',
+        order: 1,
+      },
+      {
+        id: 3,
+        courseId: 3,
+        title: 'Fundamentos',
+        description: 'Aprenda os fundamentos',
+        imageSrc: '/icon/socioculture/cognitive.svg',
+        order: 1,
       },
     ]);
     await db.insert(schema.lessons).values([
@@ -73,33 +93,27 @@ const main = async () => {
       },
       {
         id: 3,
-        unitId: 1,
-        order: 3,
-        title: 'Yipe',
-      },
-      {
-        id: 4,
-        unitId: 1,
-        order: 4,
+        unitId: 2,
+        order: 1,
         title: 'Pensadores',
       },
       {
-        id: 5,
-        unitId: 1,
-        order: 5,
+        id: 4,
+        unitId: 2,
+        order: 2,
         title: 'Test',
       },
       {
-        id: 6,
-        unitId: 2,
-        order: 2,
-        title: 'Yipe',
+        id: 5,
+        unitId: 3,
+        order: 1,
+        title: 'Pensadores',
       },
       {
-        id: 7,
-        unitId: 2,
+        id: 6,
+        unitId: 3,
         order: 2,
-        title: 'Yipe',
+        title: 'Test',
       },
     ]);
     await db.insert(schema.challenges).values([

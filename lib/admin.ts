@@ -1,5 +1,5 @@
 import { userRoles } from '@/db/schema';
-import { admin } from '@/db/drizzle';
+import { admin, client } from '@/db/drizzle';
 import { createClient } from './supabase/server';
 import { eq } from 'drizzle-orm';
 
@@ -14,11 +14,17 @@ export const getIsAdmin = async () => {
   } = data;
   if (!userId) return false;
 
+  const b = await client.query.userRoles.findFirst({
+    where: eq(userRoles.userId, userId),
+  });
+
+  if (!b) return false;
+
   const user = await admin.query.userRoles.findFirst({
     where: eq(userRoles.userId, userId),
   });
 
   if (!user) return false;
 
-  return user.role === 'ADMIN';
+  return b.role === 'ADMIN';
 };

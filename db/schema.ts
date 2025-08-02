@@ -2,8 +2,8 @@ import { relations } from 'drizzle-orm';
 import { challengeProgress, userProgress, SelectChallengeProgress, SelectUserProgress } from './schema/progress';
 import { challenges, challengeOptions, SelectChallenges, SelectChallengeOptions } from './schema/challenges';
 import { courses, units, lessons, SelectCourses, SelectUnits, SelectLessons } from './schema/courses';
-import { appRolesEnum, challengesEnum } from './schema/enums';
-import { userRoles } from './schema/roles';
+import { appRolesEnum, appPermissionEnum, challengesEnum } from './schema/enums';
+import { userRoles, rolePermissions } from './schema/roles';
 
 export {
   type SelectCourses,
@@ -14,9 +14,10 @@ export {
   type SelectChallengeProgress,
   type SelectUserProgress,
   appRolesEnum,
+  appPermissionEnum
   challengesEnum,
 };
-export { courses, units, lessons, challenges, challengeOptions, challengeProgress, userProgress, userRoles };
+export { courses, units, lessons, challenges, challengeOptions, challengeProgress, userProgress, userRoles, rolePermissions };
 
 export const coursesRelations = relations(courses, ({ many }) => ({
   userProgress: many(userProgress),
