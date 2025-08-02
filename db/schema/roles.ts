@@ -11,7 +11,7 @@ export const userRoles = pgTable(
       .references(() => authUsers.id, { onDelete: 'cascade' })
       .unique()
       .notNull(),
-    role: appRoleEum().notNull(),
+    role: appRolesEnum().notNull(),
   },
   () => [
     pgPolicy('Admin access to user_roles', {
