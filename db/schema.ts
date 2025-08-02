@@ -14,7 +14,7 @@ export {
   type SelectChallengeProgress,
   type SelectUserProgress,
   appRolesEnum,
-  appPermissionEnum
+  appPermissionEnum,
   challengesEnum,
 };
 export { courses, units, lessons, challenges, challengeOptions, challengeProgress, userProgress, userRoles, rolePermissions };
