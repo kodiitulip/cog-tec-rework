@@ -21,7 +21,7 @@ export const challengeProgress = pgTable(
       as: 'permissive',
       for: 'select',
       to: authenticatedRole,
-      using: sql`true`,
+      using: sql``,
     }),
   ]
 );
@@ -44,7 +44,7 @@ export const userProgress = pgTable(
       as: 'permissive',
       for: 'all',
       to: authenticatedRole,
-      using: sql`true`,
+      using: sql``,
     }),
   ]
 );

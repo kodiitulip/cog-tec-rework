@@ -15,7 +15,7 @@ export const rolePermissions = pgTable(
       as: 'permissive',
       for: 'all',
       to: supabaseAuthAdminRole,
-      using: sql`true`,
+      using: sql``,
     }),
   ]
 );
@@ -30,27 +30,29 @@ export const userRoles = pgTable(
       .notNull(),
     role: appRolesEnum().notNull(),
   },
-  () => [
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (_self) => [
     pgPolicy('Admin read access to user roles', {
       for: 'select',
       as: 'permissive',
       to: authenticatedRole,
-      using: sql`true`,
+      using: sql``,
     }),
     pgPolicy('Admin delete access to user roles', {
       for: 'delete',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.DELETE')`,
+      using: sql`select public.authorize('COURSES.DELETE')`,
+      // withCheck: sql`select public.authorize('COURSES.DELETE')`,
     }),
     pgPolicy('Admin insert access to user roles', {
       for: 'insert',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      withCheck: sql`select public.authorize('COURSES.INSERT')`,
     }),
     pgPolicy('Admin update access to user roles', {
       for: 'update',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      using: sql`select public.authorize('COURSES.INSERT')`,
     }),
   ]
 );
