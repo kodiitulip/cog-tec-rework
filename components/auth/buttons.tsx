@@ -2,9 +2,9 @@
 
 import { useTransition } from 'react';
 import { Button, ButtonProps } from '@/components/ui/button';
-import { signOut } from '@/actions/auth';
 import { useSignUpModal } from '@/store/use-sign-up-modal';
 import { useSignInModal } from '@/store/use-sign-in-modal';
+import { signOut } from '@/actions/auth';
 
 export const SignUpButton = (props: ButtonProps) => {
   const { open } = useSignUpModal();

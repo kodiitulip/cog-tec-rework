@@ -1,7 +1,7 @@
 'use server';
 
 import { admin } from '@/db/drizzle';
-import { getCourseById, getUserProgress } from '@/db/queries';
+import { getCourseById, getCourseProgressByCourseId, getFirstLessonOnCourse, getUserProgress } from '@/db/queries';
 import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
@@ -41,12 +41,16 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
       error: { type: 'COURSE_EMPTY' },
     };
 
-  const existingUserProgress = await getUserProgress();
+  const [existingUserProgress, courseProgress, fallback] = await Promise.all([
+    getUserProgress(),
+    getCourseProgressByCourseId(courseId),
+    getFirstLessonOnCourse(courseId),
+  ]);
 
   if (existingUserProgress) {
     await admin.update(userProgress).set({
       activeCourseId: courseId,
-      activeLessonId: existingUserProgress.activeLessonId || 1,
+      activeLessonId: courseProgress?.activeLessonId || fallback?.id || 1,
       userName: (user.user_metadata['user_name'] as string) || 'User',
       userImageSrc: user.user_metadata['avatar_url'] as string,
     });

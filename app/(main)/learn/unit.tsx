@@ -1,4 +1,4 @@
-import { SelectLessons } from '@/db/schema';
+import { SelectChallenges, SelectLessons } from '@/db/schema';
 import { UnitBanner } from './unit-banner';
 import { LessonButton } from './lesson-button';
 import { CourseTitles } from '@/lib/utils';
@@ -8,7 +8,7 @@ type Props = {
   order: number;
   title: string;
   description: string;
-  lessons: (SelectLessons & { completed: boolean })[];
+  lessons: (SelectLessons & { completed: boolean } & { challenges: SelectChallenges[] })[];
   activeLesson?: SelectLessons;
   activeLessonPercentage: number;
   activeCourse: CourseTitles;
@@ -24,7 +24,7 @@ export const Unit = ({ title, description, lessons, activeLesson, activeLessonPe
     <div className='grid grid-cols2 justify-center gap-y-3 gap-x-20 py-10'>
       {lessons.map((lesson, index) => {
         const isCurrent = lesson.id === activeLesson?.id;
-        const isLocked = !lesson.completed && !isCurrent;
+        const isLocked = lesson.challenges.length === 0 || (!lesson.completed && !isCurrent);
 
         return (
           <LessonButton

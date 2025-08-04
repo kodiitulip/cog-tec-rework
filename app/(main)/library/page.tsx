@@ -3,13 +3,16 @@ import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { UserProgress } from '@/components/bits/pages/user-progress';
 import { QuestSidenote } from '@/components/misc/sidenote/quest';
-import { getUserProgress } from '@/db/queries';
+import { Accordion } from '@/components/ui/accordion';
+import { Separator } from '@/components/ui/separator';
+import { getUnits, getUserProgress } from '@/db/queries';
 import { CourseTitles } from '@/lib/utils';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { Unit } from './unit';
 
 const ShopPage = async () => {
-  const [userProgress] = await Promise.all([getUserProgress()]);
+  const [userProgress, units] = await Promise.all([getUserProgress(), getUnits()]);
 
   if (!userProgress || !userProgress.activeCourse) redirect('/courses');
 
@@ -36,7 +39,22 @@ const ShopPage = async () => {
           />
           <h1 className='text-center font-bold text-neutral-800 text-2xl my-6'>Biblioteca</h1>
           <p className='tex-neutral-500 text-center text-lg mb-6'>Leia e estude os conteúdos aqui!</p>
-          <p className='text-rose-600/70 text-center font-bold tracking-wider uppercase'>🚧 Em construção 🚧</p>
+          <Separator className='mb-4 rounded-full' />
+          <Accordion
+            type='single'
+            collapsible
+            className='w-full'
+          >
+            {units.map(({ id, title, courseId, description }, idx) => (
+              <Unit
+                key={idx}
+                id={id}
+                courseId={courseId}
+                description={description}
+                title={title}
+              />
+            ))}
+          </Accordion>
         </div>
       </FeedWrapper>
     </div>

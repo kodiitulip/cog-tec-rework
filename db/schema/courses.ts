@@ -19,17 +19,17 @@ export const courses = pgTable(
     pgPolicy('Admin delete access to courses', {
       for: 'delete',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.DELETE')`,
+      using: sql`authorize('COURSES.DELETE')`,
     }),
     pgPolicy('Admin insert access to courses', {
       for: 'insert',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      withCheck: sql`authorize('COURSES.INSERT')`,
     }),
     pgPolicy('Admin update access to courses', {
       for: 'update',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      using: sql`authorize('COURSES.INSERT')`,
     }),
   ]
 );
@@ -56,17 +56,17 @@ export const units = pgTable(
     pgPolicy('Admin delete access to courses', {
       for: 'delete',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.DELETE')`,
+      using: sql`authorize('COURSES.DELETE')`,
     }),
     pgPolicy('Admin insert access to courses', {
       for: 'insert',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      withCheck: sql`authorize('COURSES.INSERT')`,
     }),
     pgPolicy('Admin update access to courses', {
       for: 'update',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      using: sql`authorize('COURSES.INSERT')`,
     }),
   ]
 );
@@ -91,17 +91,17 @@ export const lessons = pgTable(
     pgPolicy('Admin delete access to courses', {
       for: 'delete',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.DELETE')`,
+      using: sql`authorize('COURSES.DELETE')`,
     }),
     pgPolicy('Admin insert access to courses', {
       for: 'insert',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      withCheck: sql`authorize('COURSES.INSERT')`,
     }),
     pgPolicy('Admin update access to courses', {
       for: 'update',
       to: authenticatedRole,
-      using: sql`select authorize('COURSES.INSERT')`,
+      using: sql`authorize('COURSES.INSERT')`,
     }),
   ]
 );
