@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getCurrentUserName, getCurrentUserAvatarUrl } from '@/lib/supabase/auth/user';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
 import { LogOut } from 'lucide-react';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
@@ -34,15 +34,15 @@ export const UserButton = async ({ label, className, ...props }: UserButtonProps
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56'>
-        <DropdownMenuItem asChild>
-          <SignOutButton
-            variant='ghost'
-            className='w-full justify-start'
-          >
-            <LogOut />
-            <label>Sign Out</label>
-          </SignOutButton>
-        </DropdownMenuItem>
+        {/* <DropdownMenuItem asChild> */}
+        <SignOutButton
+          variant='ghost'
+          className='w-full justify-start'
+        >
+          <LogOut />
+          <label>Sign Out</label>
+        </SignOutButton>
+        {/* </DropdownMenuItem> */}
       </DropdownMenuContent>
     </DropdownMenu>
   );

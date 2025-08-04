@@ -120,23 +120,10 @@ export const signUpWithEmail = async (
 
 export const signOut = async () => {
   const { auth } = await createClient();
-  const {
-    data: { session },
-    error: sessionError,
-  } = await auth.getSession();
-
-  if (sessionError) return console.log(sessionError.code);
-  if (!session) return console.log('session missing');
-
-  const { access_token } = session;
-
-  if (!access_token) return console.log('no access token');
-
-  const { error: signOutError } = await auth.admin.signOut(access_token, 'local');
-  if (signOutError) {
-    console.log(signOutError.code);
-    return;
-  }
+  const { error: signOutError } = await auth.signOut({
+    scope: 'local',
+  });
+  if (signOutError) return console.log(signOutError.code);
   revalidatePath('/', 'layout');
   revalidatePath('/', 'page');
   redirect('/');
