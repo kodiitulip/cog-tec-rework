@@ -35,5 +35,6 @@ jobs:
 
       - name: Seed database
         run: bun run seed
+        if: inputs.seed
         env:
           ADMIN_DATABASE_URL: ${{ secrets.ADMIN_DATABASE_URL }}
