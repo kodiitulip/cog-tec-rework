@@ -15,7 +15,6 @@ type Props = {
 };
 
 export const LessonButton = ({ index, totalCount, current, locked, id, activeCourse }: Props) => {
-  const isFirst = index === 0;
   const isLast = index === totalCount;
   const isCompleted = !current && !locked;
 
@@ -27,7 +26,7 @@ export const LessonButton = ({ index, totalCount, current, locked, id, activeCou
       href={href}
       aria-disabled={locked}
       style={{
-        pointerEvents: locked && !isFirst ? 'none' : 'auto',
+        pointerEvents: locked ? 'none' : 'auto',
       }}
       className={cn(
         'relative size-20 flex items-center justify-center rounded-full border-2 border-b-6 hover:border-b-4',

@@ -5,7 +5,6 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { UserLoginFormSchema, SignUpFormSchema } from '@/zod/schemas';
-import { AuthError } from '@supabase/supabase-js';
 
 export const signInWithGithub = async () => {
   const origin = (await headers()).get('origin');
@@ -23,22 +22,17 @@ export const signInWithGithub = async () => {
   if (data.url) redirect(data.url);
 };
 
-export type SignInFieldErrors = {
-  success: false;
-  formError?: { email?: string[]; password?: string[] };
-  authError?: AuthError;
-};
-
-export type SignInSuccess = {
-  success: true;
-  formError: null;
-  authError: null;
+export type SignInFormState = {
+  success: boolean;
+  next?: string;
+  fieldErrors?: { email?: string[]; password?: string[] };
+  authError?: string;
 };
 
 export const signInWithEmail = async (
-  _state: SignInSuccess | SignInFieldErrors | null,
+  state: SignInFormState | null,
   formData: FormData
-): Promise<SignInSuccess | SignInFieldErrors | null> => {
+): Promise<SignInFormState | null> => {
   const validatedFields = UserLoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -47,7 +41,8 @@ export const signInWithEmail = async (
   if (!validatedFields.success)
     return {
       success: false,
-      formError: validatedFields.error.flatten().fieldErrors,
+      next: state?.next,
+      fieldErrors: validatedFields.error.flatten().fieldErrors,
     };
 
   const { email, password } = validatedFields.data;
@@ -61,22 +56,27 @@ export const signInWithEmail = async (
   if (error)
     return {
       success: false,
-      authError: error,
+      next: state?.next,
+      authError: error.code,
     };
 
-  return { success: true, authError: null, formError: null };
+  return {
+    next: state?.next,
+    success: true,
+  };
 };
 
-export type SignUpReturn = {
+export type SignUpFormState = {
   success: boolean;
-  fieldErrors?: { email?: string[]; password?: string[]; repeatPassword?: string[], userName?: string[] };
-  authError?: AuthError;
+  next?: string;
+  fieldErrors?: { email?: string[]; password?: string[]; repeatPassword?: string[]; userName?: string[] };
+  authError?: string;
 };
 
 export const signUpWithEmail = async (
-  _state: SignUpReturn | null,
+  state: SignUpFormState | null,
   formData: FormData
-): Promise<SignUpReturn | null> => {
+): Promise<SignUpFormState | null> => {
   const validatedFields = SignUpFormSchema.safeParse({
     userName: formData.get('userName'),
     email: formData.get('email'),
@@ -87,6 +87,7 @@ export const signUpWithEmail = async (
   if (!validatedFields.success)
     return {
       success: false,
+      next: state?.next,
       fieldErrors: validatedFields.error.flatten().fieldErrors,
     };
 
@@ -107,10 +108,14 @@ export const signUpWithEmail = async (
   if (error)
     return {
       success: false,
-      authError: error,
+      next: state?.next,
+      authError: error.code,
     };
 
-  return { success: true };
+  return {
+    next: state?.next,
+    success: true,
+  };
 };
 
 export const signOut = async () => {

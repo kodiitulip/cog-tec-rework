@@ -32,7 +32,8 @@ export const userRoles = pgTable(
   },
   () => [
     pgPolicy('Admin read access to user roles', {
-      for: 'all',
+      for: 'select',
+      as: 'permissive',
       to: authenticatedRole,
       using: sql`true`,
     }),
