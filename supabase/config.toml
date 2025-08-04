@@ -33,7 +33,7 @@ sql_paths = ["./seed.sql"]
 enabled = false
 
 [studio]
-enabled = false
+enabled = true
 port = 54323
 api_url = "http://localhost"
 
@@ -90,10 +90,10 @@ otp_expiry = 1800
 # enabled = true
 # uri = "pg-functions://<database>/<schema>/<hook_name>"
 
-[auth.external.github]
-enabled = true
-client_id = "env(SUPABASE_AUTH_EXTERNAL_GITHUB_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_EXTERNAL_GITHUB_SECRET)"
+#[auth.external.github]
+#enabled = true
+#client_id = "env(SUPABASE_AUTH_EXTERNAL_GITHUB_CLIENT_ID)"
+#secret = "env(SUPABASE_AUTH_EXTERNAL_GITHUB_SECRET)"
 
 [edge_runtime]
 enabled = false

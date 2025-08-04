@@ -32,7 +32,7 @@ export const SignUpModal = () => {
           className='justify-start'
         />
         <Separator className='rounded-2xl ' />
-        <SignUpForm />
+        <SignUpForm close={close} />
       </DialogContent>
     </Dialog>
   );

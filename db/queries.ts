@@ -2,7 +2,7 @@ import { cache } from 'react';
 import { admin } from '@/db/drizzle';
 import { createClient } from '@/lib/supabase/server';
 import { eq } from 'drizzle-orm';
-import { units, userProgress, courses, challengeProgress, lessons } from '@/db/schema';
+import { units, userProgress, courses, challengeProgress, lessons, SelectCourses } from '@/db/schema';
 
 export const getCourses = cache(
   async () =>
@@ -88,6 +88,23 @@ export const getCourseById = cache(
     })
 );
 
+export const getFirstLessonOnCourse = cache(async (courseId: SelectCourses['id']) => {
+  const data = await admin.query.courses.findFirst({
+    where: eq(courses.id, courseId),
+    with: {
+      units: {
+        orderBy: ({ order }, { asc }) => [asc(order)],
+        with: {
+          lessons: {
+            orderBy: ({ order }, { asc }) => [asc(order)],
+          },
+        },
+      },
+    },
+  });
+  return data?.units[0].lessons[0];
+});
+
 export const getCourseProgress = cache(async () => {
   const userProgress = await getUserProgress();
 
@@ -114,6 +131,46 @@ export const getCourseProgress = cache(async () => {
   });
 
   const firstUncompletedLesson = unitsInActiveCourse
+    .flatMap((unit) => unit.lessons)
+    .find((lesson) =>
+      lesson.challenges.some(
+        ({ challengeProgress }) =>
+          !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
+      )
+    );
+
+  return {
+    activeLesson: firstUncompletedLesson,
+    activeLessonId: firstUncompletedLesson?.id,
+  };
+});
+
+export const getCourseProgressByCourseId = cache(async (courseId: SelectCourses['id']) => {
+  const userProgress = await getUserProgress();
+
+  if (!userProgress || !userProgress?.userId || !courseId) return null;
+
+  const unitsInCourse = await admin.query.units.findMany({
+    orderBy: ({ order }, { asc }) => [asc(order)],
+    where: eq(units.courseId, courseId),
+    with: {
+      lessons: {
+        orderBy: ({ order }, { asc }) => [asc(order)],
+        with: {
+          unit: true,
+          challenges: {
+            with: {
+              challengeProgress: {
+                where: eq(challengeProgress.userId, userProgress.userId),
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const firstUncompletedLesson = unitsInCourse
     .flatMap((unit) => unit.lessons)
     .find((lesson) =>
       lesson.challenges.some(

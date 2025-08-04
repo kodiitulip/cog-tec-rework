@@ -1,13 +1,25 @@
 import { useActionState } from 'react';
 import { Button } from '../ui/button';
-import { SignUpReturn, signUpWithEmail } from '@/actions/auth';
+import { SignUpFormState, signUpWithEmail } from '@/actions/auth';
+import { authErrorCodeToMessage } from '@/lib/utils';
+import { redirect } from 'next/navigation';
 
-type SignUpFormProps = React.ComponentPropsWithRef<'form'> & {};
-type SignUpInitialState = SignUpReturn | null;
+type Props = React.ComponentPropsWithRef<'form'> & { close?: () => void };
 
-export const SignUpForm = ({ ...props }: SignUpFormProps) => {
-  const [state, action, isPending] = useActionState<SignUpInitialState, FormData>(signUpWithEmail, null);
+export const SignUpForm = ({ close, ...props }: Props) => {
+  const nAction = async (state: SignUpFormState | null, formData: FormData) => {
+    const data = await signUpWithEmail(state, formData);
+    if (data?.success && data?.next) {
+      if (close) close();
+      redirect(data.next);
+    }
+    return data;
+  };
 
+  const [state, action, isPending] = useActionState<SignUpFormState | null, FormData>(nAction, {
+    success: false,
+    next: '/learn',
+  });
   return (
     <form
       action={action}
@@ -24,7 +36,7 @@ export const SignUpForm = ({ ...props }: SignUpFormProps) => {
         id='userName'
         name='userName'
         placeholder='Nome de Usuário'
-        className='bg-neutral-400 border-2 border-neutral-600 rounded-xl w-full'
+        className='bg-neutral-400/10 border-2 border-neutral-400 rounded-xl w-full p-2'
       />
       <ul>
         {state?.fieldErrors?.userName?.map((msg, idx) => (
@@ -47,7 +59,7 @@ export const SignUpForm = ({ ...props }: SignUpFormProps) => {
         id='email'
         name='email'
         placeholder='Seu email'
-        className='bg-neutral-400 border-2 border-neutral-600 rounded-xl w-full'
+        className='bg-neutral-400/10 border-2 border-neutral-400 rounded-xl w-full p-2'
       />
       <ul>
         {state?.fieldErrors?.email?.map((msg, idx) => (
@@ -70,7 +82,7 @@ export const SignUpForm = ({ ...props }: SignUpFormProps) => {
         id='password'
         name='password'
         placeholder='Sua Senha'
-        className='bg-neutral-400 border-2 border-neutral-600 rounded-xl w-full'
+        className='bg-neutral-400/10 border-2 border-neutral-400 rounded-xl w-full p-2'
       />
       <ul>
         {state?.fieldErrors?.password?.map((msg, idx) => (
@@ -93,7 +105,7 @@ export const SignUpForm = ({ ...props }: SignUpFormProps) => {
         id='repeatPassword'
         name='repeatPassword'
         placeholder='Repita sua Senha'
-        className='bg-neutral-400 border-2 border-neutral-600 rounded-xl w-full'
+        className='bg-neutral-400/10 border-2 border-neutral-400 rounded-xl w-full p-2'
       />
       <ul>
         {state?.fieldErrors?.repeatPassword?.map((msg, idx) => (
@@ -105,15 +117,13 @@ export const SignUpForm = ({ ...props }: SignUpFormProps) => {
           </li>
         ))}
       </ul>
-      {state?.authError && (
-        <div className='text-sm text-rose-400'>Houve um erro de autenticação. Porfavor tente novamente mais tarde</div>
-      )}
+      {state?.authError && <div className='text-sm text-rose-400'>{authErrorCodeToMessage(state.authError)}</div>}
       <Button
         type='submit'
         variant='ghost'
         disabled={isPending}
       >
-        Sign In
+        Cadstar-se
       </Button>
     </form>
   );
