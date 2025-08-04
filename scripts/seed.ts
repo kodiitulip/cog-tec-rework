@@ -24,16 +24,18 @@ const main = async () => {
     await db.delete(schema.rolePermissions);
     await db.delete(schema.userRoles);
 
-    db.insert(schema.rolePermissions).values([
+    await db.insert(schema.rolePermissions).values([
       {
+        id: 1,
         role: 'ADMIN',
-        permission: 'COURSES.INSERT'
+        permission: 'COURSES.INSERT',
       },
       {
+        id: 2,
         role: 'ADMIN',
-        permission: 'COURSES.DELETE'
+        permission: 'COURSES.DELETE',
       },
-    ])
+    ]);
 
     await db.insert(schema.courses).values([
       {
@@ -150,39 +152,101 @@ const main = async () => {
           'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
       },
     ]);
+    await db.insert(schema.challenges).values([
+      {
+        id: 5,
+        lessonId: 3,
+        type: 'SELECT',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 6,
+        lessonId: 3,
+        type: 'ASSIST',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 7,
+        lessonId: 4,
+        type: 'SELECT',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 8,
+        lessonId: 4,
+        type: 'ASSIST',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+    ]);
+    await db.insert(schema.challenges).values([
+      {
+        id: 9,
+        lessonId: 5,
+        type: 'SELECT',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 10,
+        lessonId: 5,
+        type: 'ASSIST',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 11,
+        lessonId: 6,
+        type: 'SELECT',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+      {
+        id: 12,
+        lessonId: 6,
+        type: 'ASSIST',
+        order: 1,
+        question:
+          'Qual desses pensadores prpos que após grande repetição de uma experiência, cria-se uma associação com uma ação?',
+      },
+    ]);
     await db.insert(schema.challengeOptions).values([
       {
-        id: 1,
         challengeId: 1,
         correct: true,
         text: 'Pavlov',
       },
       {
-        id: 2,
         challengeId: 1,
         correct: false,
         text: 'Watson',
       },
       {
-        id: 3,
         challengeId: 1,
         correct: false,
         text: 'Skinner',
       },
       {
-        id: 4,
         challengeId: 2,
         correct: true,
         text: 'Pavlov',
       },
       {
-        id: 5,
         challengeId: 2,
         correct: false,
         text: 'Watson',
       },
       {
-        id: 6,
         challengeId: 2,
         correct: false,
         text: 'Skinner',
