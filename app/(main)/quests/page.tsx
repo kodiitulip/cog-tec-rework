@@ -38,7 +38,7 @@ const QuestsPage = async () => {
               return (
                 <div
                   key={title}
-                  className='flex items-center w-full p-4 gap-x-4 border-t-2'
+                  className='flex items-center w-full p-4 gap-x-4 border-t-1'
                 >
                   <Image
                     src='/icons/points.svg'

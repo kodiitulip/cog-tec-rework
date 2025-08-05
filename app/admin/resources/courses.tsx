@@ -1,13 +1,23 @@
-import { Create, Datagrid, Edit, List, NumberField, SimpleForm, TextField, TextInput, required } from 'react-admin';
+import {
+  Create,
+  Datagrid,
+  Edit,
+  InfiniteList,
+  NumberField,
+  NumberInput,
+  SimpleForm,
+  TextField,
+  TextInput,
+  required,
+} from 'react-admin';
 
 export const CourseCreate = () => {
   return (
     <Create>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='ID'
-          type='number'
         />
         <TextInput
           source='title'
@@ -27,11 +37,10 @@ export const CourseEdit = () => {
   return (
     <Edit>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='Id'
           validate={[required()]}
-          type='number'
         />
         <TextInput
           source='title'
@@ -49,12 +58,12 @@ export const CourseEdit = () => {
 };
 export const CourseList = () => {
   return (
-    <List>
+    <InfiniteList>
       <Datagrid rowClick='edit'>
         <NumberField source='id' />
         <TextField source='title' />
         <TextField source='imageSrc' />
       </Datagrid>
-    </List>
+    </InfiniteList>
   );
 };

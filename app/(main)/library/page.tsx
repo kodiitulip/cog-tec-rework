@@ -5,14 +5,14 @@ import { UserProgress } from '@/components/bits/pages/user-progress';
 import { QuestSidenote } from '@/components/misc/sidenote/quest';
 import { Accordion } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
-import { getUnits, getUserProgress } from '@/db/queries';
+import { getLibraryUnits, getUserProgress } from '@/db/queries';
 import { CourseTitles } from '@/lib/utils';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Unit } from './unit';
 
-const ShopPage = async () => {
-  const [userProgress, units] = await Promise.all([getUserProgress(), getUnits()]);
+const LibraryPage = async () => {
+  const [userProgress, units] = await Promise.all([getUserProgress(), getLibraryUnits()]);
 
   if (!userProgress || !userProgress.activeCourse) redirect('/courses');
 
@@ -45,13 +45,14 @@ const ShopPage = async () => {
             collapsible
             className='w-full'
           >
-            {units.map(({ id, title, courseId, description }, idx) => (
+            {units.map(({ id, title, courseId, description, library }, idx) => (
               <Unit
                 key={idx}
                 id={id}
                 courseId={courseId}
                 description={description}
                 title={title}
+                libraryContent={library}
               />
             ))}
           </Accordion>
@@ -61,4 +62,4 @@ const ShopPage = async () => {
   );
 };
 
-export default ShopPage;
+export default LibraryPage;

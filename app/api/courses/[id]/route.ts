@@ -1,4 +1,4 @@
-import { client } from '@/db/drizzle';
+import { admin } from '@/db/drizzle';
 import { courses } from '@/db/schema';
 import { getIsAdmin } from '@/lib/admin';
 import { eq } from 'drizzle-orm';
@@ -11,7 +11,7 @@ export const GET = async (req: Request, { params }: { params: Promise<{ id: numb
 
   const { id } = await params;
 
-  const data = await client.query.courses.findFirst({
+  const data = await admin.query.courses.findFirst({
     where: eq(courses.id, id),
   });
 
@@ -27,7 +27,7 @@ export const PUT = async (req: Request, { params }: { params: Promise<{ id: numb
 
   const body = await req.json();
 
-  const data = await client
+  const data = await admin
     .update(courses)
     .set({
       ...body,
@@ -45,7 +45,7 @@ export const DELETE = async (req: Request, { params }: { params: Promise<{ id: n
 
   const { id } = await params;
 
-  const data = await client.delete(courses).where(eq(courses.id, id)).returning();
+  const data = await admin.delete(courses).where(eq(courses.id, id)).returning();
 
   return NextResponse.json(data[0]);
 };

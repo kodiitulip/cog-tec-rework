@@ -4,6 +4,7 @@ import { challenges, challengeOptions, SelectChallenges, SelectChallengeOptions 
 import { courses, units, lessons, SelectCourses, SelectUnits, SelectLessons } from './schema/courses';
 import { appRolesEnum, appPermissionsEnum, challengesEnum } from './schema/enums';
 import { userRoles, rolePermissions } from './schema/roles';
+import { library, SelectLibrary } from './schema/library';
 
 export {
   type SelectCourses,
@@ -13,11 +14,23 @@ export {
   type SelectChallengeOptions,
   type SelectChallengeProgress,
   type SelectUserProgress,
+  type SelectLibrary,
   appRolesEnum,
   appPermissionsEnum,
   challengesEnum,
 };
-export { courses, units, lessons, challenges, challengeOptions, challengeProgress, userProgress, userRoles, rolePermissions };
+export {
+  courses,
+  units,
+  lessons,
+  library,
+  challenges,
+  challengeOptions,
+  challengeProgress,
+  userProgress,
+  userRoles,
+  rolePermissions,
+};
 
 export const coursesRelations = relations(courses, ({ many }) => ({
   userProgress: many(userProgress),
@@ -30,6 +43,7 @@ export const unitsRelations = relations(units, ({ many, one }) => ({
     references: [courses.id],
   }),
   lessons: many(lessons),
+  library: many(library),
 }));
 
 export const lessonsRelations = relations(lessons, ({ one, many }) => ({
@@ -38,6 +52,13 @@ export const lessonsRelations = relations(lessons, ({ one, many }) => ({
     references: [units.id],
   }),
   challenges: many(challenges),
+}));
+
+export const libraryRelations = relations(library, ({ one }) => ({
+  unit: one(units, {
+    fields: [library.unitId],
+    references: [units.id],
+  }),
 }));
 
 export const challengesRelations = relations(challenges, ({ one, many }) => ({
