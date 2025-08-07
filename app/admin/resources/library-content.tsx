@@ -7,14 +7,14 @@ import {
   NumberInput,
   ReferenceField,
   ReferenceInput,
-  required,
   SelectInput,
   SimpleForm,
   TextField,
   TextInput,
+  required,
 } from 'react-admin';
 
-export const UnitsCreate = () => {
+export const LibraryContentCreate = () => {
   return (
     <Create>
       <SimpleForm>
@@ -27,33 +27,25 @@ export const UnitsCreate = () => {
           label='Title'
           validate={[required()]}
         />
-        <TextInput
-          source='description'
-          label='Description'
-          validate={[required()]}
-        />
         <ReferenceInput
-          reference='courses'
-          label='Course ID'
-          source='courseId'
+          source='unitId'
+          label='Unit ID'
+          reference='units'
         >
           <SelectInput validate={[required()]} />
         </ReferenceInput>
-        <NumberInput
-          source='order'
-          label='Order'
-          validate={[required()]}
-        />
         <TextInput
-          source='imageSrc'
-          label='ImageSrc'
+          source='markdown'
+          label='Markdown'
+          defaultValue=''
+          multiline
         />
+        <NumberInput source='order' />
       </SimpleForm>
     </Create>
   );
 };
-
-export const UnitsEdit = () => {
+export const LibraryContentEdit = () => {
   return (
     <Edit>
       <SimpleForm>
@@ -67,46 +59,45 @@ export const UnitsEdit = () => {
           label='Title'
           validate={[required()]}
         />
-        <TextInput
-          source='description'
-          label='Description'
-          validate={[required()]}
-        />
         <ReferenceInput
-          reference='courses'
-          label='Course ID'
-          source='courseId'
+          source='unitId'
+          label='Unit ID'
+          reference='units'
         >
           <SelectInput validate={[required()]} />
         </ReferenceInput>
-        <NumberInput
-          source='order'
-          label='Order'
-          validate={[required()]}
-        />
         <TextInput
-          source='imageSrc'
-          label='ImageSrc'
-          validate={[required()]}
+          source='markdown'
+          label='Markdown'
+          defaultValue=''
         />
+        <NumberInput source='order' />
       </SimpleForm>
     </Edit>
   );
 };
-
-export const UnitsList = () => {
+export const LibraryContentList = () => {
   return (
     <InfiniteList>
       <Datagrid rowClick='edit'>
-        <NumberField source='id' />
-        <TextField source='title' />
-        <TextField source='description' />
+        <NumberField
+          source='id'
+          label='ID'
+        />
+        <TextField
+          source='title'
+          label='Title'
+        />
         <ReferenceField
-          reference='courses'
-          source='courseId'
+          source='unitId'
+          label='Unit ID'
+          reference='units'
+        />
+        <TextField
+          source='markdown'
+          label='Markdown'
         />
         <NumberField source='order' />
-        <TextField source='imageSrc' />
       </Datagrid>
     </InfiniteList>
   );

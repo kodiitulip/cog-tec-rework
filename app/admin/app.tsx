@@ -8,6 +8,7 @@ import { UnitsCreate, UnitsEdit, UnitsList } from './resources/units';
 import { LessonsCreate, LessonsEdit, LessonsList } from './resources/lessons';
 import { ChallengeCreate, ChallengeEdit, ChallengeList } from './resources/challenge';
 import { ChallengeOptionsCreate, ChallengeOptionsEdit, ChallengeOptionsList } from './resources/challenge-options';
+import { LibraryContentCreate, LibraryContentEdit, LibraryContentList } from './resources/library-content';
 
 const dataProvider = simpleRestProvider('/api');
 
@@ -34,6 +35,13 @@ const App = () => {
         list={LessonsList}
         create={LessonsCreate}
         edit={LessonsEdit}
+      />
+      <Resource
+        name='library'
+        recordRepresentation='title'
+        list={LibraryContentList}
+        create={LibraryContentCreate}
+        edit={LibraryContentEdit}
       />
       <Resource
         name='challenges'

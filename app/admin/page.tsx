@@ -1,11 +1,11 @@
 import { getIsAdmin } from '@/lib/admin';
 import App from './app';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 
 const AdminPage = async () => {
   const isAdmin = await getIsAdmin();
 
-  if (!isAdmin) redirect('/');
+  if (!isAdmin) notFound();
 
   return <App />;
 };

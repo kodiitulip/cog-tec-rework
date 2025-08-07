@@ -19,6 +19,7 @@ const main = async () => {
     await db.delete(schema.userProgress);
     await db.delete(schema.units);
     await db.delete(schema.lessons);
+    await db.delete(schema.library);
     await db.delete(schema.challenges);
     await db.delete(schema.challengeOptions);
     await db.delete(schema.rolePermissions);
@@ -80,6 +81,31 @@ const main = async () => {
         order: 1,
       },
     ]);
+
+    await db.insert(schema.library).values([
+      {
+        id: 1,
+        title: 'Test',
+        markdown: '# Test\n\nThis is a text\n\n- There\n- Is\n- Nothing\n- Here',
+        unitId: 1,
+        order: 1,
+      },
+      {
+        id: 2,
+        title: 'Test',
+        markdown: '# Test\n\nThis is a text\n\n- There\n- Is\n- Nothing\n- Here',
+        unitId: 2,
+        order: 1,
+      },
+      {
+        id: 3,
+        title: 'Test',
+        markdown: '# Test\n\nThis is a text\n\n- There\n- Is\n- Nothing\n- Here',
+        unitId: 3,
+        order: 1,
+      },
+    ]);
+
     await db.insert(schema.lessons).values([
       {
         id: 1,

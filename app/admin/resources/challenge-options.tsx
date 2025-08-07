@@ -4,11 +4,13 @@ import {
   Create,
   Datagrid,
   Edit,
-  List,
+  InfiniteList,
   NumberField,
+  NumberInput,
   ReferenceField,
   ReferenceInput,
   required,
+  SelectInput,
   SimpleForm,
   TextField,
   TextInput,
@@ -18,16 +20,17 @@ export const ChallengeOptionsCreate = () => {
   return (
     <Create>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='ID'
-          type='number'
         />
         <ReferenceInput
           reference='challenges'
           label='Challenge ID'
           source='challengeId'
-        />
+        >
+          <SelectInput validate={[required()]} />
+        </ReferenceInput>
         <TextInput
           source='text'
           label='Text'
@@ -61,7 +64,9 @@ export const ChallengeOptionsEdit = () => {
           reference='challenges'
           label='Challenge ID'
           source='challengeId'
-        />
+        >
+          <SelectInput validate={[required()]} />
+        </ReferenceInput>
         <TextInput
           source='text'
           label='Text'
@@ -83,7 +88,7 @@ export const ChallengeOptionsEdit = () => {
 
 export const ChallengeOptionsList = () => {
   return (
-    <List>
+    <InfiniteList>
       <Datagrid rowClick='edit'>
         <NumberField source='id' />
         <ReferenceField
@@ -94,6 +99,6 @@ export const ChallengeOptionsList = () => {
         <BooleanField source='correct' />
         <TextField source='imageSrc' />
       </Datagrid>
-    </List>
+    </InfiniteList>
   );
 };

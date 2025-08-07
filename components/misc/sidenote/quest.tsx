@@ -12,7 +12,7 @@ type Props = {
 
 export const QuestSidenote = ({ points, courseTitle }: Props) => {
   return (
-    <div className='border-2 rounded-xl p-4 space-y-4'>
+    <div className='border-1 rounded-xl p-4 space-y-4'>
       <div className='flex items-center justify-between w-full space-y-2'>
         <h3 className='font-bold text-lg'>Missões</h3>
         <Button

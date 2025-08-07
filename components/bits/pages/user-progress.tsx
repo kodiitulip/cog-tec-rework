@@ -1,25 +1,29 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { SelectCourses } from '@/db/schema';
-import { InfinityIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 
 type Props = {
   activeCourse: SelectCourses;
   hearts: number;
   points: number;
-  hasActiveSubscription?: boolean;
 };
 
-export const UserProgress = ({ activeCourse, points, hearts, hasActiveSubscription }: Props) => {
+export const UserProgress = ({ activeCourse, points, hearts }: Props) => {
+  const pathname = usePathname();
+  const back = pathname.indexOf('/', 1) === -1 ? pathname : pathname.slice(0, pathname.indexOf('/', 1));
+
   return (
     <div className='flex items-center justify-between gap-x-3 w-full'>
       <Button
         asChild
         variant='ghost'
       >
-        <Link href='/courses'>
+        <Link href={`/courses?back=${back.replace('/', '')}`}>
           <Image
             src={activeCourse.imageSrc ?? '/icon/cog-tec/icon.svg'}
             alt={activeCourse.title ?? 'unknown flag'}
@@ -58,7 +62,7 @@ export const UserProgress = ({ activeCourse, points, hearts, hasActiveSubscripti
             width={22}
             height={22}
           />
-          {hasActiveSubscription ? <InfinityIcon className='size-4 stroke-3' /> : hearts}
+          {hearts}
         </Link>
       </Button>
     </div>

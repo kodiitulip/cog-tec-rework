@@ -32,7 +32,7 @@ export const QuestionBubble = ({ question, courseName }: Props) => {
         height={40}
         width={40}
         className={cn(
-          'lg:hidden',
+          'lg:hidden shrink-0',
           courseName === 'Behaviorismo' && 'fill-behaviorism-500',
           courseName === 'Gestalt' && 'fill-gestalt-500',
           courseName === 'Teoria Sociocultural' && 'fill-sociocultural-500'
