@@ -70,6 +70,7 @@ export const LibraryContentEdit = () => {
           source='markdown'
           label='Markdown'
           defaultValue=''
+          multiline
         />
         <NumberInput source='order' />
       </SimpleForm>
