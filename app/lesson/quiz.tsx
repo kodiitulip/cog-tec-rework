@@ -75,7 +75,7 @@ export const Quiz = ({
     );
   }
 
-  const title = currentChallenge.type === 'ASSIST' ? 'Selecione o significado correto' : currentChallenge.question;
+  const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
   const options = currentChallenge?.challengeOptions || [];
 
   const onNext = () => setActiveIndex((curr) => curr + 1);

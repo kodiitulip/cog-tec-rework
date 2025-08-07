@@ -28,7 +28,7 @@ const LibraryContentPage = async ({ params }: { params: Promise<{ id: SelectLibr
           title={content?.title}
           id={id}
         />
-        <article className='prose prose-neutral rounded-xl rounded-t-none max-w-(--breakpoint-lg) p-6 border-1 border-t-0 border-neutral-400 prose-h1:text-2xl prose-p:text-base'>
+        <article className='prose prose-neutral rounded-xl rounded-t-none max-w-(--breakpoint-lg) p-4 mx-2 border-1 border-t-0 border-neutral-400 prose-h1:text-2xl prose-p:text-base'>
           <Markdown>{content ? content.markdown : 'Empty'}</Markdown>
         </article>
       </FeedWrapper>

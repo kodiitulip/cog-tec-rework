@@ -12,7 +12,7 @@ export const Header = ({ courseId, id, title = 'Header' }: Props) => {
   return (
     <Link
       className={cn(
-        'p-4 rounded-xl rounded-b-none max-w-(--breakpoint-lg) block',
+        'p-4 px-6 rounded-xl max-w-(--breakpoint-lg) block',
         courseId === 1 && 'bg-behaviorism-500',
         courseId === 2 && 'bg-gestalt-500',
         courseId === 3 && 'bg-sociocultural-500'
