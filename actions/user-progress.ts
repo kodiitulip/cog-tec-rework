@@ -51,8 +51,8 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
     await admin.update(userProgress).set({
       activeCourseId: courseId,
       activeLessonId: courseProgress?.activeLessonId || fallback?.id || 1,
-      userName: (user.user_metadata['user_name'] as string) || 'User',
-      userImageSrc: user.user_metadata['avatar_url'] as string,
+      userName: userProgress.userName || (user.user_metadata['user_name'] as string) || 'User',
+      userImageSrc: userProgress.userImageSrc || (user.user_metadata['avatar_url'] as string),
     });
   } else {
     await admin.insert(userProgress).values({
