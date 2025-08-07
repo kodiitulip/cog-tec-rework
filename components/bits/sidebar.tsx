@@ -13,7 +13,12 @@ type SidebarProps = {
 
 export const Sidebar = ({ className }: SidebarProps) => {
   return (
-    <div className={cn('h-full lg:w-64 lg:fixed flex left-0 inset-y-0 py-4 lg:rounded-r-lg flex-col', className)}>
+    <div
+      className={cn(
+        'h-full lg:w-64 lg:fixed flex left-0 inset-y-0 py-4 lg:rounded-r-lg flex-col border-r-1 border-neutral-400',
+        className
+      )}
+    >
       <Link
         href='/learn'
         className='pt-4 pl-4 pb-7 flex items-center gap-x-3'

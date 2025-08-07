@@ -2,7 +2,16 @@ import { cache } from 'react';
 import { admin } from '@/db/drizzle';
 import { createClient } from '@/lib/supabase/server';
 import { eq } from 'drizzle-orm';
-import { units, userProgress, courses, challengeProgress, lessons, SelectCourses } from '@/db/schema';
+import {
+  units,
+  userProgress,
+  courses,
+  challengeProgress,
+  lessons,
+  SelectCourses,
+  SelectLibrary,
+  library,
+} from '@/db/schema';
 
 export const getCourses = cache(
   async () =>
@@ -69,6 +78,34 @@ export const getUnits = cache(async () => {
   });
 
   return normalizedData;
+});
+
+export const getLibraryUnits = cache(async () => {
+  const userProgress = await getUserProgress();
+
+  if (!userProgress || !userProgress.userId || !userProgress.activeCourseId) {
+    return [];
+  }
+
+  const data = await admin.query.units.findMany({
+    where: eq(units.courseId, userProgress.activeCourseId),
+    orderBy: ({ order }, { asc }) => [asc(order)],
+    with: {
+      library: true,
+    },
+  });
+
+  return data;
+});
+
+export const getLibraryContentById = cache(async (contentId: SelectLibrary['id']) => {
+  const data = await admin.query.library.findFirst({
+    where: eq(library.id, contentId),
+    with: {
+      unit: true,
+    },
+  });
+  return data;
 });
 
 export const getCourseById = cache(

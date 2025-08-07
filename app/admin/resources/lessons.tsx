@@ -2,11 +2,13 @@ import {
   Create,
   Datagrid,
   Edit,
-  List,
+  InfiniteList,
   NumberField,
+  NumberInput,
   ReferenceField,
   ReferenceInput,
   required,
+  SelectInput,
   SimpleForm,
   TextField,
   TextInput,
@@ -16,10 +18,9 @@ export const LessonsCreate = () => {
   return (
     <Create>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='ID'
-          type='number'
         />
         <TextInput
           source='title'
@@ -30,12 +31,13 @@ export const LessonsCreate = () => {
           reference='units'
           label='Unit ID'
           source='unitId'
-        />
-        <TextInput
+        >
+          <SelectInput validate={[required()]} />
+        </ReferenceInput>
+        <NumberInput
           source='order'
           label='Order'
           validate={[required()]}
-          type='number'
         />
       </SimpleForm>
     </Create>
@@ -46,10 +48,9 @@ export const LessonsEdit = () => {
   return (
     <Edit>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='ID'
-          type='number'
           validate={[required()]}
         />
         <TextInput
@@ -61,12 +62,13 @@ export const LessonsEdit = () => {
           reference='units'
           label='Unit ID'
           source='unitId'
-        />
-        <TextInput
+        >
+          <SelectInput validate={[required()]} />
+        </ReferenceInput>
+        <NumberInput
           source='order'
           label='Order'
           validate={[required()]}
-          type='number'
         />
       </SimpleForm>
     </Edit>
@@ -75,7 +77,7 @@ export const LessonsEdit = () => {
 
 export const LessonsList = () => {
   return (
-    <List>
+    <InfiniteList>
       <Datagrid rowClick='edit'>
         <NumberField source='id' />
         <TextField source='title' />
@@ -85,6 +87,6 @@ export const LessonsList = () => {
         />
         <NumberField source='order' />
       </Datagrid>
-    </List>
+    </InfiniteList>
   );
 };

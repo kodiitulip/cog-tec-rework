@@ -2,8 +2,9 @@ import {
   Create,
   Datagrid,
   Edit,
-  List,
+  InfiniteList,
   NumberField,
+  NumberInput,
   ReferenceField,
   ReferenceInput,
   required,
@@ -18,16 +19,17 @@ export const ChallengeCreate = () => {
   return (
     <Create>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='ID'
-          type='number'
         />
         <ReferenceInput
           reference='lessons'
           label='Lesson ID'
           source='lessonId'
-        />
+        >
+          <SelectInput validate={[required()]}></SelectInput>
+        </ReferenceInput>
         <SelectInput
           source='type'
           label='Type'
@@ -48,11 +50,10 @@ export const ChallengeCreate = () => {
           label='Question'
           validate={[required()]}
         />
-        <TextInput
+        <NumberInput
           source='order'
           label='Order'
           validate={[required()]}
-          type='number'
         />
       </SimpleForm>
     </Create>
@@ -63,16 +64,17 @@ export const ChallengeEdit = () => {
   return (
     <Edit>
       <SimpleForm>
-        <TextInput
+        <NumberInput
           source='id'
           label='ID'
-          type='number'
         />
         <ReferenceInput
           reference='lessons'
           label='Lesson ID'
           source='lessonId'
-        />
+        >
+          <SelectInput validate={[required()]}></SelectInput>
+        </ReferenceInput>
         <SelectInput
           source='type'
           label='Type'
@@ -93,11 +95,10 @@ export const ChallengeEdit = () => {
           label='Question'
           validate={[required()]}
         />
-        <TextInput
+        <NumberInput
           source='order'
           label='Order'
           validate={[required()]}
-          type='number'
         />
       </SimpleForm>
     </Edit>
@@ -106,7 +107,7 @@ export const ChallengeEdit = () => {
 
 export const ChallengeList = () => {
   return (
-    <List>
+    <InfiniteList>
       <Datagrid rowClick='edit'>
         <NumberField source='id' />
         <ReferenceField
@@ -129,6 +130,6 @@ export const ChallengeList = () => {
         <TextField source='question' />
         <NumberField source='order' />
       </Datagrid>
-    </List>
+    </InfiniteList>
   );
 };

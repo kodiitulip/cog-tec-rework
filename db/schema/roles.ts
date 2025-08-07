@@ -41,18 +41,18 @@ export const userRoles = pgTable(
     pgPolicy('Admin delete access to user roles', {
       for: 'delete',
       to: authenticatedRole,
-      using: sql`select public.authorize('COURSES.DELETE')`,
-      // withCheck: sql`select public.authorize('COURSES.DELETE')`,
+      using: sql`authorize public.authorize('COURSES.DELETE')`,
+      // withCheck: sql`authorize public.authorize('COURSES.DELETE')`,
     }),
     pgPolicy('Admin insert access to user roles', {
       for: 'insert',
       to: authenticatedRole,
-      withCheck: sql`select public.authorize('COURSES.INSERT')`,
+      withCheck: sql`authorize public.authorize('COURSES.INSERT')`,
     }),
     pgPolicy('Admin update access to user roles', {
       for: 'update',
       to: authenticatedRole,
-      using: sql`select public.authorize('COURSES.INSERT')`,
+      using: sql`authorize public.authorize('COURSES.INSERT')`,
     }),
   ]
 );

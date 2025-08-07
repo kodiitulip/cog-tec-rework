@@ -1,5 +1,5 @@
 import { admin } from '@/db/drizzle';
-import { lessons } from '@/db/schema';
+import { library } from '@/db/schema';
 import { getIsAdmin } from '@/lib/admin';
 import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
@@ -11,8 +11,8 @@ export const GET = async (req: Request, { params }: { params: Promise<{ id: numb
 
   const { id } = await params;
 
-  const data = await admin.query.lessons.findFirst({
-    where: eq(lessons.id, id),
+  const data = await admin.query.library.findFirst({
+    where: eq(library.id, id),
   });
 
   return NextResponse.json(data);
@@ -28,16 +28,12 @@ export const PUT = async (req: Request, { params }: { params: Promise<{ id: numb
   const body = await req.json();
 
   const data = await admin
-    .update(lessons)
+    .update(library)
     .set({
       ...body,
     })
-    .where(eq(lessons.id, id))
+    .where(eq(library.id, id))
     .returning();
-
-  if (data.length === 0) {
-    return new NextResponse('Unauthorized', { status: 401 });
-  }
 
   return NextResponse.json(data[0]);
 };
@@ -49,7 +45,7 @@ export const DELETE = async (req: Request, { params }: { params: Promise<{ id: n
 
   const { id } = await params;
 
-  const data = await admin.delete(lessons).where(eq(lessons.id, id)).returning();
+  const data = await admin.delete(library).where(eq(library.id, id)).returning();
 
   return NextResponse.json(data[0]);
 };
