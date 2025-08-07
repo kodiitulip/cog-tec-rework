@@ -34,6 +34,7 @@ export const Unit = ({ id, title, description, courseId, libraryContent }: Props
             <Content
               key={idx}
               id={id}
+              htmlId={`${id}`}
               title={title}
               isLast={idx === libraryContent.length - 1}
             />

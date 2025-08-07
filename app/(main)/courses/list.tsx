@@ -11,21 +11,24 @@ import { CourseTitles } from '@/lib/utils';
 type Props = {
   courses: SelectCourses[];
   activeCourseId?: SelectUserProgress['activeCourseId'];
+  backLink?: string;
 } & React.ComponentProps<'div'>;
 
-export const List = ({ courses, activeCourseId }: Props) => {
+export const List = ({ courses, activeCourseId, backLink = '/learn' }: Props) => {
   const [pending, startTransition] = useTransition();
 
   const onClick = (id: number) => {
     if (pending) return;
 
-    if (id === activeCourseId) return redirect('/learn');
+    const blink = backLink.startsWith('/') ? backLink : `/${backLink}`;
+
+    if (id === activeCourseId) return redirect(blink);
 
     startTransition(async () => {
       const { error } = await upsertUserProgress(id);
       if (!error) {
         toast.success('Changed course Successfuly');
-        redirect('/learn');
+        redirect(blink);
       }
       switch (error.type) {
         case 'UNAUTHORIZED':
