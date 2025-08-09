@@ -19,7 +19,7 @@ type Props = {
 
 export const Card = ({ imageSrc, onClick, selected, shortcut, status, text, type, disabled = false }: Props) => {
   const buttonClasses = cn(
-    'h-full border-2 rounded-xl border-b-4 hover:bg-black/5 p-3 active:border-b-2 border-neutral-400 justify-start flex-col focus-visible:bg-black/5',
+    'h-full border-2 rounded-xl border-b-4 hover:bg-black/5 p-3 active:border-b-2 border-neutral-400 justify-start flex-col focus-visible:bg-black/5 whitespace-normal',
     selected && 'border-sky-300 bg-sky-100 hover:bg-sky-100 focus-visible:bg-sky-100/40',
     selected &&
       status === 'correct' &&
@@ -34,7 +34,7 @@ export const Card = ({ imageSrc, onClick, selected, shortcut, status, text, type
     selected && status === 'wrong' && 'text-rose-500'
   );
   const shortcutClasses = cn(
-    'lg:size-7.5 size-5 border-2 flex items-center justify-center rounded-lg text-neutral-600 lg:text-sm text-xs font-semibold',
+    'lg:size-7.5 size-5 border-2 flex items-center justify-center rounded-lg text-neutral-600 lg:text-sm text-xs font-semibold shrink-0',
     selected && 'text-sky-500 border-sky-300',
     selected && status === 'correct' && 'text-green-500 border-green-300',
     selected && status === 'wrong' && 'text-rose-500 border-rose-300'

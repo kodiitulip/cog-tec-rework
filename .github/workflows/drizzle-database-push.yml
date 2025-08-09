@@ -4,12 +4,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      seed:
-        type: boolean
-        default: false
-        description: Seed the database?
-        required: true
 
 jobs:
   database-push:
@@ -30,11 +24,5 @@ jobs:
 
       - name: Push any changes
         run: bun run push
-        env:
-          ADMIN_DATABASE_URL: ${{ secrets.ADMIN_DATABASE_URL }}
-
-      - name: Seed database
-        run: bun run seed
-        if: inputs.seed
         env:
           ADMIN_DATABASE_URL: ${{ secrets.ADMIN_DATABASE_URL }}
