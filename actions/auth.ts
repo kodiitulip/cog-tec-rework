@@ -6,21 +6,23 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { UserLoginFormSchema, SignUpFormSchema } from '@/zod/schemas';
 
-export const signInWithGithub = async () => {
+const signInWithOAuth = async (provider: 'github' | 'google') => {
   const origin = (await headers()).get('origin');
   const { auth } = await createClient();
   const redirectUrl = new URL(`${origin}/auth/callback`);
   redirectUrl.searchParams.set('next', '/learn');
-  const { data, error } = await auth.signInWithOAuth({
-    provider: 'github',
+  const res = await auth.signInWithOAuth({
+    provider,
     options: {
       redirectTo: redirectUrl.toString(),
       skipBrowserRedirect: true,
     },
   });
-  if (error) console.error(error);
-  if (data.url) redirect(data.url);
+  return res;
 };
+
+export const signInWithGithub = async() => signInWithOAuth('github');
+export const signInWithGoogle = async() => signInWithOAuth('google');
 
 export type SignInFormState = {
   success: boolean;

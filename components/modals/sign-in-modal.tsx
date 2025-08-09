@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useSignInModal } from '@/store/use-sign-in-modal';
 import { GithubButton } from '@/components/auth/oauth/github-button';
+import { GoogleButton } from '@/components/auth/oauth/google-button';
 import { SignInForm } from '@/components/auth/sign-in-form';
 import { Separator } from '../ui/separator';
 
@@ -27,6 +28,11 @@ export const SignInModal = () => {
           <DialogDescription>Faça login com seu email e senha, ou com login social</DialogDescription>
         </DialogHeader>
         <GithubButton
+          variant='ghost'
+          size='lg'
+          className='justify-start'
+        />
+        <GoogleButton
           variant='ghost'
           size='lg'
           className='justify-start'

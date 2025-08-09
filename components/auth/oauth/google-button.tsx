@@ -2,19 +2,19 @@
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { type VariantProps } from 'class-variance-authority';
-import { SiGithub } from '@icons-pack/react-simple-icons';
-import { signInWithGithub } from '@/actions/auth';
+import { SiGoogle } from '@icons-pack/react-simple-icons';
+import { signInWithGoogle } from '@/actions/auth';
 import { useTransition } from 'react';
-import { toast } from 'sonner';
 import { authErrorCodeToMessage } from '@/lib/utils';
 import { redirect } from 'next/navigation';
+import { toast } from 'sonner';
 
 type Props = {} & React.ComponentProps<'button'> & VariantProps<typeof buttonVariants>;
 
-export const GithubButton = ({ disabled, ...props }: Props) => {
+export const GoogleButton = ({ disabled, ...props }: Props) => {
   const [pending, startTransition] = useTransition();
   const signIn = async () => {
-    const { data, error } = await signInWithGithub();
+    const { data, error } = await signInWithGoogle();
     if (error) {
       toast.error(authErrorCodeToMessage(error.code ?? ''));
       return;
@@ -27,11 +27,11 @@ export const GithubButton = ({ disabled, ...props }: Props) => {
       onClick={() => startTransition(signIn)}
       disabled={disabled ?? pending}
     >
-      <SiGithub
+      <SiGoogle
         color='default'
         className='size-5'
       />
-      Entrar com Github
+      Entrar com Google
     </Button>
   );
 };

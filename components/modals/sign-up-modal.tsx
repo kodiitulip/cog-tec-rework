@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useSignUpModal } from '@/store/use-sign-up-modal';
 import { GithubButton } from '@/components/auth/oauth/github-button';
+import { GoogleButton } from '@/components/auth/oauth/google-button';
 import { SignUpForm } from '@/components/auth/sign-up-form';
 import { Separator } from '../ui/separator';
 
@@ -27,6 +28,11 @@ export const SignUpModal = () => {
           <DialogDescription>Cadastre-se com email e senha, ou entre com login social</DialogDescription>
         </DialogHeader>
         <GithubButton
+          variant='ghost'
+          size='lg'
+          className='justify-start'
+        />
+        <GoogleButton
           variant='ghost'
           size='lg'
           className='justify-start'
