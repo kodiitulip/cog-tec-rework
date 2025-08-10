@@ -10,8 +10,8 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: 'Lingo',
-  description: 'Learn new languages with Lingo!',
+  title: 'CogTec',
+  description: 'Aprenda novos conceitos com o CogTec!',
 };
 
 export default function RootLayout({
