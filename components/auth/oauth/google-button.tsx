@@ -28,7 +28,7 @@ export const GoogleButton = ({ disabled, ...props }: Props) => {
       disabled={disabled ?? pending}
     >
       <SiGoogle
-        color='default'
+        color='#181717'
         className='size-5'
       />
       Entrar com Google
