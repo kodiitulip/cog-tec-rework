@@ -76,7 +76,11 @@ export const Quiz = ({
   }
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
-  const options = currentChallenge?.challengeOptions || [];
+  const options =
+    currentChallenge?.challengeOptions
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value) || [];
 
   const onNext = () => setActiveIndex((curr) => curr + 1);
 
