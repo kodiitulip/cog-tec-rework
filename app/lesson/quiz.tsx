@@ -82,10 +82,6 @@ export const Quiz = ({
 
   const onSelect = (id: number) => {
     if (status !== 'none') return;
-    if (selectedOption == id) {
-      setSelectedOption(undefined);
-      return;
-    }
     setSelectedOption(id);
   };
 
