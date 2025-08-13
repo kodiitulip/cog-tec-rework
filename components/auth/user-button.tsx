@@ -1,19 +1,19 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { LogOut } from 'lucide-react';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { type VariantProps } from 'class-variance-authority';
+import { LayoutDashboardIcon, LogOut } from 'lucide-react';
+import { Button, ButtonProps } from '@/components/ui/button';
 import { SignOutButton } from './buttons';
 import { cn } from '@/lib/utils';
 import { getUserProgress } from '@/db/queries';
+import Link from 'next/link';
+import { getIsAdmin } from '@/lib/admin';
 
 type UserButtonProps = {
   label?: boolean;
-} & React.ComponentProps<'button'> &
-  VariantProps<typeof buttonVariants>;
+} & ButtonProps;
 
 export const UserButton = async ({ label, className, ...props }: UserButtonProps) => {
-  const userProgress = await getUserProgress();
+  const [userProgress, isAdmin] = await Promise.all([getUserProgress(), getIsAdmin()]);
   const userName = userProgress?.userName ?? 'user';
   const userAvatarUrl = userProgress?.userImageSrc ?? '/icon-512-maskable.png';
 
@@ -36,6 +36,18 @@ export const UserButton = async ({ label, className, ...props }: UserButtonProps
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56'>
+        {isAdmin && (
+          <Button
+            asChild
+            variant='ghost'
+            className='w-full justify-start'
+          >
+            <Link href='/admin'>
+              <LayoutDashboardIcon />
+              Admin Dashboard
+            </Link>
+          </Button>
+        )}
         <SignOutButton
           variant='ghost'
           className='w-full justify-start'
