@@ -18,7 +18,9 @@ export const UserProgressList = () => {
   return (
     <InfiniteList>
       <Datagrid>
+        <TextField source='userId' />
         <TextField source='userName' />
+        <TextField source='userImageSrc' />
         <ReferenceField
           source='activeCourseId'
           reference='courses'
@@ -27,7 +29,8 @@ export const UserProgressList = () => {
           source='activeLessonId'
           reference='lessons'
         />
-        <TextField source='userId' />
+        <NumberField source='hearts' />
+        <NumberField source='points' />
       </Datagrid>
     </InfiniteList>
   );
