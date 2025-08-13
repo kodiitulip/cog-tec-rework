@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
 import { authenticatedRole } from 'drizzle-orm/supabase';
 
 export const courses = pgTable(
@@ -8,6 +8,7 @@ export const courses = pgTable(
     id: serial('id').primaryKey(),
     title: text('title').notNull(),
     imageSrc: text('image_src').notNull(),
+    hidden: boolean('hidden').notNull().default(false),
   },
   () => [
     pgPolicy('Authenticated read access to courses', {

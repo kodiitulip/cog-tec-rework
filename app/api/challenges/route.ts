@@ -13,13 +13,10 @@ export const GET = async (request: Request) => {
 
   const { searchParams } = new URL(request.url);
 
-  const range: number[] = JSON.parse(searchParams.get('range') || '[0,9]');
   const [fi, op]: string[] = JSON.parse(searchParams.get('sort') || '["id", "ASC"]');
   const sort: [Fields, Operators] = [fi as Fields, op.toLowerCase() as Operators];
 
   const data = await admin.query.challenges.findMany({
-    offset: range[0],
-    limit: range[1] - range[0] + 1,
     orderBy: (fields, operators) => {
       const operator = operators[sort[1]];
       const field = fields[sort[0]];

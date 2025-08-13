@@ -11,3 +11,15 @@ export const useSignUpModal = create<SignUpModalState>((set) => ({
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
 }));
+
+type SignUpAlertModalState = {
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+};
+
+export const useSignUpAlertModal = create<SignUpAlertModalState>((set) => ({
+  isOpen: false,
+  open: () => set({ isOpen: true }),
+  close: () => set({ isOpen: false }),
+}));

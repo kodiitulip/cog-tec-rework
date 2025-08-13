@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import { admin } from '@/db/drizzle';
 import { getIsAdmin } from '@/lib/admin';
-import { courses } from '@/db/schema';
 
-type Fields = 'id' | 'title' | 'imageSrc';
+type Fields = 'userId' | 'userName' | 'activeCourseId' | 'activeLessonId';
 type Operators = 'asc' | 'desc';
 
 export const GET = async (request: Request) => {
@@ -13,10 +12,10 @@ export const GET = async (request: Request) => {
 
   const { searchParams } = new URL(request.url);
 
-  const [fi, op]: string[] = JSON.parse(searchParams.get('sort') || '["id", "ASC"]');
+  const [fi, op]: string[] = JSON.parse(searchParams.get('sort') || '["userId", "ASC"]');
   const sort: [Fields, Operators] = [fi as Fields, op.toLowerCase() as Operators];
 
-  const data = await admin.query.courses.findMany({
+  const data = await admin.query.userProgress.findMany({
     orderBy: (fields, operators) => {
       const operator = operators[sort[1]];
       const field = fields[sort[0]];
@@ -24,21 +23,4 @@ export const GET = async (request: Request) => {
     },
   });
   return NextResponse.json(data);
-};
-
-export const POST = async (req: Request) => {
-  const isAdmin = await getIsAdmin();
-
-  if (!isAdmin) return new NextResponse('Unauthorized', { status: 401 });
-
-  const body = await req.json();
-
-  const data = await admin
-    .insert(courses)
-    .values({
-      ...body,
-    })
-    .returning();
-
-  return NextResponse.json(data[0]);
 };

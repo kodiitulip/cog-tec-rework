@@ -1,4 +1,6 @@
 import {
+  BooleanField,
+  BooleanInput,
   Create,
   Datagrid,
   Edit,
@@ -29,6 +31,11 @@ export const CourseCreate = () => {
           label='ImageSrc'
           validate={[required()]}
         />
+        <BooleanInput
+          source='hidden'
+          label='Hidden'
+          validate={[required()]}
+        />
       </SimpleForm>
     </Create>
   );
@@ -52,6 +59,11 @@ export const CourseEdit = () => {
           label='ImageSrc'
           validate={[required()]}
         />
+        <BooleanInput
+          source='hidden'
+          label='Hidden'
+          validate={[required()]}
+        />
       </SimpleForm>
     </Edit>
   );
@@ -63,6 +75,7 @@ export const CourseList = () => {
         <NumberField source='id' />
         <TextField source='title' />
         <TextField source='imageSrc' />
+        <BooleanField source='hidden' />
       </Datagrid>
     </InfiniteList>
   );

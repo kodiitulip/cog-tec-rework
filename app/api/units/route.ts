@@ -13,8 +13,6 @@ export const GET = async (request: Request) => {
 
   const { searchParams } = new URL(request.url);
 
-  // const filter: object = JSON.parse(searchParams.get('filter') || '{}');
-  // const range: number[] = JSON.parse(searchParams.get('range') || '[0,9]');
   const [fi, op]: string[] = JSON.parse(searchParams.get('sort') || '["id", "ASC"]');
   const sort: [Fields, Operators] = [fi as Fields, op.toLowerCase() as Operators];
 
