@@ -76,16 +76,16 @@ export const Quiz = ({
   }
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
-  const options = currentChallenge?.challengeOptions || [];
+  const options =
+    currentChallenge?.challengeOptions
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value) || [];
 
   const onNext = () => setActiveIndex((curr) => curr + 1);
 
   const onSelect = (id: number) => {
     if (status !== 'none') return;
-    if (selectedOption == id) {
-      setSelectedOption(undefined);
-      return;
-    }
     setSelectedOption(id);
   };
 

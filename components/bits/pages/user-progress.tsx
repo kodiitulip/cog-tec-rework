@@ -38,7 +38,7 @@ export const UserProgress = ({ activeCourse, points, hearts }: Props) => {
         variant='ghost'
         className='text-orange-500'
       >
-        <Link href='/shop'>
+        <Link href='/quests'>
           <Image
             src='/icons/points.svg'
             alt='Points'
@@ -54,7 +54,7 @@ export const UserProgress = ({ activeCourse, points, hearts }: Props) => {
         variant='ghost'
         className='text-rose-500'
       >
-        <Link href='/shop'>
+        <Link href='/learn'>
           <Image
             src='/icons/heart.svg'
             alt='Hearts'
