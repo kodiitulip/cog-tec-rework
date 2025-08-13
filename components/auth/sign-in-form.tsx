@@ -7,18 +7,17 @@ import { redirect } from 'next/navigation';
 type Props = React.ComponentPropsWithRef<'form'> & { close?: () => void };
 
 export const SignInForm = ({ close, ...props }: Props) => {
-  const nAction = async (state: SignInFormState | null, formData: FormData) => {
+  const nAction = async (state: SignInFormState, formData: FormData) => {
     const data = await signInWithEmail(state, formData);
-    if (data?.success && data?.next) {
+    if (data?.success) {
       if (close) close();
-      redirect(data.next);
+      redirect('/learn');
     }
     return data;
   };
 
-  const [state, action, isPending] = useActionState<SignInFormState | null, FormData>(nAction, {
+  const [state, action, isPending] = useActionState<SignInFormState, FormData>(nAction, {
     success: false,
-    next: '/learn',
   });
 
   return (

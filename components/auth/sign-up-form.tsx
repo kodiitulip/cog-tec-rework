@@ -2,23 +2,21 @@ import { useActionState } from 'react';
 import { Button } from '../ui/button';
 import { SignUpFormState, signUpWithEmail } from '@/actions/auth';
 import { authErrorCodeToMessage } from '@/lib/utils';
-import { redirect } from 'next/navigation';
 
-type Props = React.ComponentPropsWithRef<'form'> & { close?: () => void };
+type Props = React.ComponentPropsWithRef<'form'> & { close?: () => void; alert?: () => void };
 
-export const SignUpForm = ({ close, ...props }: Props) => {
-  const nAction = async (state: SignUpFormState | null, formData: FormData) => {
+export const SignUpForm = ({ close, alert, ...props }: Props) => {
+  const nAction = async (state: SignUpFormState, formData: FormData) => {
     const data = await signUpWithEmail(state, formData);
-    if (data?.success && data?.next) {
+    if (data?.success) {
       if (close) close();
-      redirect(data.next);
+      if (alert) alert();
     }
     return data;
   };
 
-  const [state, action, isPending] = useActionState<SignUpFormState | null, FormData>(nAction, {
+  const [state, action, isPending] = useActionState<SignUpFormState, FormData>(nAction, {
     success: false,
-    next: '/learn',
   });
   return (
     <form

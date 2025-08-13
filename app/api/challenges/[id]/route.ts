@@ -4,7 +4,7 @@ import { getIsAdmin } from '@/lib/admin';
 import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 
-export const GET = async (req: Request, { params }: { params: Promise<{ id: number }> }) => {
+export const GET = async (_req: Request, { params }: { params: Promise<{ id: number }> }) => {
   const isAdmin = await getIsAdmin();
 
   if (!isAdmin) return new NextResponse('Unauthorized', { status: 401 });

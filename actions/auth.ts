@@ -21,20 +21,16 @@ const signInWithOAuth = async (provider: 'github' | 'google') => {
   return res;
 };
 
-export const signInWithGithub = async() => signInWithOAuth('github');
-export const signInWithGoogle = async() => signInWithOAuth('google');
+export const signInWithGithub = async () => signInWithOAuth('github');
+export const signInWithGoogle = async () => signInWithOAuth('google');
 
 export type SignInFormState = {
   success: boolean;
-  next?: string;
   fieldErrors?: { email?: string[]; password?: string[] };
   authError?: string;
 };
 
-export const signInWithEmail = async (
-  state: SignInFormState | null,
-  formData: FormData
-): Promise<SignInFormState | null> => {
+export const signInWithEmail = async (_state: SignInFormState, formData: FormData): Promise<SignInFormState> => {
   const validatedFields = UserLoginFormSchema.safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -43,7 +39,6 @@ export const signInWithEmail = async (
   if (!validatedFields.success)
     return {
       success: false,
-      next: state?.next,
       fieldErrors: validatedFields.error.flatten().fieldErrors,
     };
 
@@ -58,27 +53,21 @@ export const signInWithEmail = async (
   if (error)
     return {
       success: false,
-      next: state?.next,
       authError: error.code,
     };
 
   return {
-    next: state?.next,
     success: true,
   };
 };
 
 export type SignUpFormState = {
   success: boolean;
-  next?: string;
   fieldErrors?: { email?: string[]; password?: string[]; repeatPassword?: string[]; userName?: string[] };
   authError?: string;
 };
 
-export const signUpWithEmail = async (
-  state: SignUpFormState | null,
-  formData: FormData
-): Promise<SignUpFormState | null> => {
+export const signUpWithEmail = async (_state: SignUpFormState, formData: FormData): Promise<SignUpFormState> => {
   const validatedFields = SignUpFormSchema.safeParse({
     userName: formData.get('userName'),
     email: formData.get('email'),
@@ -89,7 +78,6 @@ export const signUpWithEmail = async (
   if (!validatedFields.success)
     return {
       success: false,
-      next: state?.next,
       fieldErrors: validatedFields.error.flatten().fieldErrors,
     };
 
@@ -110,12 +98,10 @@ export const signUpWithEmail = async (
   if (error)
     return {
       success: false,
-      next: state?.next,
       authError: error.code,
     };
 
   return {
-    next: state?.next,
     success: true,
   };
 };

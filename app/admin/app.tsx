@@ -9,6 +9,7 @@ import { LessonsCreate, LessonsEdit, LessonsList } from './resources/lessons';
 import { ChallengeCreate, ChallengeEdit, ChallengeList } from './resources/challenge';
 import { ChallengeOptionsCreate, ChallengeOptionsEdit, ChallengeOptionsList } from './resources/challenge-options';
 import { LibraryContentCreate, LibraryContentEdit, LibraryContentList } from './resources/library-content';
+import { UserProgressList, UserRolesCreate, UserRolesEdit, UserRolesList } from './resources/user-progress';
 
 const dataProvider = simpleRestProvider('/api');
 
@@ -56,6 +57,18 @@ const App = () => {
         list={ChallengeOptionsList}
         create={ChallengeOptionsCreate}
         edit={ChallengeOptionsEdit}
+      />
+      <Resource
+        name='user-progress'
+        recordRepresentation='userName'
+        list={UserProgressList}
+      />
+      <Resource
+        name='user-roles'
+        recordRepresentation='userId'
+        list={UserRolesList}
+        create={UserRolesCreate}
+        edit={UserRolesEdit}
       />
     </Admin>
   );

@@ -1,19 +1,21 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { useSignUpModal } from '@/store/use-sign-up-modal';
+import { useSignUpAlertModal, useSignUpModal } from '@/store/use-sign-up-modal';
 import { GithubButton } from '@/components/auth/oauth/github-button';
 import { GoogleButton } from '@/components/auth/oauth/google-button';
 import { SignUpForm } from '@/components/auth/sign-up-form';
 import { Separator } from '../ui/separator';
+import { useMount } from 'react-use';
 
 export const SignUpModal = () => {
   const [isClient, setIsClient] = useState<boolean>(false);
   const { isOpen, close } = useSignUpModal();
+  const { open } = useSignUpAlertModal();
 
-  useEffect(() => setIsClient(true), []);
+  useMount(() => setIsClient(true));
 
   if (!isClient) return null;
 
@@ -38,7 +40,34 @@ export const SignUpModal = () => {
           className='justify-start'
         />
         <Separator className='rounded-2xl ' />
-        <SignUpForm close={close} />
+        <SignUpForm
+          close={close}
+          alert={open}
+        />
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export const SignUpAlertModal = () => {
+  const [isClient, setIsClient] = useState<boolean>(false);
+  const { isOpen, close } = useSignUpAlertModal();
+
+  useMount(() => setIsClient(true));
+
+  if (!isClient) return null;
+
+  return (
+    <Dialog
+      open={isOpen}
+      onOpenChange={close}
+    >
+      <DialogContent className='sm:max-w-107'>
+        <DialogHeader>
+          <DialogTitle>Criar uma conta</DialogTitle>
+          <DialogDescription>Verificação de Email</DialogDescription>
+        </DialogHeader>
+        Verifique seu email. Enviamos um link de confirmação!
       </DialogContent>
     </Dialog>
   );
