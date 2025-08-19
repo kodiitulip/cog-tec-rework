@@ -145,6 +145,7 @@ export const getFirstLessonOnCourse = cache(async (courseId: SelectCourses['id']
         with: {
           lessons: {
             orderBy: ({ order }, { asc }) => [asc(order)],
+            where: eq(lessons.hidden, false),
           },
         },
       },

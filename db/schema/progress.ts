@@ -34,7 +34,7 @@ export const userProgress = pgTable(
       .primaryKey(),
     userName: text('user_name').notNull().default('User'),
     userImageSrc: text('user_image_src').notNull().default('/icon-512-maskable.png'),
-    activeCourseId: integer('acive_course_id').references(() => courses.id, { onDelete: 'cascade' }),
+    activeCourseId: integer('active_course_id').references(() => courses.id, { onDelete: 'cascade' }),
     activeLessonId: integer('active_lesson_id').references(() => lessons.id, { onDelete: 'cascade' }),
     hearts: integer('hearts').notNull().default(5),
     points: integer('points').notNull().default(0),
@@ -42,9 +42,9 @@ export const userProgress = pgTable(
   () => [
     pgPolicy('Authenticated read access to userProgress', {
       as: 'permissive',
-      for: 'all',
+      for: 'select',
       to: authenticatedRole,
-      using: sql``,
+      using: sql`true`,
     }),
   ]
 );
