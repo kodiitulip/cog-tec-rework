@@ -53,7 +53,7 @@ export const ChallengeCreate = () => {
         <NumberInput
           source='order'
           label='Order'
-          validate={[required()]}
+          defaultValue={0}
         />
       </SimpleForm>
     </Create>
@@ -98,7 +98,7 @@ export const ChallengeEdit = () => {
         <NumberInput
           source='order'
           label='Order'
-          validate={[required()]}
+          defaultValue={0}
         />
       </SimpleForm>
     </Edit>

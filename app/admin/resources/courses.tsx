@@ -34,7 +34,7 @@ export const CourseCreate = () => {
         <BooleanInput
           source='hidden'
           label='Hidden'
-          validate={[required()]}
+          defaultValue={false}
         />
       </SimpleForm>
     </Create>

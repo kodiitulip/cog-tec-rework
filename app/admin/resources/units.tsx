@@ -1,4 +1,6 @@
 import {
+  BooleanField,
+  BooleanInput,
   Create,
   Datagrid,
   Edit,
@@ -39,10 +41,15 @@ export const UnitsCreate = () => {
         >
           <SelectInput validate={[required()]} />
         </ReferenceInput>
+        <BooleanInput
+          source='hidden'
+          label='Hidden'
+          defaultValue={false}
+        />
         <NumberInput
           source='order'
           label='Order'
-          validate={[required()]}
+          defaultValue={0}
         />
         <TextInput
           source='imageSrc'
@@ -79,10 +86,15 @@ export const UnitsEdit = () => {
         >
           <SelectInput validate={[required()]} />
         </ReferenceInput>
+        <BooleanInput
+          source='hidden'
+          label='Hidden'
+          defaultValue={false}
+        />
         <NumberInput
           source='order'
           label='Order'
-          validate={[required()]}
+          defaultValue={0}
         />
         <TextInput
           source='imageSrc'
@@ -105,6 +117,7 @@ export const UnitsList = () => {
           reference='courses'
           source='courseId'
         />
+        <BooleanField source='hidden' />
         <NumberField source='order' />
         <TextField source='imageSrc' />
       </Datagrid>

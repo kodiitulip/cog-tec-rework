@@ -1,4 +1,6 @@
 import {
+  BooleanField,
+  BooleanInput,
   Create,
   Datagrid,
   Edit,
@@ -40,6 +42,11 @@ export const LibraryContentCreate = () => {
           defaultValue=''
           multiline
         />
+        <BooleanInput
+          source='hidden'
+          label='Hidden'
+          defaultValue={false}
+        />
         <NumberInput source='order' />
       </SimpleForm>
     </Create>
@@ -72,6 +79,11 @@ export const LibraryContentEdit = () => {
           defaultValue=''
           multiline
         />
+        <BooleanInput
+          source='hidden'
+          label='Hidden'
+          defaultValue={false}
+        />
         <NumberInput source='order' />
       </SimpleForm>
     </Edit>
@@ -81,23 +93,15 @@ export const LibraryContentList = () => {
   return (
     <InfiniteList>
       <Datagrid rowClick='edit'>
-        <NumberField
-          source='id'
-          label='ID'
-        />
-        <TextField
-          source='title'
-          label='Title'
-        />
+        <NumberField source='id' />
+        <TextField source='title' />
         <ReferenceField
           source='unitId'
           label='Unit ID'
           reference='units'
         />
-        <TextField
-          source='markdown'
-          label='Markdown'
-        />
+        <TextField source='markdown' />
+        <BooleanField source='hidden' />
         <NumberField source='order' />
       </Datagrid>
     </InfiniteList>
