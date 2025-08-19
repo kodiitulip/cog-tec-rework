@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.VERCEL_TOKEN }}
           teamId: ${{ secrets.ORG_ID }}
           projectName: cog-tec
-          envVariableKeys: NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,ADMIN_DATABASE_URL,DATABASE_URL
+          envVariableKeys: NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,ADMIN_DATABASE_URL,DATABASE_URL, VERCEL_BUILD_SYSTEM_REPORT
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
           TARGET_NEXT_PUBLIC_SUPABASE_URL: preview,development,production
@@ -45,13 +45,14 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           TARGET_DATABASE_URL: preview,development,production
           TYPE_DATABASE_URL: encrypted
+          VERCEL_BUILD_SYSTEM_REPORT: 1
 
       - uses: amondnet/vercel-action@v25
-        if: inputs.production == 'production'
+        if: inputs.production != 'preview'
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--prod'
+          vercel-args: '--prod --debug'
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           scope: ${{ secrets.ORG_ID }}

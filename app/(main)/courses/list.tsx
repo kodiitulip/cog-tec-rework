@@ -49,7 +49,7 @@ export const List = ({ courses, activeCourseId, backLink = '/learn' }: Props) =>
 
   return (
     <div className='grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 overflow-y-hidden min-h-55'>
-      {courses.map(({ id, title, imageSrc, hidden }) => (
+      {courses.map(({ id, title, imageSrc }) => (
         <Card
           key={id}
           id={id}

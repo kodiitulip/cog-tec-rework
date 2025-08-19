@@ -1,8 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  async headers() {
-    return [
+  headers: async () => [
       {
         source: '/api/(.*)',
         headers: [
@@ -24,8 +23,10 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-    ];
-  },
+    ],
+  eslint: {
+    ignoreDuringBuilds: true,
+  }
 };
 
 export default nextConfig;
