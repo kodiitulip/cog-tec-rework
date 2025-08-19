@@ -1,7 +1,7 @@
 import { cache } from 'react';
 import { admin } from '@/db/drizzle';
 import { createClient } from '@/lib/supabase/server';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import {
   units,
   userProgress,
@@ -13,22 +13,30 @@ import {
   library,
 } from '@/db/schema';
 
-export const getCourses = cache(
-  async () =>
-    await admin.query.courses.findMany({
-      orderBy: ({ id }, { asc }) => [asc(id)],
-    })
-);
-
-export const getUserProgress = cache(async () => {
+export const getUserId = cache(async () => {
   const { auth } = await createClient();
   const {
     data: { user },
   } = await auth.getUser();
   if (!user) return undefined;
+  return user.id;
+});
+
+export const getCourses = cache(
+  async () =>
+    await admin.query.courses.findMany({
+      where: eq(courses.hidden, false),
+      orderBy: ({ id }, { asc }) => [asc(id)],
+    })
+);
+
+export const getUserProgress = cache(async () => {
+  const userId = await getUserId();
+
+  if (!userId) return undefined;
 
   const data = await admin.query.userProgress.findFirst({
-    where: eq(userProgress.userId, user.id),
+    where: eq(userProgress.userId, userId),
     with: {
       activeCourse: true,
     },
@@ -45,11 +53,12 @@ export const getUnits = cache(async () => {
   }
 
   const data = await admin.query.units.findMany({
-    where: eq(units.courseId, userProgress.activeCourseId),
+    where: and(eq(units.courseId, userProgress.activeCourseId), eq(units.hidden, false)),
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
       lessons: {
         orderBy: ({ order }, { asc }) => [asc(order)],
+        where: eq(lessons.hidden, false),
         with: {
           challenges: {
             orderBy: ({ order }, { asc }) => [asc(order)],
@@ -88,7 +97,7 @@ export const getLibraryUnits = cache(async () => {
   }
 
   const data = await admin.query.units.findMany({
-    where: eq(units.courseId, userProgress.activeCourseId),
+    where: and(eq(units.courseId, userProgress.activeCourseId), eq(units.hidden, false)),
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
       library: true,
@@ -100,7 +109,7 @@ export const getLibraryUnits = cache(async () => {
 
 export const getLibraryContentById = cache(async (contentId: SelectLibrary['id']) => {
   const data = await admin.query.library.findFirst({
-    where: eq(library.id, contentId),
+    where: and(eq(library.id, contentId), eq(library.hidden, false)),
     with: {
       unit: true,
     },
@@ -115,6 +124,7 @@ export const getCourseById = cache(
       with: {
         units: {
           orderBy: ({ order }, { asc }) => [asc(order)],
+          where: eq(units.hidden, false),
           with: {
             lessons: {
               orderBy: ({ order }, { asc }) => [asc(order)],
@@ -131,6 +141,7 @@ export const getFirstLessonOnCourse = cache(async (courseId: SelectCourses['id']
     with: {
       units: {
         orderBy: ({ order }, { asc }) => [asc(order)],
+        where: eq(units.hidden, false),
         with: {
           lessons: {
             orderBy: ({ order }, { asc }) => [asc(order)],
@@ -233,7 +244,7 @@ export const getLesson = cache(async (id?: number) => {
   if (!lessonId) return null;
 
   const data = await admin.query.lessons.findFirst({
-    where: eq(lessons.id, lessonId),
+    where: and(eq(lessons.id, lessonId), eq(lessons.hidden, false)),
     with: {
       challenges: {
         orderBy: ({ order }, { asc }) => [asc(order)],
@@ -257,7 +268,17 @@ export const getLesson = cache(async (id?: number) => {
       challenge.challengeProgress.every(({ completed }) => completed),
   }));
 
-  return { ...data, challenges: normalizedChallenges };
+  const isPractice = normalizedChallenges.every(({ completed }) => completed);
+
+  const challenges =
+    !isPractice ? normalizedChallenges : (
+      normalizedChallenges
+        .map((value) => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+    );
+
+  return { ...data, challenges };
 });
 
 export const getLessonPercentage = cache(async () => {

@@ -44,7 +44,8 @@ export const units = pgTable(
     courseId: integer('course_id')
       .references(() => courses.id, { onDelete: 'cascade' })
       .notNull(),
-    order: integer('order').notNull(),
+    hidden: boolean().notNull().default(false),
+    order: integer('order').notNull().default(0),
     imageSrc: text('image_src').notNull().default(''),
   },
   () => [
@@ -80,7 +81,8 @@ export const lessons = pgTable(
     unitId: integer('unit_id')
       .references(() => units.id, { onDelete: 'cascade' })
       .notNull(),
-    order: integer('order').notNull(),
+    hidden: boolean('hidden').notNull().default(false),
+    order: integer('order').notNull().default(0),
   },
   () => [
     pgPolicy('Authenticated read access to courses', {

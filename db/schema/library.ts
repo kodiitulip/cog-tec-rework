@@ -1,4 +1,4 @@
-import { integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { integer, pgPolicy, pgTable, serial, text,boolean } from 'drizzle-orm/pg-core';
 import { units } from './courses';
 import { authenticatedRole } from 'drizzle-orm/supabase';
 import { sql } from 'drizzle-orm';
@@ -12,6 +12,7 @@ export const library = pgTable(
       .references(() => units.id, { onDelete: 'cascade' })
       .notNull(),
     markdown: text('markdown').notNull().default(''),
+    hidden: boolean('hidden').notNull().default(false),
     order: integer('order').notNull().default(0),
   },
   () => [

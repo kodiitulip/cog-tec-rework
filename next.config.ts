@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
-            value: '*',
+            value: 'https://cog-tec.vercel.app/*',
           },
           {
             key: 'Access-Control-Allow-Methods',
