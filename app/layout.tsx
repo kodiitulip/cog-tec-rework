@@ -22,7 +22,10 @@ export default function RootLayout({
   return (
     <html lang='pt-BR'>
       <body className={cn(nunito.variable, 'antialiased')}>
-        <Toaster />
+        <Toaster
+          richColors
+          position='top-center'
+        />
         {children}
       </body>
     </html>
