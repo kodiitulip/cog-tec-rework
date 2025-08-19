@@ -121,7 +121,7 @@ export const SignUpForm = ({ close, alert, ...props }: Props) => {
         variant='ghost'
         disabled={isPending}
       >
-        Cadstar-se
+        Cadastre-se
       </Button>
     </form>
   );
