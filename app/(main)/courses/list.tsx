@@ -12,7 +12,7 @@ type Props = {
   courses: SelectCourses[];
   activeCourseId?: SelectUserProgress['activeCourseId'];
   backLink?: string;
-} & React.ComponentProps<'div'>;
+};
 
 export const List = ({ courses, activeCourseId, backLink = '/learn' }: Props) => {
   const [pending, startTransition] = useTransition();
@@ -49,19 +49,17 @@ export const List = ({ courses, activeCourseId, backLink = '/learn' }: Props) =>
 
   return (
     <div className='grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 overflow-y-hidden min-h-55'>
-      {courses.map(({ id, title, imageSrc, hidden }) =>
-        hidden ?
-          <Card
-            key={id}
-            id={id}
-            title={title as CourseTitles}
-            imageSrc={imageSrc}
-            onClick={onClick}
-            disabled={pending}
-            active={id === activeCourseId}
-          />
-        : null
-      )}
+      {courses.map(({ id, title, imageSrc, hidden }) => (
+        <Card
+          key={id}
+          id={id}
+          title={title as CourseTitles}
+          imageSrc={imageSrc}
+          onClick={onClick}
+          disabled={pending}
+          active={id === activeCourseId}
+        />
+      ))}
     </div>
   );
 };

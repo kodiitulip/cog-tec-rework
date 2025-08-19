@@ -10,8 +10,8 @@ import { UserProgress } from '@/components/bits/pages/user-progress';
 const LibraryContentPage = async ({ params }: { params: Promise<{ id: SelectLibrary['id'] }> }) => {
   const { id } = await params;
   const [content, userProgress] = await Promise.all([getLibraryContentById(id), getUserProgress()]);
-  if (!content || !userProgress) notFound();
-  if (!userProgress.activeCourse) redirect('/courses');
+  if (!content) notFound();
+  if (!userProgress || !userProgress.activeCourse) redirect('/courses');
 
   return (
     <div className='flex flex-row-reverse gap-12 px-6'>
