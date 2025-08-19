@@ -1,5 +1,5 @@
 import { getLesson, getUserProgress } from '@/db/queries';
-import { redirect } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import React from 'react';
 import { Quiz } from '../quiz';
 import { CourseTitles } from '@/lib/utils';
@@ -15,7 +15,8 @@ const LessonIdPage = async ({ params }: Props) => {
   const { id: lessonId } = await params;
   const [lesson, userProgress] = await Promise.all([getLesson(lessonId), getUserProgress()]);
 
-  if (!lesson || !userProgress) redirect('/learn');
+  if (!lesson) notFound();
+  if (!userProgress) redirect('/courses');
 
   const initialPercentage =
     (lesson.challenges.filter(({ completed }) => completed).length / lesson.challenges.length) * 100;
