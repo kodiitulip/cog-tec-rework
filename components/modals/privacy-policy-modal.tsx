@@ -21,12 +21,12 @@ export const PrivacyPolicyModal = () => {
       open={isOpen}
       onOpenChange={close}
     >
-      <DialogContent className='sm:max-w-107'>
+      <DialogContent className='sm:max-w-107 max-h-[80dvh]'>
         <DialogHeader>
           <DialogTitle>Política de Privacidade / Privacy Policy</DialogTitle>
         </DialogHeader>
         {variant === 'pt_br' && (
-          <article className='prose prose-neutral'>
+          <article className='prose prose-neutral max-h-112 overflow-y-auto'>
             <h3>Data Efetiva: 20/08/2025</h3>
             <p>
               CogTec dar valor a sua privacidade. Essa Política de privacidade explica qual informação coletamos e como
@@ -56,7 +56,7 @@ export const PrivacyPolicyModal = () => {
           </article>
         )}
         {variant === 'en_us' && (
-          <article className='prose prose-neutral'>
+          <article className='prose prose-neutral max-h-112 overflow-y-auto'>
             <h3>Effective Date: 20/08/2025</h3>
             <p>
               CogTec values your privacy. This Privacy Policy explains what information we collect and how we use it.
