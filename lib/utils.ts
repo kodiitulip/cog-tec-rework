@@ -8,6 +8,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const randomizeArray = <T>(array: Array<T>) =>
+  array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+
 export const authErrorCodeToMessage = (code: string) => {
   switch (code) {
     case 'email_address_invalid':

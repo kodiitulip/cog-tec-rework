@@ -1,4 +1,4 @@
-name: Deploy to vercel
+name: Deploy to vercel - Production
 on:
   push:
     branches:
@@ -45,7 +45,7 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--prod'
+          vercel-args: '--prod --force'
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           scope: ${{ secrets.ORG_ID }}
