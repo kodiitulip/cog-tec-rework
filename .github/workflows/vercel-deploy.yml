@@ -4,15 +4,6 @@ on:
     branches:
       - main
   workflow_dispatch:
-    inputs:
-      production:
-        type: choice
-        default: preview
-        description: Deploy to production or preview?
-        required: true
-        options:
-          - production
-          - preview
 
 jobs:
   build-and-deploy:
@@ -51,20 +42,10 @@ jobs:
           TYPE_VERCEL_BUILD_SYSTEM_REPORT: encrypted
 
       - uses: amondnet/vercel-action@v25
-        if: inputs.production != 'preview'
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          vercel-args: '--prod --debug'
-          vercel-org-id: ${{ secrets.ORG_ID }}
-          vercel-project-id: ${{ secrets.PROJECT_ID }}
-          scope: ${{ secrets.ORG_ID }}
-
-      - uses: amondnet/vercel-action@v25
-        if: inputs.production == 'preview'
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-args: '--prod'
           vercel-org-id: ${{ secrets.ORG_ID }}
           vercel-project-id: ${{ secrets.PROJECT_ID }}
           scope: ${{ secrets.ORG_ID }}
