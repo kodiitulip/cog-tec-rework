@@ -1,6 +1,7 @@
 import { SelectChallengeOptions, SelectChallenges } from '@/db/schema';
-import { cn } from '@/lib/utils';
+import { cn, randomizeArray } from '@/lib/utils';
 import { Card } from './card';
+import { useState } from 'react';
 
 type Props = {
   options: SelectChallengeOptions[];
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export const Challenge = ({ options, onSelect, status, type, disabled, selectedOption }: Props) => {
+  const [randomizedOptions] = useState<SelectChallengeOptions[]>(randomizeArray<SelectChallengeOptions>(options));
   return (
     <div
       className={cn(
@@ -20,7 +22,7 @@ export const Challenge = ({ options, onSelect, status, type, disabled, selectedO
         type === 'SELECT' && 'grid-cols-2 lg:grid-cols-[repeat(auto-fit,minmax(0,1fr))]'
       )}
     >
-      {options.map(({ id, imageSrc, text }, i) => (
+      {randomizedOptions.map(({ id, imageSrc, text }, i) => (
         <Card
           key={i}
           id={id}
