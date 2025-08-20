@@ -6,7 +6,7 @@ import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
 import { Challenge } from './challenge';
 import { Footer } from './footer';
-import { CourseTitles } from '@/lib/utils';
+import { CourseTitles, randomizeArray } from '@/lib/utils';
 import { upsertChallengeProgress } from '@/actions/challenge-progress';
 import { reduceHearts } from '@/actions/user-progress';
 import { toast } from 'sonner';
@@ -43,7 +43,6 @@ export const Quiz = ({
 
   useMount(() => {
     if (initialPercentage === 100) openPracticeModal();
-    // if (options.length === 0) setOptions(randomizeArray<SelectChallengeOptions>(currentChallenge.challengeOptions));
   });
 
   const [pending, startTransition] = useTransition();
@@ -58,9 +57,6 @@ export const Quiz = ({
   });
   const [selectedOption, setSelectedOption] = useState<SelectChallengeOptions['id'] | undefined>();
   const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
-  // const [options, setOptions] = useState<SelectChallengeOptions[]>(() =>
-  //   currentChallenge ? randomizeArray<SelectChallengeOptions>(currentChallenge.challengeOptions) : []
-  // );
 
   const currentChallenge = challenges[activeIndex];
 
@@ -80,7 +76,8 @@ export const Quiz = ({
   }
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
-  const options = currentChallenge?.challengeOptions || [];
+  // const options = currentChallenge?.challengeOptions || [];
+  const [options] = useState<SelectChallengeOptions[]>(() => randomizeArray( currentChallenge?.challengeOptions ) || [])
 
   const onNext = () => setActiveIndex((curr) => curr + 1);
 

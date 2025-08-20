@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const randomizeArray = <T>(array: Array<T>) =>
+export const randomizeArray = <T>(array: T[]): T[] =>
   array
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)

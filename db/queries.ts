@@ -261,23 +261,14 @@ export const getLesson = cache(async (id?: number) => {
 
   if (!data || !data.challenges) return null;
 
-  const normalizedChallenges = data.challenges.map((challenge) => ({
+  const challenges = data.challenges.map(({ challengeProgress ,...challenge }) => ({
     ...challenge,
+    challengeProgress,
     completed:
-      challenge.challengeProgress &&
-      challenge.challengeProgress.length > 0 &&
-      challenge.challengeProgress.every(({ completed }) => completed),
+      challengeProgress &&
+      challengeProgress.length > 0 &&
+      challengeProgress.every(({ completed }) => completed),
   }));
-
-  const isPractice = normalizedChallenges.every(({ completed }) => completed);
-
-  const challenges =
-    !isPractice ? normalizedChallenges : (
-      normalizedChallenges
-        .map((value) => ({ value, sort: Math.random() }))
-        .sort((a, b) => a.sort - b.sort)
-        .map(({ value }) => value)
-    );
 
   return { ...data, challenges };
 });
