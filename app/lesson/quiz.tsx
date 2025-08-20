@@ -76,8 +76,8 @@ export const Quiz = ({
   }
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
-  // const options = currentChallenge?.challengeOptions || [];
-  const [options] = useState<SelectChallengeOptions[]>(() => randomizeArray( currentChallenge?.challengeOptions ) || [])
+  const options = currentChallenge?.challengeOptions || [];
+  // const [options] = useState<SelectChallengeOptions[]>(() => randomizeArray( currentChallenge?.challengeOptions ) || [])
 
   const onNext = () => setActiveIndex((curr) => curr + 1);
 
