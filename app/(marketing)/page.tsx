@@ -5,6 +5,7 @@ import { LoadingIcon } from '@/components/misc/loading';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { PrivacyPolicyButton } from './privacy-policy-button';
 
 const Home = () => {
   return (
@@ -12,7 +13,7 @@ const Home = () => {
       <div className='relative size-60 lg:size-106 mb-8 lg:mb-0'>
         <Image
           alt='hero'
-          src='/kenney/shape-characters/prefab/hero.svg'
+          src='/icon-512-maskable.png'
           fill
         />
       </div>
@@ -48,6 +49,7 @@ const Home = () => {
             </SignedIn>
           </Suspense>
         </div>
+        <PrivacyPolicyButton />
       </div>
     </div>
   );
