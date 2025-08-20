@@ -3,10 +3,12 @@
 import { Button, ButtonProps } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { usePrivacyPolicyModal } from '@/store/use-privacy-policy-modal';
+import { useLocation } from 'react-use';
 
 export const PrivacyPolicyButton = ({ className, variant, ...props }: ButtonProps) => {
   const { open } = usePrivacyPolicyModal();
-  if (window.location.hash === 'policy') open();
+  const { hash } = useLocation();
+  if (hash === 'policy') open();
   return (
     <Button
       onClick={open}
