@@ -49,7 +49,7 @@ const Home = () => {
             </SignedIn>
           </Suspense>
         </div>
-        <PrivacyPolicyButton />
+        <PrivacyPolicyButton id='policy' />
       </div>
     </div>
   );
