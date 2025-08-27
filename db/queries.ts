@@ -11,7 +11,7 @@ import {
   SelectLibrary,
   library,
 } from '@/db/schema';
-import { getUserId } from '@/lib/utils';
+import { getUserId } from '@/actions/auth';
 
 export const getCourses = cache(
   async () =>

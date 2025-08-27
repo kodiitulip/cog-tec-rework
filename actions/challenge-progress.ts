@@ -3,7 +3,7 @@
 import { admin } from '@/db/drizzle';
 import { getUserProgress } from '@/db/queries';
 import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
-import { getUserId } from '@/lib/utils';
+import { getUserId } from '@/actions/auth';
 import { AuthError } from '@supabase/supabase-js';
 import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
