@@ -17,12 +17,6 @@ export const getIsAdmin = async () => {
   } = data;
   if (!userId) return false;
 
-  // const b = await client.query.userRoles.findFirst({
-  //   where: eq(userRoles.userId, userId),
-  // });
-
-  // if (!b) return false;
-
   const user = await admin.query.userRoles.findFirst({
     where: eq(userRoles.userId, userId),
   });

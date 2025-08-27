@@ -3,7 +3,7 @@
 import { admin } from '@/db/drizzle';
 import { getUserProgress } from '@/db/queries';
 import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
-import { createClient } from '@/lib/supabase/server';
+import { getUserId } from '@/lib/utils';
 import { AuthError } from '@supabase/supabase-js';
 import { and, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
@@ -16,9 +16,8 @@ type UpsertChallengeProgressError = {
 export const upsertChallengeProgress = async (
   challengeId: SelectChallenges['id']
 ): Promise<{ error: UpsertChallengeProgressError | null }> => {
-  const { auth } = await createClient();
+  const { data: userId, error } = await getUserId();
 
-  const { data, error } = await auth.getUser();
   if (error)
     return {
       error: {
@@ -26,10 +25,6 @@ export const upsertChallengeProgress = async (
         error,
       },
     };
-
-  const {
-    user: { id: userId },
-  } = data;
   if (!userId)
     return {
       error: {

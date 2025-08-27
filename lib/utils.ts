@@ -1,6 +1,8 @@
-// import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
+import { AuthError } from '@supabase/supabase-js';
 import { clsx, type ClassValue } from 'clsx';
+import { cache } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { createClient } from './supabase/server';
 
 export type CourseTitles = 'Behaviorismo' | 'Gestalt' | 'Teoria Sociocultural';
 
@@ -36,3 +38,13 @@ export const authErrorCodeToMessage = (code: string) => {
       return 'Houve um erro de autenticação, por favor tente novamente';
   }
 };
+
+export const getUserId = cache(async (): Promise<{ data: string | null; error: AuthError | null }> => {
+  const { auth } = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await auth.getUser();
+  if (error || !user) return { data: null, error };
+  return { data: user.id, error: null };
+});

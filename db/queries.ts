@@ -1,6 +1,5 @@
 import { cache } from 'react';
 import { admin } from '@/db/drizzle';
-import { createClient } from '@/lib/supabase/server';
 import { and, eq } from 'drizzle-orm';
 import {
   units,
@@ -12,15 +11,7 @@ import {
   SelectLibrary,
   library,
 } from '@/db/schema';
-
-export const getUserId = cache(async () => {
-  const { auth } = await createClient();
-  const {
-    data: { user },
-  } = await auth.getUser();
-  if (!user) return undefined;
-  return user.id;
-});
+import { getUserId } from '@/lib/utils';
 
 export const getCourses = cache(
   async () =>
@@ -31,9 +22,9 @@ export const getCourses = cache(
 );
 
 export const getUserProgress = cache(async () => {
-  const userId = await getUserId();
+  const { data: userId, error } = await getUserId();
 
-  if (!userId) return undefined;
+  if (error || !userId) return undefined;
 
   const data = await admin.query.userProgress.findFirst({
     where: eq(userProgress.userId, userId),
