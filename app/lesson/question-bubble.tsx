@@ -1,42 +1,25 @@
-import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
-import { cn, CourseTitles } from '@/lib/utils';
+import { CourseIcon } from '@/components/misc/course-icon';
+import { CoursesIds } from '@/lib/utils';
 
 type Props = {
   question: string;
-  courseName?: CourseTitles;
+  courseId?: CoursesIds;
 };
 
-export const QuestionBubble = ({ question, courseName }: Props) => {
-  const Icon =
-    courseName === 'Behaviorismo'
-      ? BehaviorismIcon
-      : courseName === 'Gestalt'
-      ? GestaltIcon
-      : courseName === 'Teoria Sociocultural'
-      ? SociocultureIcon
-      : CogTecIcon;
-
+export const QuestionBubble = ({ question, courseId }: Props) => {
   return (
     <div className='flex items-center gap-x-4 mb-6'>
-      <Icon
+      <CourseIcon
+        courseId={courseId}
         height={60}
         width={60}
-        className={cn(
-          'hidden lg:block',
-          courseName === 'Behaviorismo' && 'fill-behaviorism-500',
-          courseName === 'Gestalt' && 'fill-gestalt-500',
-          courseName === 'Teoria Sociocultural' && 'fill-sociocultural-500'
-        )}
+        className='hidden lg:block'
       />
-      <Icon
+      <CourseIcon
+        courseId={courseId}
         height={40}
         width={40}
-        className={cn(
-          'lg:hidden shrink-0',
-          courseName === 'Behaviorismo' && 'fill-behaviorism-500',
-          courseName === 'Gestalt' && 'fill-gestalt-500',
-          courseName === 'Teoria Sociocultural' && 'fill-sociocultural-500'
-        )}
+        className='lg:hidden shrink-0'
       />
       <div className='relative py-2 px-4 border-2 rounded-xl text-sm lg:text-base border-neutral-400'>
         {question}

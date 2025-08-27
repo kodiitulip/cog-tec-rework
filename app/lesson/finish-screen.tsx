@@ -1,27 +1,22 @@
-import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
 import Confetti from 'react-confetti';
-import { cn, CourseTitles } from '@/lib/utils';
+import { CoursesIds } from '@/lib/utils';
 import { ResultCard } from './result-card';
 import { Footer } from './footer';
 import { SelectLessons } from '@/db/schema';
 import { useRouter } from 'next/navigation';
 import { useAudio, useWindowSize } from 'react-use';
+import { CourseIcon } from '@/components/misc/course-icon';
 
 type Props = {
-  courseName?: CourseTitles;
+  courseId?: CoursesIds;
   points: number;
   hearts: number;
   lessonId: SelectLessons['id'];
 };
 
-export const FinishScreen = ({ courseName, hearts, points, lessonId }: Props) => {
+export const FinishScreen = ({ courseId, hearts, points, lessonId }: Props) => {
   const { width, height } = useWindowSize();
   const [finishAudio] = useAudio({ src: '/sounds/finish.mp3', autoPlay: true });
-  const Icon =
-    courseName === 'Behaviorismo' ? BehaviorismIcon
-    : courseName === 'Gestalt' ? GestaltIcon
-    : courseName === 'Teoria Sociocultural' ? SociocultureIcon
-    : CogTecIcon;
 
   const router = useRouter();
 
@@ -35,23 +30,20 @@ export const FinishScreen = ({ courseName, hearts, points, lessonId }: Props) =>
         tweenDuration={10000}
       />
       {finishAudio}
-      <div
-        className={cn(
-          'flex flex-col gap-t-4 lg:gap-y-8 max-w-(--breakpoint-lg) mx-auto text-center items-center justify-center h-full fill-ecstasy-500',
-          courseName === 'Behaviorismo' && 'fill-behaviorism-500',
-          courseName === 'Gestalt' && 'fill-gestalt-500',
-          courseName === 'Teoria Sociocultural' && 'fill-sociocultural-500'
-        )}
-      >
-        <Icon
+      <div className='flex flex-col gap-t-4 lg:gap-y-8 max-w-(--breakpoint-lg) mx-auto text-center items-center justify-center h-full fill-ecstasy-500'>
+        <CourseIcon
           className='hidden lg:block'
           height={100}
           width={100}
+          courseId={courseId}
+          colored
         />
-        <Icon
+        <CourseIcon
           className='lg:hidden'
           height={50}
           width={50}
+          courseId={courseId}
+          colored
         />
         <h1 className='text-xl lg:text-3xl font-bold text-neutral-700'>
           Bom Trabalho! <br /> Você completou uma lição :D
