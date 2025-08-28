@@ -1,7 +1,7 @@
 'use client';
 
 import { SelectChallengeOptions, SelectChallenges, SelectLessons } from '@/db/schema';
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
 import { Challenge } from './challenge';
@@ -45,6 +45,9 @@ export const Quiz = ({
     if (initialPercentage === 100) openPracticeModal();
   });
 
+  const completedChallenges = useRef<NormalizedChallenges[]>([]);
+  const isPractice = initialPercentage === 100;
+
   const [pending, startTransition] = useTransition();
 
   const [hearts, setHearts] = useState<number>(initialHearts);
@@ -62,11 +65,33 @@ export const Quiz = ({
   const currentChallenge = challenges[activeIndex];
 
   if (finished || !currentChallenge) {
+    startTransition(() => {
+      for (const chall in completedChallenges.current) {
+        upsertChallengeProgress(completedChallenges.current[chall].id)
+          .then(({ error }) => {
+            if (!error) return;
+            switch (error.type) {
+              case 'UNAUTHORIZED':
+                toast.error('Usuário não autorizado');
+                console.log(error.error?.message);
+                break;
+              case 'ZERO_HEARTS':
+                openHeartsModal();
+                toast.error('Lhe faltou vidas para concluir a lição.');
+                break;
+              default:
+                toast.error('Houve um erro inesperado!');
+                break;
+            }
+          })
+          .catch(() => toast.error('Um erro inesperado aconteceu.'));
+      }
+    });
     return (
       <>
         <FinishScreen
           courseId={courseId}
-          points={challenges.length * 10}
+          points={completedChallenges.current.length * (isPractice ? 5 : 10)}
           hearts={hearts}
           lessonId={lessonId}
         />
@@ -90,6 +115,7 @@ export const Quiz = ({
   };
 
   const onContinue = () => {
+    if (isPractice && hearts === 0) return openHeartsModal();
     if (!selectedOption) return;
     if (status === 'wrong') {
       setStatus('none');
@@ -106,35 +132,14 @@ export const Quiz = ({
     if (!correctOption) return;
     if (correctOption.id === selectedOption) {
       startTransition(() => {
-        upsertChallengeProgress(currentChallenge.id)
-          .then(({ error }) => {
-            if (!error) {
-              correctControls.play();
-              setStatus('correct');
-              setPercentage((prev) => prev + 100 / challenges.length);
+        correctControls.play();
+        setStatus('correct');
+        if (hearts === 0) return openHeartsModal();
+        completedChallenges.current.push(currentChallenge);
+        setPercentage((prev) => prev + 100 / challenges.length);
 
-              // this is practice
-              if (initialPercentage === 100) {
-                setHearts((prev) => Math.min(prev + 1, 5));
-              }
-              return;
-            }
-            switch (error.type) {
-              case 'UNAUTHORIZED':
-                toast.error('Usuário não autorizado');
-                console.log(error.error?.message);
-                break;
-
-              case 'ZERO_HEARTS':
-                openHeartsModal();
-                break;
-
-              default:
-                toast.error('Houve um erro inesperado!');
-                break;
-            }
-          })
-          .catch(() => toast.error('Um erro inesperado aconteceu.'));
+        // this is practice run
+        if (isPractice) setHearts((prev) => Math.min(prev + 1, 5));
       });
     } else {
       startTransition(() => {
