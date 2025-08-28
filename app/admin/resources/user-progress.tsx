@@ -16,19 +16,17 @@ import {
 } from 'react-admin';
 
 export const UserProgressList = () => (
-  <InfiniteList>
+  <InfiniteList
+    sort={{
+      field: 'userName',
+      order: 'ASC',
+    }}
+  >
     <Datagrid>
-      <TextField source='userId' />
       <TextField source='userName' />
       <TextField source='userImageSrc' />
-      <ReferenceField
-        source='activeCourseId'
-        reference='courses'
-      />
-      <ReferenceField
-        source='activeLessonId'
-        reference='lessons'
-      />
+      {/* <ReferenceField source='activeCourseId' reference='courses' />
+       <ReferenceField source='activeLessonId' reference='lessons' /> */}
       <NumberField source='hearts' />
       <NumberField source='points' />
       <BooleanField source='rankHidden' />
