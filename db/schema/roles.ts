@@ -1,4 +1,4 @@
-import { integer, pgPolicy, pgTable, uuid } from 'drizzle-orm/pg-core';
+import { pgPolicy, pgTable, serial, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 import { authUsers, authenticatedRole } from 'drizzle-orm/supabase';
 import { appRolesEnum } from '@/db/schema/enums';
@@ -6,7 +6,7 @@ import { appRolesEnum } from '@/db/schema/enums';
 export const userRoles = pgTable(
   'user_roles',
   {
-    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+    id: serial('id').primaryKey(),
     userId: uuid('user_id')
       .references(() => authUsers.id, { onDelete: 'cascade' })
       .unique()
