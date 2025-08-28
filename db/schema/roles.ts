@@ -1,29 +1,12 @@
-import { pgPolicy, pgTable, serial, uuid } from 'drizzle-orm/pg-core';
+import { integer, pgPolicy, pgTable, uuid } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
-import { authUsers, supabaseAuthAdminRole, authenticatedRole } from 'drizzle-orm/supabase';
-import { appRolesEnum, appPermissionsEnum } from '@/db/schema/enums';
-
-export const rolePermissions = pgTable(
-  'role_permissions',
-  {
-    id: serial('id').primaryKey(),
-    role: appRolesEnum().notNull(),
-    permission: appPermissionsEnum().notNull(),
-  },
-  () => [
-    pgPolicy('Allow auth admin to read roles permission', {
-      as: 'permissive',
-      for: 'all',
-      to: supabaseAuthAdminRole,
-      using: sql``,
-    }),
-  ]
-);
+import { authUsers, authenticatedRole } from 'drizzle-orm/supabase';
+import { appRolesEnum } from '@/db/schema/enums';
 
 export const userRoles = pgTable(
   'user_roles',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     userId: uuid('user_id')
       .references(() => authUsers.id, { onDelete: 'cascade' })
       .unique()

@@ -1,11 +1,11 @@
 import { sql } from 'drizzle-orm';
-import { boolean, integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgPolicy, pgTable, text } from 'drizzle-orm/pg-core';
 import { authenticatedRole } from 'drizzle-orm/supabase';
 
 export const courses = pgTable(
   'courses',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     title: text('title').notNull(),
     imageSrc: text('image_src').notNull(),
     hidden: boolean('hidden').notNull().default(false),
@@ -38,7 +38,7 @@ export const courses = pgTable(
 export const units = pgTable(
   'units',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     title: text('title').notNull(),
     description: text('description').notNull(),
     courseId: integer('course_id')
@@ -76,7 +76,7 @@ export const units = pgTable(
 export const lessons = pgTable(
   'lessons',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     title: text('title').notNull(),
     unitId: integer('unit_id')
       .references(() => units.id, { onDelete: 'cascade' })

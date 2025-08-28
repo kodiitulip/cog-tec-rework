@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, integer, pgPolicy, pgTable, serial, text, uuid } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgPolicy, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { authenticatedRole, authUsers } from 'drizzle-orm/supabase';
 import { courses, lessons } from '@/db/schema/courses';
 import { challenges } from './challenges';
@@ -7,7 +7,7 @@ import { challenges } from './challenges';
 export const challengeProgress = pgTable(
   'challenge_progress',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     userId: uuid('user_id')
       .references(() => authUsers.id, { onDelete: 'cascade' })
       .notNull(),
@@ -38,6 +38,7 @@ export const userProgress = pgTable(
     activeLessonId: integer('active_lesson_id').references(() => lessons.id, { onDelete: 'cascade' }),
     hearts: integer('hearts').notNull().default(5),
     points: integer('points').notNull().default(0),
+    rankHidden: boolean('rank_hidden').notNull().default(false),
   },
   () => [
     pgPolicy('Authenticated read access to userProgress', {

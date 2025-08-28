@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { boolean, integer, pgPolicy, pgTable, serial, text } from 'drizzle-orm/pg-core';
+import { boolean, integer, pgPolicy, pgTable, text } from 'drizzle-orm/pg-core';
 import { authenticatedRole } from 'drizzle-orm/supabase';
 import { lessons } from './courses';
 import { challengesEnum } from './enums';
@@ -7,7 +7,7 @@ import { challengesEnum } from './enums';
 export const challenges = pgTable(
   'challenges',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     lessonId: integer('lesson_id')
       .references(() => lessons.id, { onDelete: 'cascade' })
       .notNull(),
@@ -43,7 +43,7 @@ export const challenges = pgTable(
 export const challengeOptions = pgTable(
   'challenge_options',
   {
-    id: serial('id').primaryKey(),
+    id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
     challengeId: integer('challenge_id')
       .references(() => challenges.id, { onDelete: 'cascade' })
       .notNull(),
