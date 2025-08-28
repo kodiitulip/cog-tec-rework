@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { admin } from '@/db/drizzle';
 import { getIsAdmin } from '@/lib/admin';
 import { units } from '@/db/schema';
+import { and, inArray, SQL } from 'drizzle-orm';
 
 type Fields = 'id' | 'title' | 'description' | 'courseId' | 'order' | 'imageSrc';
 type Operators = 'asc' | 'desc';
@@ -15,6 +16,12 @@ export const GET = async (request: Request) => {
 
   const [fi, op]: string[] = JSON.parse(searchParams.get('sort') || '["id", "ASC"]');
   const sort: [Fields, Operators] = [fi as Fields, op.toLowerCase() as Operators];
+  const filter = JSON.parse(searchParams.get('filter') || '{}');
+  const filters: SQL[] = [];
+
+  for (const col in filter) {
+    if (filter[col] instanceof Array) filters.push(inArray(units[col as Fields], filter[col]));
+  }
 
   const data = await admin.query.units.findMany({
     orderBy: (fields, operators) => {
@@ -22,6 +29,7 @@ export const GET = async (request: Request) => {
       const field = fields[sort[0]];
       return [operator(field)];
     },
+    where: and(...filters),
   });
   return NextResponse.json(data);
 };

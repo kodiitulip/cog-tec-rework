@@ -1,16 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { tempquests } from '@/constants';
-import { cn, CourseTitles } from '@/lib/utils';
+import { cn, CoursesIds } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
   points: number;
-  courseTitle: CourseTitles;
+  courseId?: CoursesIds;
 };
 
-export const QuestSidenote = ({ points, courseTitle }: Props) => {
+export const QuestSidenote = ({ points, courseId = CoursesIds.DEFAULT }: Props) => {
   return (
     <div className='border-1 rounded-xl p-4 space-y-4'>
       <div className='flex items-center justify-between w-full space-y-2'>
@@ -42,9 +42,9 @@ export const QuestSidenote = ({ points, courseTitle }: Props) => {
                 <Progress
                   classNameIndicator={cn(
                     'bg-ecstasy-500',
-                    courseTitle === 'Behaviorismo' && 'bg-behaviorism-500',
-                    courseTitle === 'Gestalt' && 'bg-gestalt-500',
-                    courseTitle === 'Teoria Sociocultural' && 'bg-sociocultural-500'
+                    courseId === CoursesIds.BEHAVIORISM && 'bg-behaviorism-500',
+                    courseId === CoursesIds.GESTALT && 'bg-gestalt-500',
+                    courseId === CoursesIds.SOCIOCULTURE && 'bg-sociocultural-500'
                   )}
                   value={progress}
                   className='h-2'

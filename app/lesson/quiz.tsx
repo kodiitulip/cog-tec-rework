@@ -6,7 +6,6 @@ import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
 import { Challenge } from './challenge';
 import { Footer } from './footer';
-import { CourseTitles, randomizeArray } from '@/lib/utils';
 import { upsertChallengeProgress } from '@/actions/challenge-progress';
 import { reduceHearts } from '@/actions/user-progress';
 import { toast } from 'sonner';
@@ -14,6 +13,7 @@ import { useAudio, useMount } from 'react-use';
 import { FinishScreen } from './finish-screen';
 import { useHeartsModal } from '@/store/use-hearts-modal';
 import { usePracticeModal } from '@/store/use-practice-modal';
+import { CoursesIds } from '@/lib/utils';
 
 type NormalizedChallenges = SelectChallenges & {
   completed: boolean;
@@ -25,7 +25,7 @@ type Props = {
   initialHearts: number;
   initialLessonId: SelectLessons['id'];
   initialLessonChallenges: NormalizedChallenges[];
-  activeCourseName?: CourseTitles;
+  courseId?: CoursesIds;
 };
 
 export const Quiz = ({
@@ -33,7 +33,7 @@ export const Quiz = ({
   initialHearts,
   initialLessonId,
   initialLessonChallenges,
-  activeCourseName,
+  courseId,
 }: Props) => {
   const [correctAudio, , correctControls] = useAudio({ src: '/sounds/correct.mp3' });
   const [incorrectAudio, , incorrectControls] = useAudio({ src: '/sounds/incorrect.wav' });
@@ -57,14 +57,15 @@ export const Quiz = ({
   });
   const [selectedOption, setSelectedOption] = useState<SelectChallengeOptions['id'] | undefined>();
   const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
+  const [finished, setFinished] = useState<boolean>(false);
 
   const currentChallenge = challenges[activeIndex];
 
-  if (!currentChallenge) {
+  if (finished || !currentChallenge) {
     return (
       <>
         <FinishScreen
-          courseName={activeCourseName}
+          courseId={courseId}
           points={challenges.length * 10}
           hearts={hearts}
           lessonId={lessonId}
@@ -77,9 +78,11 @@ export const Quiz = ({
 
   const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
   const options = currentChallenge?.challengeOptions || [];
-  // const [options] = useState<SelectChallengeOptions[]>(() => randomizeArray( currentChallenge?.challengeOptions ) || [])
 
-  const onNext = () => setActiveIndex((curr) => curr + 1);
+  const onNext = () => {
+    if (activeIndex + 1 >= challenges.length) return setFinished(true);
+    setActiveIndex((curr) => curr + 1);
+  };
 
   const onSelect = (id: number) => {
     if (status !== 'none') return;
@@ -104,8 +107,8 @@ export const Quiz = ({
     if (correctOption.id === selectedOption) {
       startTransition(() => {
         upsertChallengeProgress(currentChallenge.id)
-          .then((res) => {
-            if (!res.error) {
+          .then(({ error }) => {
+            if (!error) {
               correctControls.play();
               setStatus('correct');
               setPercentage((prev) => prev + 100 / challenges.length);
@@ -116,10 +119,10 @@ export const Quiz = ({
               }
               return;
             }
-            switch (res.error.type) {
+            switch (error.type) {
               case 'UNAUTHORIZED':
                 toast.error('Usuário não autorizado');
-                console.log(res.error.error?.message);
+                console.log(error.error?.message);
                 break;
 
               case 'ZERO_HEARTS':
@@ -171,7 +174,7 @@ export const Quiz = ({
       <Header
         hearts={hearts}
         percentage={percentage}
-        courseName={activeCourseName}
+        courseId={courseId}
       />
       <div className='h-full flex items-center justify-center'>
         <div className='max-w-230 px-6 lg:px-0 flex flex-col gap-y-12 w-full'>
@@ -179,7 +182,7 @@ export const Quiz = ({
           {currentChallenge.type === 'ASSIST' && (
             <QuestionBubble
               question={currentChallenge.question}
-              courseName={activeCourseName}
+              courseId={courseId}
             />
           )}
           <Challenge

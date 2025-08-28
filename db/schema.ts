@@ -3,7 +3,7 @@ import { challengeProgress, userProgress, SelectChallengeProgress, SelectUserPro
 import { challenges, challengeOptions, SelectChallenges, SelectChallengeOptions } from './schema/challenges';
 import { courses, units, lessons, SelectCourses, SelectUnits, SelectLessons } from './schema/courses';
 import { appRolesEnum, appPermissionsEnum, challengesEnum } from './schema/enums';
-import { userRoles, rolePermissions } from './schema/roles';
+import { userRoles } from './schema/roles';
 import { library, SelectLibrary } from './schema/library';
 
 export {
@@ -19,18 +19,7 @@ export {
   appPermissionsEnum,
   challengesEnum,
 };
-export {
-  courses,
-  units,
-  lessons,
-  library,
-  challenges,
-  challengeOptions,
-  challengeProgress,
-  userProgress,
-  userRoles,
-  rolePermissions,
-};
+export { courses, units, lessons, library, challenges, challengeOptions, challengeProgress, userProgress, userRoles };
 
 export const coursesRelations = relations(courses, ({ many }) => ({
   userProgress: many(userProgress),

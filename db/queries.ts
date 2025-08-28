@@ -1,6 +1,5 @@
 import { cache } from 'react';
 import { admin } from '@/db/drizzle';
-import { createClient } from '@/lib/supabase/server';
 import { and, eq } from 'drizzle-orm';
 import {
   units,
@@ -12,15 +11,7 @@ import {
   SelectLibrary,
   library,
 } from '@/db/schema';
-
-export const getUserId = cache(async () => {
-  const { auth } = await createClient();
-  const {
-    data: { user },
-  } = await auth.getUser();
-  if (!user) return undefined;
-  return user.id;
-});
+import { getUserId } from '@/actions/auth';
 
 export const getCourses = cache(
   async () =>
@@ -31,9 +22,9 @@ export const getCourses = cache(
 );
 
 export const getUserProgress = cache(async () => {
-  const userId = await getUserId();
+  const { data: userId, error } = await getUserId();
 
-  if (!userId) return undefined;
+  if (error || !userId) return undefined;
 
   const data = await admin.query.userProgress.findFirst({
     where: eq(userProgress.userId, userId),
@@ -46,14 +37,14 @@ export const getUserProgress = cache(async () => {
 });
 
 export const getUnits = cache(async () => {
-  const userProgress = await getUserProgress();
+  const userProg = await getUserProgress();
 
-  if (!userProgress || !userProgress.userId || !userProgress.activeCourseId) {
+  if (!userProg || !userProg.userId || !userProg.activeCourseId) {
     return [];
   }
 
   const data = await admin.query.units.findMany({
-    where: and(eq(units.courseId, userProgress.activeCourseId), eq(units.hidden, false)),
+    where: and(eq(units.courseId, userProg.activeCourseId), eq(units.hidden, false)),
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
       lessons: {
@@ -64,7 +55,7 @@ export const getUnits = cache(async () => {
             orderBy: ({ order }, { asc }) => [asc(order)],
             with: {
               challengeProgress: {
-                where: eq(challengeProgress.userId, userProgress.userId),
+                where: eq(challengeProgress.userId, userProg.userId),
               },
             },
           },
@@ -90,14 +81,14 @@ export const getUnits = cache(async () => {
 });
 
 export const getLibraryUnits = cache(async () => {
-  const userProgress = await getUserProgress();
+  const userProg = await getUserProgress();
 
-  if (!userProgress || !userProgress.userId || !userProgress.activeCourseId) {
+  if (!userProg || !userProg.userId || !userProg.activeCourseId) {
     return [];
   }
 
   const data = await admin.query.units.findMany({
-    where: and(eq(units.courseId, userProgress.activeCourseId), eq(units.hidden, false)),
+    where: and(eq(units.courseId, userProg.activeCourseId), eq(units.hidden, false)),
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
       library: true,
@@ -155,13 +146,13 @@ export const getFirstLessonOnCourse = cache(async (courseId: SelectCourses['id']
 });
 
 export const getCourseProgress = cache(async () => {
-  const userProgress = await getUserProgress();
+  const userProg = await getUserProgress();
 
-  if (!userProgress || !userProgress?.userId || !userProgress.activeCourseId) return null;
+  if (!userProg || !userProg?.userId || !userProg.activeCourseId) return null;
 
   const unitsInActiveCourse = await admin.query.units.findMany({
     orderBy: ({ order }, { asc }) => [asc(order)],
-    where: eq(units.courseId, userProgress.activeCourseId),
+    where: eq(units.courseId, userProg.activeCourseId),
     with: {
       lessons: {
         orderBy: ({ order }, { asc }) => [asc(order)],
@@ -170,7 +161,7 @@ export const getCourseProgress = cache(async () => {
           challenges: {
             with: {
               challengeProgress: {
-                where: eq(challengeProgress.userId, userProgress.userId),
+                where: eq(challengeProgress.userId, userProg.userId),
               },
             },
           },
@@ -179,25 +170,29 @@ export const getCourseProgress = cache(async () => {
     },
   });
 
-  const firstUncompletedLesson = unitsInActiveCourse
-    .flatMap((unit) => unit.lessons)
-    .find((lesson) =>
-      lesson.challenges.some(
-        ({ challengeProgress }) =>
-          !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
-      )
-    );
+  const allLessons = unitsInActiveCourse.flatMap(({ lessons }) => lessons);
 
+  const firstUncompletedLesson = allLessons.find(({ challenges }) =>
+    challenges.some(
+      ({ challengeProgress }) =>
+        !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
+    )
+  );
+
+  // in case the user manages to complete the course and there are no more
+  // uncompleted lessons, we will fallback to the last lesson on the course
+  // just so that the /lesson page allows the quiz component to show the
+  // finish screen
   return {
-    activeLesson: firstUncompletedLesson,
-    activeLessonId: firstUncompletedLesson?.id,
+    activeLesson: firstUncompletedLesson || allLessons.at(-1),
+    activeLessonId: (firstUncompletedLesson || allLessons.at(-1))?.id,
   };
 });
 
 export const getCourseProgressByCourseId = cache(async (courseId: SelectCourses['id']) => {
-  const userProgress = await getUserProgress();
+  const userProg = await getUserProgress();
 
-  if (!userProgress || !userProgress?.userId || !courseId) return null;
+  if (!userProg || !userProg?.userId || !courseId) return null;
 
   const unitsInCourse = await admin.query.units.findMany({
     orderBy: ({ order }, { asc }) => [asc(order)],
@@ -210,7 +205,7 @@ export const getCourseProgressByCourseId = cache(async (courseId: SelectCourses[
           challenges: {
             with: {
               challengeProgress: {
-                where: eq(challengeProgress.userId, userProgress.userId),
+                where: eq(challengeProgress.userId, userProg.userId),
               },
             },
           },
@@ -235,8 +230,8 @@ export const getCourseProgressByCourseId = cache(async (courseId: SelectCourses[
 });
 
 export const getLesson = cache(async (id?: number) => {
-  const userProgress = await getUserProgress();
-  if (!userProgress || !userProgress.userId) return null;
+  const userProg = await getUserProgress();
+  if (!userProg || !userProg.userId) return null;
 
   const courseProgress = await getCourseProgress();
 
@@ -252,7 +247,7 @@ export const getLesson = cache(async (id?: number) => {
         with: {
           challengeOptions: true,
           challengeProgress: {
-            where: eq(challengeProgress.userId, userProgress?.userId),
+            where: eq(challengeProgress.userId, userProg?.userId),
           },
         },
       },
@@ -261,13 +256,11 @@ export const getLesson = cache(async (id?: number) => {
 
   if (!data || !data.challenges) return null;
 
-  const challenges = data.challenges.map(({ challengeProgress ,...challenge }) => ({
+  const challenges = data.challenges.map(({ challengeProgress, ...challenge }) => ({
     ...challenge,
     challengeProgress,
     completed:
-      challengeProgress &&
-      challengeProgress.length > 0 &&
-      challengeProgress.every(({ completed }) => completed),
+      challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed),
   }));
 
   return { ...data, challenges };
@@ -289,12 +282,13 @@ export const getLessonPercentage = cache(async () => {
 });
 
 export const getTopNUsers = cache(async (n: number = 10) => {
-  const userProgress = await getUserProgress();
+  const userProg = await getUserProgress();
 
-  if (!userProgress || !userProgress.userId) return [];
+  if (!userProg || !userProg.userId) return [];
 
   const data = await admin.query.userProgress.findMany({
     orderBy: ({ points }, { desc }) => [desc(points)],
+    where: eq(userProgress.rankHidden, false),
     limit: n,
     columns: {
       userId: true,

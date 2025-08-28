@@ -2,7 +2,8 @@
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { cn, CourseTitles } from '@/lib/utils';
+import { SelectCourses } from '@/db/schema';
+import { cn, CoursesIds } from '@/lib/utils';
 import { useExitModal } from '@/store/use-exit-modal';
 import { X } from 'lucide-react';
 import Image from 'next/image';
@@ -10,10 +11,10 @@ import Image from 'next/image';
 type Props = {
   hearts: number;
   percentage: number;
-  courseName?: CourseTitles;
+  courseId?: CoursesIds;
 };
 
-export const Header = ({ hearts, percentage, courseName }: Props) => {
+export const Header = ({ hearts, percentage, courseId }: Props) => {
   const { open } = useExitModal();
 
   return (
@@ -29,9 +30,9 @@ export const Header = ({ hearts, percentage, courseName }: Props) => {
       <Progress
         value={percentage}
         classNameIndicator={cn(
-          courseName === 'Behaviorismo' && 'bg-behaviorism-500',
-          courseName === 'Gestalt' && 'bg-gestalt-500',
-          courseName === 'Teoria Sociocultural' && 'bg-sociocultural-500'
+          courseId === CoursesIds.BEHAVIORISM && 'bg-behaviorism-500',
+          courseId === CoursesIds.GESTALT && 'bg-gestalt-500',
+          courseId === CoursesIds.SOCIOCULTURE && 'bg-sociocultural-500'
         )}
       />
       <div className='text-rose-500 flex items-center font-bold'>

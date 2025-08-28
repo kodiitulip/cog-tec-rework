@@ -1,8 +1,14 @@
-// import { BehaviorismIcon, CogTecIcon, GestaltIcon, SociocultureIcon } from '@/components/svgs';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export type CourseTitles = 'Behaviorismo' | 'Gestalt' | 'Teoria Sociocultural';
+
+export enum CoursesIds {
+  DEFAULT = -1,
+  BEHAVIORISM = 1,
+  GESTALT = 2,
+  SOCIOCULTURE = 3,
+}
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

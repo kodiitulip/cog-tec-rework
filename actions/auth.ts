@@ -5,6 +5,18 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { UserLoginFormSchema, SignUpFormSchema } from '@/zod/schemas';
+import { AuthError } from '@supabase/supabase-js';
+import { cache } from 'react';
+
+export const getUserId = cache(async (): Promise<{ data: string | null; error: AuthError | null }> => {
+  const { auth } = await createClient();
+  const {
+    data: { user },
+    error,
+  } = await auth.getUser();
+  if (error || !user) return { data: null, error };
+  return { data: user.id, error: null };
+});
 
 const signInWithOAuth = async (provider: 'github' | 'google') => {
   const origin = (await headers()).get('origin');
