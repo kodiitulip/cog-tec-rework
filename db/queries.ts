@@ -170,18 +170,22 @@ export const getCourseProgress = cache(async () => {
     },
   });
 
-  const firstUncompletedLesson = unitsInActiveCourse
-    .flatMap((unit) => unit.lessons)
-    .find((lesson) =>
-      lesson.challenges.some(
-        ({ challengeProgress }) =>
-          !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
-      )
-    );
+  const allLessons = unitsInActiveCourse.flatMap(({ lessons }) => lessons);
 
+  const firstUncompletedLesson = allLessons.find(({ challenges }) =>
+    challenges.some(
+      ({ challengeProgress }) =>
+        !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
+    )
+  );
+
+  // in case the user manages to complete the course and there are no more
+  // uncompleted lessons, we will fallback to the last lesson on the course
+  // just so that the /lesson page allows the quiz component to show the
+  // finish screen
   return {
-    activeLesson: firstUncompletedLesson,
-    activeLessonId: firstUncompletedLesson?.id,
+    activeLesson: firstUncompletedLesson || allLessons.at(-1),
+    activeLessonId: (firstUncompletedLesson || allLessons.at(-1))?.id,
   };
 });
 
@@ -252,13 +256,11 @@ export const getLesson = cache(async (id?: number) => {
 
   if (!data || !data.challenges) return null;
 
-  const challenges = data.challenges.map(({ challengeProgress ,...challenge }) => ({
+  const challenges = data.challenges.map(({ challengeProgress, ...challenge }) => ({
     ...challenge,
     challengeProgress,
     completed:
-      challengeProgress &&
-      challengeProgress.length > 0 &&
-      challengeProgress.every(({ completed }) => completed),
+      challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed),
   }));
 
   return { ...data, challenges };
