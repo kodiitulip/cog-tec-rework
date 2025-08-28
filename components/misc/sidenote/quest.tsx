@@ -1,17 +1,16 @@
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { tempquests } from '@/constants';
-import { SelectCourses } from '@/db/schema';
 import { cn, CoursesIds } from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
 type Props = {
   points: number;
-  courseId: SelectCourses['id'];
+  courseId?: CoursesIds;
 };
 
-export const QuestSidenote = ({ points, courseId }: Props) => {
+export const QuestSidenote = ({ points, courseId = CoursesIds.DEFAULT }: Props) => {
   return (
     <div className='border-1 rounded-xl p-4 space-y-4'>
       <div className='flex items-center justify-between w-full space-y-2'>
