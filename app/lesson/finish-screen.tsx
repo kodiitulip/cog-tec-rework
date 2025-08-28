@@ -12,9 +12,10 @@ type Props = {
   points: number;
   hearts: number;
   lessonId: SelectLessons['id'];
+  disabledContinue?: boolean;
 };
 
-export const FinishScreen = ({ courseId, hearts, points, lessonId }: Props) => {
+export const FinishScreen = ({ courseId, hearts, points, lessonId, disabledContinue = false }: Props) => {
   const { width, height } = useWindowSize();
   const [finishAudio] = useAudio({ src: '/sounds/finish.mp3', autoPlay: true });
 
@@ -63,6 +64,7 @@ export const FinishScreen = ({ courseId, hearts, points, lessonId }: Props) => {
         lessonId={lessonId}
         status='completed'
         onCheck={() => router.push('/learn')}
+        disabled={disabledContinue}
       />
     </>
   );

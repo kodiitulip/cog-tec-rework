@@ -60,11 +60,53 @@ export const Quiz = ({
   });
   const [selectedOption, setSelectedOption] = useState<SelectChallengeOptions['id'] | undefined>();
   const [status, setStatus] = useState<'correct' | 'wrong' | 'none'>('none');
-  const [finished, setFinished] = useState<boolean>(false);
+  // const [finished, setFinished] = useState<boolean>(false);
 
   const currentChallenge = challenges[activeIndex];
 
-  if (finished || !currentChallenge) {
+  if (/*finished ||*/ !currentChallenge) {
+    // startTransition(() => {
+    //   for (const chall in completedChallenges.current) {
+    //     upsertChallengeProgress(completedChallenges.current[chall].id)
+    //       .then(({ error }) => {
+    //         if (!error) return;
+    //         switch (error.type) {
+    //           case 'UNAUTHORIZED':
+    //             toast.error('Usuário não autorizado');
+    //             console.log(error.error?.message);
+    //             break;
+    //           case 'ZERO_HEARTS':
+    //             openHeartsModal();
+    //             toast.error('Lhe faltou vidas para concluir a lição.');
+    //             break;
+    //           default:
+    //             toast.error('Houve um erro inesperado!');
+    //             break;
+    //         }
+    //       })
+    //       .catch(() => toast.error('Um erro inesperado aconteceu.'));
+    //   }
+    // });
+    return (
+      <>
+        <FinishScreen
+          courseId={courseId}
+          points={completedChallenges.current.length * (isPractice ? 5 : 10)}
+          hearts={hearts}
+          lessonId={lessonId}
+          disabledContinue={pending}
+        />
+        {correctAudio}
+        {incorrectAudio}
+      </>
+    );
+  }
+
+  const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
+  const options = currentChallenge?.challengeOptions || [];
+
+  const onNext = () => {
+    if (activeIndex + 1 >= challenges.length) return 
     startTransition(() => {
       for (const chall in completedChallenges.current) {
         upsertChallengeProgress(completedChallenges.current[chall].id)
@@ -87,25 +129,6 @@ export const Quiz = ({
           .catch(() => toast.error('Um erro inesperado aconteceu.'));
       }
     });
-    return (
-      <>
-        <FinishScreen
-          courseId={courseId}
-          points={completedChallenges.current.length * (isPractice ? 5 : 10)}
-          hearts={hearts}
-          lessonId={lessonId}
-        />
-        {correctAudio}
-        {incorrectAudio}
-      </>
-    );
-  }
-
-  const title = currentChallenge.type === 'ASSIST' ? 'Selecione a opção correta' : currentChallenge.question;
-  const options = currentChallenge?.challengeOptions || [];
-
-  const onNext = () => {
-    if (activeIndex + 1 >= challenges.length) return setFinished(true);
     setActiveIndex((curr) => curr + 1);
   };
 
