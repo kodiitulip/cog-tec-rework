@@ -1,5 +1,5 @@
 import { useKey, useMedia } from 'react-use';
-import { CheckCircle, XCircle, Loader } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -54,7 +54,6 @@ export const Footer = ({ onCheck, status, lessonId, disabled = false }: Props) =
           size={isMobile ? 'sm' : 'lg'}
           variant={status === 'wrong' ? 'danger' : 'default'}
         >
-          {disabled && <Loader className='size-5 text-gray-500 animate-spin' />}
           {status === 'none' && 'Confirmar'}
           {status === 'correct' && 'Próximo'}
           {status === 'wrong' && 'Tente Denovo'}
