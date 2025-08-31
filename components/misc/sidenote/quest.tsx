@@ -11,6 +11,12 @@ type Props = {
 };
 
 export const QuestSidenote = ({ points, courseId = CoursesIds.DEFAULT }: Props) => {
+  const courseColors =
+    courseId === CoursesIds.BEHAVIORISM ? 'bg-behaviorism-500'
+    : courseId === CoursesIds.GESTALT ? 'bg-gestalt-500'
+    : courseId === CoursesIds.SOCIOCULTURE ? 'bg-sociocultural-500'
+    : 'bg-ecstasy-500';
+
   return (
     <div className='border-1 rounded-xl p-4 space-y-4'>
       <div className='flex items-center justify-between w-full space-y-2'>
@@ -40,12 +46,7 @@ export const QuestSidenote = ({ points, courseId = CoursesIds.DEFAULT }: Props) 
               <div className='flex flex-col gap-y-2 w-full'>
                 <p className='text-neutral-700 text-sm font-bold'>{title}</p>
                 <Progress
-                  classNameIndicator={cn(
-                    'bg-ecstasy-500',
-                    courseId === CoursesIds.BEHAVIORISM && 'bg-behaviorism-500',
-                    courseId === CoursesIds.GESTALT && 'bg-gestalt-500',
-                    courseId === CoursesIds.SOCIOCULTURE && 'bg-sociocultural-500'
-                  )}
+                  classNameIndicator={cn('bg-ecstasy-500', courseColors)}
                   value={progress}
                   className='h-2'
                 />

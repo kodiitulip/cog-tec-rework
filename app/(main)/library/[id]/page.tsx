@@ -26,9 +26,9 @@ const LibraryContentPage = async ({ params }: { params: Promise<{ id: SelectLibr
       </StickyWrapper>
       <FeedWrapper>
         <Header
-          courseId={1}
-          title={content?.title}
           id={id}
+          title={content?.title}
+          courseId={userProgress.activeCourseId || undefined}
         />
         <article className='prose prose-neutral rounded-xl rounded-t-none max-w-(--breakpoint-lg) p-4 mx-2 border-1 border-t-0 border-neutral-400 prose-h1:text-2xl prose-p:text-base'>
           <Markdown

@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { SelectCourses } from '@/db/schema';
 import { cn, CoursesIds } from '@/lib/utils';
 import { useExitModal } from '@/store/use-exit-modal';
 import { X } from 'lucide-react';
@@ -16,6 +15,11 @@ type Props = {
 
 export const Header = ({ hearts, percentage, courseId }: Props) => {
   const { open } = useExitModal();
+  const courseColors =
+    courseId === CoursesIds.BEHAVIORISM ? 'bg-behaviorism-500'
+    : courseId === CoursesIds.GESTALT ? 'bg-gestalt-500'
+    : courseId === CoursesIds.SOCIOCULTURE ? 'bg-sociocultural-500'
+    : 'bg-ecstasy-500';
 
   return (
     <header className='lg:pt-12 pt-5 px-10 flex gap-x-7 items-center justify-between max-w-285 mx-auto w-full'>
@@ -29,11 +33,7 @@ export const Header = ({ hearts, percentage, courseId }: Props) => {
       </Button>
       <Progress
         value={percentage}
-        classNameIndicator={cn(
-          courseId === CoursesIds.BEHAVIORISM && 'bg-behaviorism-500',
-          courseId === CoursesIds.GESTALT && 'bg-gestalt-500',
-          courseId === CoursesIds.SOCIOCULTURE && 'bg-sociocultural-500'
-        )}
+        classNameIndicator={cn(courseColors)}
       />
       <div className='text-rose-500 flex items-center font-bold'>
         <Image
