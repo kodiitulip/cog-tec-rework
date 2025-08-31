@@ -6,6 +6,8 @@ import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { notFound, redirect } from 'next/navigation';
 import { UserProgress } from '@/components/bits/pages/user-progress';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 
 const LibraryContentPage = async ({ params }: { params: Promise<{ id: SelectLibrary['id'] }> }) => {
   const { id } = await params;
@@ -29,7 +31,13 @@ const LibraryContentPage = async ({ params }: { params: Promise<{ id: SelectLibr
           id={id}
         />
         <article className='prose prose-neutral rounded-xl rounded-t-none max-w-(--breakpoint-lg) p-4 mx-2 border-1 border-t-0 border-neutral-400 prose-h1:text-2xl prose-p:text-base'>
-          <Markdown>{content ? content.markdown : 'Empty'}</Markdown>
+          <Markdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            remarkRehypeOptions={{ passThrough: ['link'] }}
+          >
+            {content.markdown}
+          </Markdown>
         </article>
       </FeedWrapper>
     </div>
