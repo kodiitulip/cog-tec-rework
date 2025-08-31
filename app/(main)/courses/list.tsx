@@ -24,26 +24,29 @@ export const List = ({ courses, activeCourseId, backLink = '/learn' }: Props) =>
 
     if (id === activeCourseId) return redirect(blink);
 
-    startTransition(async () => {
-      const { error } = await upsertUserProgress(id);
-      if (!error) {
-        toast.success('Changed course Successfuly');
-        redirect(blink);
-      }
-      switch (error.type) {
-        case 'UNAUTHORIZED':
-          toast.error('Usuário não autorizado');
-          break;
-        case 'COURSE_NOT_FOUND':
-          toast.error('Curso não encontrado');
-          break;
-        case 'COURSE_EMPTY':
-          toast.error('Curso está vazio. Porfavor avisar aos administradores!');
-          break;
-        default:
-          toast.error('Um erro inesperado aconteceu');
-          break;
-      }
+    startTransition(() => {
+      upsertUserProgress(id)
+        .then(({ error }) => {
+          if (!error) {
+            toast.success('Changed course Successfuly');
+            redirect(blink);
+          }
+          switch (error.type) {
+            case 'UNAUTHORIZED':
+              toast.error('Usuário não autorizado');
+              break;
+            case 'COURSE_NOT_FOUND':
+              toast.error('Curso não encontrado');
+              break;
+            case 'COURSE_EMPTY':
+              toast.error('Curso está vazio. Porfavor avisar aos administradores!');
+              break;
+            default:
+              toast.error('Um erro inesperado aconteceu');
+              break;
+          }
+        })
+        .catch(() => toast.error('Um erro inesperado ocorreu'));
     });
   };
 
