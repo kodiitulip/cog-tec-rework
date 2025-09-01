@@ -30,7 +30,7 @@ const LearnPage = async () => {
         />
         <QuestSidenote
           points={userProgress.points}
-          courseTitle={userProgress.activeCourse.title as CourseTitles}
+          courseId={userProgress.activeCourseId || undefined}
         />
       </StickyWrapper>
       <FeedWrapper>
