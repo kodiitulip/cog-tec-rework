@@ -1,12 +1,12 @@
 'use server';
 
 import { admin } from '@/db/drizzle';
-import { getCourseById, getCourseProgressByCourseId, getFirstLessonOnCourse, getUserProgress } from '@/db/queries';
-import { challengeProgress, challenges, SelectChallenges, userProgress } from '@/db/schema';
-import { createClient } from '@/lib/supabase/server';
+import { getCourseById, getActiveLessonByCourseId, getFirstLessonOnCourse, getUserProgress } from '@/db/queries';
+import { SelectChallenges, userProgress } from '@/db/schema';
 import { revalidatePath } from 'next/cache';
-import { and, eq } from 'drizzle-orm';
 import { AuthError } from '@supabase/supabase-js';
+import { getUserId } from '@/actions/auth';
+import { eq } from 'drizzle-orm';
 
 type UpsertUserProgressError = {
   type: 'UNAUTHORIZED' | 'MISSING_ID' | 'COURSE_NOT_FOUND' | 'COURSE_EMPTY';
@@ -14,20 +14,10 @@ type UpsertUserProgressError = {
 };
 
 export const upsertUserProgress = async (courseId: number): Promise<{ error: UpsertUserProgressError | null }> => {
-  const { auth } = await createClient();
-
-  const { data, error } = await auth.getUser();
-  if (error)
+  const { data: userId, error } = await getUserId();
+  if (error || !userId)
     return {
-      error: { type: 'UNAUTHORIZED', error },
-    };
-
-  const { user } = data;
-
-  const { id } = user;
-  if (!id)
-    return {
-      error: { type: 'MISSING_ID' },
+      error: { type: 'UNAUTHORIZED' },
     };
 
   const course = await getCourseById(courseId);
@@ -41,20 +31,20 @@ export const upsertUserProgress = async (courseId: number): Promise<{ error: Ups
       error: { type: 'COURSE_EMPTY' },
     };
 
-  const [existingUserProgress, courseProgress, fallback] = await Promise.all([
+  const [existingUserProgress, activeLesson, fallback] = await Promise.all([
     getUserProgress(),
-    getCourseProgressByCourseId(courseId),
+    getActiveLessonByCourseId(courseId, userId),
     getFirstLessonOnCourse(courseId),
   ]);
 
   if (existingUserProgress) {
     await admin.update(userProgress).set({
       activeCourseId: courseId,
-      activeLessonId: courseProgress?.activeLessonId || fallback?.id || 1,
+      activeLessonId: activeLesson.id || fallback?.id,
     });
   } else {
     await admin.insert(userProgress).values({
-      userId: id,
+      userId,
       activeCourseId: courseId,
       activeLessonId: fallback?.id || 1,
     });
@@ -79,27 +69,6 @@ export type ReduceHeartsError = {
 export const reduceHearts = async (
   challengeId: SelectChallenges['id']
 ): Promise<{ error: ReduceHeartsError | null }> => {
-  const { auth } = await createClient();
-
-  const { data, error } = await auth.getUser();
-  if (error)
-    return {
-      error: {
-        type: 'UNAUTHORIZED',
-        error,
-      },
-    };
-
-  const {
-    user: { id: userId },
-  } = data;
-  if (!userId)
-    return {
-      error: {
-        type: 'MISSING_USER_ID',
-      },
-    };
-
   const currentUserProgress = await getUserProgress();
 
   if (!currentUserProgress)
@@ -110,7 +79,8 @@ export const reduceHearts = async (
     };
 
   const existingChallengeProgress = await admin.query.challengeProgress.findFirst({
-    where: and(eq(challengeProgress.userId, userId), eq(challengeProgress.challengeId, challengeId)),
+    where: ({ userId, challengeId: challId }, { and, eq }) =>
+      and(eq(userId, currentUserProgress.userId), eq(challId, challengeId)),
   });
 
   const isPractice = !!existingChallengeProgress;
@@ -125,7 +95,7 @@ export const reduceHearts = async (
     };
 
   const challenge = await admin.query.challenges.findFirst({
-    where: eq(challenges.id, challengeId),
+    where: ({ id: challId }, { eq }) => eq(challId, challengeId),
   });
 
   if (!challenge)
@@ -142,7 +112,7 @@ export const reduceHearts = async (
     .set({
       hearts: Math.max(currentUserProgress.hearts - 1, 0),
     })
-    .where(eq(userProgress.userId, userId));
+    .where(eq(userProgress.userId, currentUserProgress.userId));
 
   revalidatePath('/learn');
   revalidatePath('/lesson');

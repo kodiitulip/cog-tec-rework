@@ -10,6 +10,11 @@ import {
   SelectCourses,
   SelectLibrary,
   library,
+  SelectUserProgress,
+  SelectLessons,
+  SelectUnits,
+  SelectChallengeProgress,
+  SelectChallenges,
 } from '@/db/schema';
 import { getUserId } from '@/actions/auth';
 
@@ -194,61 +199,59 @@ export const getCourseProgress = cache(async () => {
   };
 });
 
-export const getCourseProgressByCourseId = cache(async (courseId: SelectCourses['id']) => {
-  const userProg = await getUserProgress();
+type NormalizedActiveLesson = SelectLessons & {
+  unit: SelectUnits;
+  challenges: (SelectChallenges & { challengeProgress: SelectChallengeProgress[] })[];
+};
 
-  if (!userProg || !userProg?.userId || !courseId) return null;
-
-  const unitsInCourse = await admin.query.units.findMany({
-    orderBy: ({ order }, { asc }) => [asc(order)],
-    where: eq(units.courseId, courseId),
-    with: {
-      lessons: {
-        orderBy: ({ order }, { asc }) => [asc(order)],
-        with: {
-          unit: true,
-          challenges: {
-            with: {
-              challengeProgress: {
-                where: eq(challengeProgress.userId, userProg.userId),
+export const getActiveLessonByCourseId = cache(
+  async (courseId: SelectCourses['id'], userId: SelectUserProgress['userId']): Promise<NormalizedActiveLesson> => {
+    const unitsInCourse = await admin.query.units.findMany({
+      orderBy: ({ order }, { asc }) => [asc(order)],
+      where: (units, { eq }) => eq(units.courseId, courseId),
+      with: {
+        lessons: {
+          orderBy: ({ order }, { asc }) => [asc(order)],
+          with: {
+            unit: true,
+            challenges: {
+              with: {
+                challengeProgress: {
+                  where: (challProg, { eq }) => eq(challProg.userId, userId),
+                },
               },
             },
           },
         },
       },
-    },
-  });
+    });
 
-  const allLessons = unitsInCourse.flatMap(({ lessons }) => lessons);
+    const allLessons = unitsInCourse.flatMap(({ lessons }) => lessons);
 
-  const firstUncompletedLesson = allLessons.find(({ challenges }) =>
-    challenges.some(
-      ({ challengeProgress }) =>
-        !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
-    )
-  );
-
-  const lastLesson = allLessons[allLessons.length - 1];
-
-  // in case the user manages to complete the course and there are no more
-  // uncompleted lessons, we will fallback to the last lesson on the course
-  // just so that the /lesson page allows the quiz component to show the
-  // finish screen
-  return {
-    activeLesson: firstUncompletedLesson || lastLesson,
-    activeLessonId: (firstUncompletedLesson || lastLesson)?.id,
-  };
-});
+    // in case the user manages to complete the course and there are no more
+    // uncompleted lessons, we will fallback to the last lesson on the course
+    // just so that the /lesson page allows the quiz component to show the
+    // finish screen
+    return (
+      allLessons.find(({ challenges }) =>
+        challenges.some(
+          ({ challengeProgress }) =>
+            !challengeProgress ||
+            challengeProgress.length === 0 ||
+            challengeProgress.some(({ completed }) => !completed)
+        )
+      ) || allLessons[allLessons.length - 1]
+    );
+  }
+);
 
 export const getLesson = cache(async (id?: number, randomOptions: boolean = true) => {
   const userProg = await getUserProgress();
-  if (!userProg || !userProg.userId) return null;
+  if (!userProg || !userProg.userId || !userProg.activeCourseId) return null;
 
-  const courseProgress = await getCourseProgress();
+  const activeLesson = await getActiveLessonByCourseId(userProg.activeCourseId, userProg.userId);
 
-  const lessonId = id || courseProgress?.activeLessonId;
-
-  if (!lessonId) return null;
+  const lessonId = id || activeLesson.id;
 
   const data = await admin.query.lessons.findFirst({
     where: and(eq(lessons.id, lessonId), eq(lessons.hidden, false)),
@@ -269,14 +272,15 @@ export const getLesson = cache(async (id?: number, randomOptions: boolean = true
 
   if (!data || !data.challenges) return null;
 
-  const challenges = data.challenges.map(({ challengeProgress, ...challenge }) => ({
-    ...challenge,
-    challengeProgress,
-    completed:
-      challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed),
-  }));
-
-  return { ...data, challenges };
+  return {
+    ...data,
+    challenges: data.challenges.map(({ challengeProgress, ...challenge }) => ({
+      challengeProgress,
+      completed:
+        challengeProgress && challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed),
+      ...challenge,
+    })),
+  };
 });
 
 export const getLessonPercentage = cache(async () => {
