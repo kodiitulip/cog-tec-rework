@@ -11,7 +11,7 @@ const NotFoundPage = () => {
         asChild
         variant='empty'
       >
-        <Link href='/learn' className='mx-auto'>Voltar</Link>
+        <Link href='/learn' className='w-full'>Voltar</Link>
       </Button>
     </div>
   );
