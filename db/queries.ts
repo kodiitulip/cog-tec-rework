@@ -64,20 +64,21 @@ export const getUnits = cache(async () => {
     },
   });
 
-  const normalizedData = data.map((unit) => {
-    const lessons = unit.lessons.map((lesson) => {
-      const completed =
-        lesson.challenges.length > 0 &&
-        lesson.challenges.every(
-          ({ challengeProgress }) =>
-            challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed)
-        );
-      return { ...lesson, completed };
-    });
-    return { ...unit, lessons };
-  });
-
-  return normalizedData;
+  return data
+    .filter(({ lessons }) => lessons.length > 0)
+    .map(({ lessons, ...unit }) => ({
+      lessons: lessons.map(({ challenges, ...lesson }) => ({
+        completed:
+          challenges.length > 0 &&
+          challenges.every(
+            ({ challengeProgress }) =>
+              challengeProgress.length > 0 && challengeProgress.every(({ completed }) => completed)
+          ),
+        challenges,
+        ...lesson,
+      })),
+      ...unit,
+    }));
 });
 
 export const getLibraryUnits = cache(async () => {
@@ -92,7 +93,7 @@ export const getLibraryUnits = cache(async () => {
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
       library: {
-        orderBy: ({order}, {asc}) => [asc(order)],
+        orderBy: ({ order }, { asc }) => [asc(order)],
       },
     },
   });
@@ -181,13 +182,15 @@ export const getCourseProgress = cache(async () => {
     )
   );
 
+  const lastLesson = allLessons[allLessons.length - 1];
+
   // in case the user manages to complete the course and there are no more
   // uncompleted lessons, we will fallback to the last lesson on the course
   // just so that the /lesson page allows the quiz component to show the
   // finish screen
   return {
-    activeLesson: firstUncompletedLesson || allLessons.at(-1),
-    activeLessonId: (firstUncompletedLesson || allLessons.at(-1))?.id,
+    activeLesson: firstUncompletedLesson || lastLesson,
+    activeLessonId: (firstUncompletedLesson || lastLesson)?.id,
   };
 });
 
@@ -216,22 +219,28 @@ export const getCourseProgressByCourseId = cache(async (courseId: SelectCourses[
     },
   });
 
-  const firstUncompletedLesson = unitsInCourse
-    .flatMap((unit) => unit.lessons)
-    .find((lesson) =>
-      lesson.challenges.some(
-        ({ challengeProgress }) =>
-          !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
-      )
-    );
+  const allLessons = unitsInCourse.flatMap(({ lessons }) => lessons);
 
+  const firstUncompletedLesson = allLessons.find(({ challenges }) =>
+    challenges.some(
+      ({ challengeProgress }) =>
+        !challengeProgress || challengeProgress.length === 0 || challengeProgress.some(({ completed }) => !completed)
+    )
+  );
+
+  const lastLesson = allLessons[allLessons.length - 1];
+
+  // in case the user manages to complete the course and there are no more
+  // uncompleted lessons, we will fallback to the last lesson on the course
+  // just so that the /lesson page allows the quiz component to show the
+  // finish screen
   return {
-    activeLesson: firstUncompletedLesson,
-    activeLessonId: firstUncompletedLesson?.id,
+    activeLesson: firstUncompletedLesson || lastLesson,
+    activeLessonId: (firstUncompletedLesson || lastLesson)?.id,
   };
 });
 
-export const getLesson = cache(async (id?: number) => {
+export const getLesson = cache(async (id?: number, randomOptions: boolean = true) => {
   const userProg = await getUserProgress();
   if (!userProg || !userProg.userId) return null;
 
@@ -247,7 +256,9 @@ export const getLesson = cache(async (id?: number) => {
       challenges: {
         orderBy: ({ order }, { asc }) => [asc(order)],
         with: {
-          challengeOptions: true,
+          challengeOptions: {
+            orderBy: randomOptions ? (_, { sql }) => [sql`RANDOM()`] : ({ id }, { asc }) => [asc(id)],
+          },
           challengeProgress: {
             where: eq(challengeProgress.userId, userProg?.userId),
           },
