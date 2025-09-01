@@ -4,18 +4,13 @@ import Link from 'next/link';
 import React from 'react';
 
 type Props = {
-  id: SelectLibrary['id']; // TODO: change to select type
+  id: SelectLibrary['id'];
   title: SelectLibrary['title'];
-  isLast?: boolean;
-  htmlId?: string;
 };
 
-export const Content = ({ id, title, htmlId, isLast = false }: Props) => {
+export const Content = ({ id, title }: Props) => {
   return (
-    <div
-      className={cn('p-1 mx-2.5 border-1 border-t-0', isLast && 'rounded-b-xl')}
-      id={htmlId}
-    >
+    <div className='p-1 mx-2.5 border-1 border-t-0 last:rounded-b-xl'>
       <Link
         href={`/library/${id}`}
         className='text-md font-medium rounded-lg hover:bg-neutral-400/40 p-1 w-full block'

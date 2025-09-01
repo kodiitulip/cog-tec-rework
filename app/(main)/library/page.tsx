@@ -1,12 +1,9 @@
-// TODO: Library Page
 import { FeedWrapper } from '@/components/bits/pages/feed-wrapper';
 import { StickyWrapper } from '@/components/bits/pages/sticky-wrapper';
 import { UserProgress } from '@/components/bits/pages/user-progress';
-import { QuestSidenote } from '@/components/misc/sidenote/quest';
 import { Accordion } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
 import { getLibraryUnits, getUserProgress } from '@/db/queries';
-import { CourseTitles } from '@/lib/utils';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { Unit } from './unit';
@@ -23,10 +20,6 @@ const LibraryPage = async () => {
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
           points={userProgress.points}
-        />
-        <QuestSidenote
-          points={userProgress.points}
-          courseTitle={userProgress.activeCourse.title as CourseTitles}
         />
       </StickyWrapper>
       <FeedWrapper>
