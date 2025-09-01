@@ -91,7 +91,9 @@ export const getLibraryUnits = cache(async () => {
     where: and(eq(units.courseId, userProg.activeCourseId), eq(units.hidden, false)),
     orderBy: ({ order }, { asc }) => [asc(order)],
     with: {
-      library: true,
+      library: {
+        orderBy: ({order}, {asc}) => [asc(order)],
+      },
     },
   });
 
