@@ -4,21 +4,28 @@ import { ResultCard } from './result-card';
 import { Footer } from './footer';
 import { SelectLessons } from '@/db/schema';
 import { useRouter } from 'next/navigation';
-import { useAudio, useWindowSize } from 'react-use';
+import { useAudio, useMount, useWindowSize } from 'react-use';
 import { CourseIcon } from '@/components/misc/course-icon';
+import { useTransition } from 'react';
 
 type Props = {
   courseId?: CoursesIds;
   points: number;
   hearts: number;
   lessonId: SelectLessons['id'];
+  transition: () => void;
 };
 
-export const FinishScreen = ({ courseId, hearts, points, lessonId }: Props) => {
+export const FinishScreen = ({ courseId, hearts, points, lessonId, transition }: Props) => {
   const { width, height } = useWindowSize();
   const [finishAudio] = useAudio({ src: '/sounds/finish.mp3', autoPlay: true });
+  const [pending, startTransition] = useTransition();
 
   const router = useRouter();
+
+  useMount(() => {
+    startTransition(transition);
+  });
 
   return (
     <>
@@ -63,6 +70,7 @@ export const FinishScreen = ({ courseId, hearts, points, lessonId }: Props) => {
         lessonId={lessonId}
         status='completed'
         onCheck={() => router.push('/learn')}
+        disabled={pending}
       />
     </>
   );

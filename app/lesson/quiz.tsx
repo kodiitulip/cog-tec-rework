@@ -1,12 +1,12 @@
 'use client';
 
 import { SelectChallengeOptions, SelectChallenges, SelectLessons } from '@/db/schema';
-import { useState, useTransition } from 'react';
+import { useRef, useState, useTransition } from 'react';
 import { Header } from './header';
 import { QuestionBubble } from './question-bubble';
 import { Challenge } from './challenge';
 import { Footer } from './footer';
-import { upsertChallengeProgress } from '@/actions/challenge-progress';
+import { batchedUpsertChallengeProgress } from '@/actions/challenge-progress';
 import { reduceHearts } from '@/actions/user-progress';
 import { toast } from 'sonner';
 import { useAudio, useMount } from 'react-use';
@@ -40,6 +40,7 @@ export const Quiz = ({
 
   const { open: openHeartsModal } = useHeartsModal();
   const { open: openPracticeModal } = usePracticeModal();
+  const completedChallenges = useRef<NormalizedChallenges[]>([]);
 
   useMount(() => {
     if (initialPercentage === 100) openPracticeModal();
@@ -69,6 +70,25 @@ export const Quiz = ({
           points={challenges.length * 10}
           hearts={hearts}
           lessonId={lessonId}
+          transition={() =>
+            batchedUpsertChallengeProgress(completedChallenges.current.flatMap(({ id }) => id))
+              .then(({ error }) => {
+                if (error)
+                  switch (error.type) {
+                    case 'UNAUTHORIZED':
+                      toast.error('Usuário não autorizado');
+                      console.log(error.error?.message);
+                      break;
+                    default:
+                      toast.error('Houve um erro inesperado!');
+                      break;
+                  }
+              })
+              .catch(() => {
+                toast.error('Um erro inesperado ocorreu');
+                console.error('Um erro ocorreu ao atualizar progresso de desafio');
+              })
+          }
         />
         {correctAudio}
         {incorrectAudio}
@@ -91,6 +111,7 @@ export const Quiz = ({
 
   const onContinue = () => {
     if (!selectedOption) return;
+    if (initialPercentage !== 100 && hearts <= 0) return openHeartsModal();
     if (status === 'wrong') {
       setStatus('none');
       setSelectedOption(undefined);
@@ -100,41 +121,47 @@ export const Quiz = ({
       onNext();
       setStatus('none');
       setSelectedOption(undefined);
+      completedChallenges.current.push(currentChallenge);
       return;
     }
     const correctOption = options.find(({ correct }) => correct);
     if (!correctOption) return;
     if (correctOption.id === selectedOption) {
       startTransition(() => {
-        upsertChallengeProgress(currentChallenge.id)
-          .then(({ error }) => {
-            if (!error) {
-              correctControls.play();
-              setStatus('correct');
-              setPercentage((prev) => prev + 100 / challenges.length);
+        correctControls.play();
+        setStatus('correct');
+        setPercentage((prev) => prev + 100 / challenges.length);
 
-              // this is practice
-              if (initialPercentage === 100) {
-                setHearts((prev) => Math.min(prev + 1, 5));
-              }
-              return;
-            }
-            switch (error.type) {
-              case 'UNAUTHORIZED':
-                toast.error('Usuário não autorizado');
-                console.log(error.error?.message);
-                break;
+        if (initialPercentage === 100) setHearts((prev) => Math.min(prev + 1, 5));
+        // upsertChallengeProgress(currentChallenge.id)
+        //   .then(({ error }) => {
+        //     if (!error) {
+        //       correctControls.play();
+        //       setStatus('correct');
+        //       setPercentage((prev) => prev + 100 / challenges.length);
 
-              case 'ZERO_HEARTS':
-                openHeartsModal();
-                break;
+        //       // this is practice
+        //       if (initialPercentage === 100) {
+        //         setHearts((prev) => Math.min(prev + 1, 5));
+        //       }
+        //       return;
+        //     }
+        //     switch (error.type) {
+        //       case 'UNAUTHORIZED':
+        //         toast.error('Usuário não autorizado');
+        //         console.log(error.error?.message);
+        //         break;
 
-              default:
-                toast.error('Houve um erro inesperado!');
-                break;
-            }
-          })
-          .catch(() => toast.error('Um erro inesperado aconteceu.'));
+        //       case 'ZERO_HEARTS':
+        //         openHeartsModal();
+        //         break;
+
+        //       default:
+        //         toast.error('Houve um erro inesperado!');
+        //         break;
+        //     }
+        //   })
+        //   .catch(() => toast.error('Um erro inesperado aconteceu.'));
       });
     } else {
       startTransition(() => {
