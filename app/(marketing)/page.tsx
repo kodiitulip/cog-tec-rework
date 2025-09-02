@@ -13,7 +13,7 @@ const Home = () => {
       <div className='relative size-60 lg:size-106 mb-8 lg:mb-0'>
         <Image
           alt='hero'
-          src='/icon-512-maskable.png'
+          src='/icon/cog-tec/icon-color.svg'
           fill
         />
       </div>
