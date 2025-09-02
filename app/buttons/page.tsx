@@ -1,8 +1,15 @@
 import { Button } from '@/components/ui/button';
+import { LoaderIcon } from 'lucide-react';
 
 const ButtonsPage = () => (
   <div className='p-4 gap-4 flex flex-col max-w-50'>
-    <Button variant='default'>default</Button>
+    <Button
+      variant='default'
+      disabled
+    >
+      <LoaderIcon className='animate-spin' />
+      default
+    </Button>
     <Button variant='ghost'>ghost</Button>
     <Button variant='behaviorism'>behaviorism</Button>
     <Button variant='behaviorismGhost'>behaviorism</Button>

@@ -4,7 +4,7 @@ import { ResultCard } from './result-card';
 import { Footer } from './footer';
 import { SelectLessons } from '@/db/schema';
 import { useRouter } from 'next/navigation';
-import { useAudio, useMount, useWindowSize } from 'react-use';
+import { useAudio, useWindowSize } from 'react-use';
 import { CourseIcon } from '@/components/misc/course-icon';
 import { useTransition } from 'react';
 
@@ -13,7 +13,7 @@ type Props = {
   points: number;
   hearts: number;
   lessonId: SelectLessons['id'];
-  transition: () => void;
+  transition: () => Promise<void>;
 };
 
 export const FinishScreen = ({ courseId, hearts, points, lessonId, transition }: Props) => {
@@ -22,10 +22,6 @@ export const FinishScreen = ({ courseId, hearts, points, lessonId, transition }:
   const [pending, startTransition] = useTransition();
 
   const router = useRouter();
-
-  useMount(() => {
-    startTransition(transition);
-  });
 
   return (
     <>
@@ -69,7 +65,12 @@ export const FinishScreen = ({ courseId, hearts, points, lessonId, transition }:
       <Footer
         lessonId={lessonId}
         status='completed'
-        onCheck={() => router.push('/learn')}
+        onCheck={() =>
+          startTransition(async () => {
+            await transition();
+            router.push('/learn');
+          })
+        }
         disabled={pending}
       />
     </>
